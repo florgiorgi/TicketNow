@@ -17,17 +17,17 @@ public class Cliente {
 	private String mail;
 	private String fechaNac;
 	private String DNI;
-	private String contraseña;
+	private String contraseÃ±a;
 	private List<Compra> compras;
 
-	public Cliente(String nombre, String apellido, String usuario, String mail, String fechaNac, String DNI, String contraseña) {
+	public Cliente(String nombre, String apellido, String usuario, String mail, String fechaNac, String DNI, String contraseÃ±a) {
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.usuario = usuario;
 		this.mail = mail;
 		this.fechaNac = fechaNac;
 		this.DNI = DNI;
-		this.contraseña = contraseña;
+		this.contraseÃ±a = contraseÃ±a;
 		this.compras = new ArrayList<Compra>();
 	}
 	
@@ -55,29 +55,29 @@ public class Cliente {
 		return this.DNI;
 	}
 
-	public String getContraseña() {
-		return this.contraseña;
+	public String getContraseÃ±a() {
+		return this.contraseÃ±a;
 	}
 	
 	public List<Compra> getCompras() {
 		return this.compras;
 	}
 	
-	public void modificarDatos(String nombre, String apellido, String mail, String fechaNac, String DNI, String contraseña) {
+	public void modificarDatos(String nombre, String apellido, String mail, String fechaNac, String DNI, String contraseÃ±a) {
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.mail = mail;
 		this.fechaNac = fechaNac;
 		this.DNI = DNI;
-		this.contraseña = contraseña;
+		this.contraseÃ±a = contraseÃ±a;
 	}
 	
 	//devuelve true si se pudo realizar la compra
-	public boolean comprar(Espectaculo esp, Funcion func, Double precio, Integer dia, Integer mes, Integer año, Integer horas, Integer minutos, Integer cantEntradas) {
+	public boolean comprar(Espectaculo esp, Funcion func, Integer dia, Integer mes, Integer aÃ±o, Integer horas, Integer minutos, Integer cantEntradas) {
 		Hora hora = new Hora(horas, minutos);
-		Fecha fecha = new Fecha(dia, mes, año);
+		Fecha fecha = new Fecha(dia, mes, aÃ±o);
 		
-		Compra compra = new Compra(this, esp, func, precio, fecha, hora, cantEntradas);
+		Compra compra = new Compra(this, esp, func, fecha, hora, cantEntradas);
 		
 		if(pagar(compra)) {
 			compras.add(compra);
@@ -94,10 +94,15 @@ public class Cliente {
 		return compra.modificarCompra(esp, func, cantEntradas);
 	}
 	
-	//devuelve true si se aprobó el pago
+	//devuelve true si se aprobÃ³ el pago
 	public boolean pagar(Compra compra) {
 		//Llama al sistema de pago externo
 		return true;
+	}
+	
+	@Override
+	public String toString() {
+		return this.nombre + " " + this.apellido + " " + this.compras;
 	}
 
 }
