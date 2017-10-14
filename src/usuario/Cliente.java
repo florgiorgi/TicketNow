@@ -68,6 +68,7 @@ public class Proveedor extends Cliente {
 	}
 	
 	//devuelve true si pudo modificar la funcion
+	//quizas no es necesario y sólo hay que ir para atrás y adelante con las pantallas de comprar y confirmar compra
 	public boolean modificarFuncion(Espectaculo esp, Funcion funcion, Hora hora, String sala, Double precio, Integer cantidadDisp) {
 		for(Espectaculo e : espectaculos) {
 			if(e.equals(esp)) {
