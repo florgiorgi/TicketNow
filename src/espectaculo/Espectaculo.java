@@ -63,12 +63,48 @@ public class Espectaculo {
 	}
 	
 	//devuelve true si pudo modificar la funcion
-	public boolean modificarFuncion(Funcion funcion, Hora hora, String sala, Integer precio, Integer cantidadDisp) {
+	public boolean modificarFuncion(Funcion funcion, Hora hora, String sala, Double precio, Integer cantidadDisp) {
 		for(Funcion f : funciones) {
 			if(f.equals(funcion)) {
 				return f.modificarFuncion(hora, sala, precio, cantidadDisp);
 			}
 		}
 		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((estreno == null) ? 0 : estreno.hashCode());
+		result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
+		return result;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Espectaculo other = (Espectaculo) obj;
+		if (estreno == null) {
+			if (other.estreno != null)
+				return false;
+		} else if (!estreno.equals(other.estreno))
+			return false;
+		if (nombre == null) {
+			if (other.nombre != null)
+				return false;
+		} else if (!nombre.equals(other.nombre))
+			return false;
+		return true;
+	}
+	
+	@Override
+	public String toString() {
+		return this.nombre;
 	}
 }
