@@ -14,17 +14,19 @@ public class Compra {
 	private Fecha fecha;
 	private Hora hora;
 	private Ticket ticket;
+	private Double precio;
 	private Integer cantEntradas;
 	
-	public Compra(Cliente cliente, Espectaculo espectaculo, Funcion funcion, Double precio, Fecha fecha, Hora hora, Integer cantEntradas) {
-		if(cliente == null || espectaculo == null || funcion == null || precio == null || fecha == null || hora == null || cantEntradas == null)
+	public Compra(Cliente cliente, Espectaculo espectaculo, Funcion funcion, Fecha fecha, Hora hora, Integer cantEntradas) {
+		if(cliente == null || espectaculo == null || funcion == null || fecha == null || hora == null || cantEntradas == null)
 			throw new IllegalArgumentException();
 		this.cliente = cliente;
 		this.espectaculo = espectaculo;
 		this.funcion = funcion;
 		this.fecha = fecha;
 		this.hora = hora;
-		this.ticket = new Ticket(precio, fecha);
+		this.precio = funcion.getPrecio()*cantEntradas;
+		this.ticket = new Ticket(this.precio, fecha);
 		this.cantEntradas = cantEntradas;
 	}
 
@@ -51,6 +53,10 @@ public class Compra {
 	public Ticket getTicket() {
 		return this.ticket;
 	}
+	
+	public Double getPrecio() {
+		return this.precio;
+	}
 
 	public Integer getCantEntradas() {
 		return this.cantEntradas;
@@ -65,6 +71,13 @@ public class Compra {
 		this.espectaculo = esp;
 		this.funcion = func;
 		this.cantEntradas = cantEntradas;
+		this.precio = cantEntradas*func.getPrecio();
+		this.ticket.setPrecio(this.precio);
 		return true;
+	}
+	
+	@Override
+	public String toString() {
+		return this.fecha.toString() + " a las " + this.hora.toString() + " - " + this.espectaculo.toString() + " - " + this.funcion.toString() + " - Precio: " + this.precio.toString(); 
 	}
 }
