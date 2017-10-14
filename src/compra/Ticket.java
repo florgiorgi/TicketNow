@@ -24,9 +24,13 @@ public class Ticket {
 		return this.fecha;
 	}
 	
+	public void setPrecio(Double precio) {
+		this.precio = precio;
+	}
+	
 	@Override
 	public String toString() {
-		return this.fecha.toString() + " - " + this.precio.toString();
+		return this.precio.toString();
 	}
 
 }
