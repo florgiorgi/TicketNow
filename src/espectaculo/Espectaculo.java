@@ -41,7 +41,7 @@ public class Espectaculo {
 		return this.funciones;
 	}
 	
-	//devuelve true si se pudo modifcar el espectaculo
+	//devuelve true si se pudo modificar el espectaculo
 	public boolean modificarEspectaculo(String nombre, String descripcion, String categoria, Fecha estreno) {
 		if(nombre == null || descripcion == null || categoria == null || estreno == null)
 			return false;
