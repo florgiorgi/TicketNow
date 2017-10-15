@@ -77,10 +77,11 @@ public class Cliente {
 		Hora hora = new Hora(horas, minutos);
 		Fecha fecha = new Fecha(dia, mes, año);
 		
-		if(esp.getFunciones().contains(func)) {
+		if(esp.getFunciones().contains(func) && func.getCantidadDisp() >= cantEntradas) {
 			Compra compra = new Compra(this, esp, func, fecha, hora, cantEntradas);
 			if(pagar(compra)) {
 				compras.add(compra);
+				func.setCantidadDisp(func.getCantidadDisp() - cantEntradas);
 				return true;
 			} else {
 				return false;
