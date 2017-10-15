@@ -12,8 +12,8 @@ public class Proveedor extends Cliente {
 	private String categoria;
 	private Set<Espectaculo> espectaculos;
 	
-	public Proveedor(String nombre, String apellido, String usuario, String mail, String fechaNac, String DNI, String contraseña) {
-		super(nombre, apellido, usuario, mail, fechaNac, DNI, contraseña);
+	public Proveedor(String nombre, String apellido, String usuario, String mail, Fecha fechaNac, String DNI, String contraseÃ±a) {
+		super(nombre, apellido, usuario, mail, fechaNac, DNI, contraseÃ±a);
 	}
 
 	public String getNombreProv() {
@@ -68,13 +68,19 @@ public class Proveedor extends Cliente {
 	}
 	
 	//devuelve true si pudo modificar la funcion
-	public boolean modificarFuncion(Espectaculo esp, Funcion funcion, Hora hora, String sala, Integer precio, Integer cantidadDisp) {
+	public boolean modificarFuncion(Espectaculo esp, Funcion funcion, Hora hora, String sala, Double precio, Integer cantidadDisp) {
 		for(Espectaculo e : espectaculos) {
 			if(e.equals(esp)) {
 				return e.modificarFuncion(funcion, hora, sala, precio, cantidadDisp);
 			}
 		}
 		return false;
+	}
+	
+	@Override
+	public String toString() {
+		super.toString();
+		return "\n" + "Espectaculos: " + this.espectaculos;
 	}
 	
 }
