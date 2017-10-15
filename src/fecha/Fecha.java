@@ -21,7 +21,7 @@ public class Fecha {
 	
 	public Fecha(Integer dia, Integer mes, Integer año) {
 		if(dia == null || mes == null || año == null)
-		if(dia < 0 || mes < 0 || mes > 12 || año < 2017)
+		if(dia < 0 || mes < 0 || mes > 12 || año < 1930)
 			throw new IllegalArgumentException();
 		if(mes == ENERO || mes == MARZO || mes == MAYO || mes == JULIO || mes == AGOSTO || mes == OCTUBRE || mes == DICIEMBRE) {
 			if(dia > 31)
