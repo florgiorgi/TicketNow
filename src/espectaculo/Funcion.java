@@ -36,6 +36,10 @@ public class Funcion {
 		return this.cantidadDisp;
 	}
 	
+	public void setCantidadDisp(Integer cant) {
+		this.cantidadDisp = cant;
+	}
+	
 	//devuelve true si se pudo modificar la funcion
 	public boolean modificarFuncion(Hora hora, String sala, Double precio, Integer cantidadDisp) {
 		if(hora == null || sala == null || precio == null || cantidadDisp == null)
