@@ -1,5 +1,6 @@
 package usuario;
 
+import java.util.HashSet;
 import java.util.Set;
 import espectaculo.Espectaculo;
 import fecha.Fecha;
@@ -12,8 +13,11 @@ public class Proveedor extends Cliente {
 	private String categoria;
 	private Set<Espectaculo> espectaculos;
 	
-	public Proveedor(String nombre, String apellido, String usuario, String mail, Fecha fechaNac, String DNI, String contraseña) {
+	public Proveedor(String nombre, String apellido, String usuario, String mail, Fecha fechaNac, String DNI, String contraseña, String nombreProv, String categoria) {
 		super(nombre, apellido, usuario, mail, fechaNac, DNI, contraseña);
+		this.nombreProv = nombreProv;
+		this.categoria = categoria;
+		this.espectaculos = new HashSet<Espectaculo>();
 	}
 
 	public String getNombreProv() {
