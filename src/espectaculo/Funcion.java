@@ -88,5 +88,5 @@ public class Funcion {
 	public String toString() {
 		return "Hora: " + this.hora.toString() + " Sala: " + this.sala;
 	}
-	
+
 }
