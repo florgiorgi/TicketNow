@@ -1,5 +1,6 @@
 package compra;
 
+
 import fecha.Fecha;
 
 public class Ticket {

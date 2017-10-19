@@ -13,8 +13,9 @@ public class Proveedor extends Cliente {
 	private String categoria;
 	private Set<Espectaculo> espectaculos;
 	
-	public Proveedor(String nombre, String apellido, String usuario, String mail, Fecha fechaNac, String DNI, String contraseña, String nombreProv, String categoria) {
-		super(nombre, apellido, usuario, mail, fechaNac, DNI, contraseña);
+	public Proveedor(String usuario, String contraseña, String nombre, String apellido, Fecha fechaNac, String mail,
+			String telefono, String DNI, String nombreProv, String categoria) {
+		super(usuario, contraseña, nombre, apellido, fechaNac, mail, telefono, DNI);
 		this.nombreProv = nombreProv;
 		this.categoria = categoria;
 		this.espectaculos = new HashSet<Espectaculo>();
