@@ -32,4 +32,8 @@ public class Controlador {
 	public void printDatabase() {
 		System.out.println(database);
 	}
+	
+	public Database getDatabase(){
+		return database;
+	}
 }

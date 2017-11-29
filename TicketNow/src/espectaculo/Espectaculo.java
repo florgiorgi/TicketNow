@@ -11,13 +11,15 @@ public class Espectaculo {
 	private String descripcion;
 	private String categoria;
 	private Fecha estreno;
+	private String promocion;
 	private Set<Funcion> funciones;
 	
-	public Espectaculo(String nombre, String descripcion, String categoria, Fecha estreno) {
+	public Espectaculo(String nombre, String descripcion, String categoria, Fecha estreno, String promocion) {
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.categoria = categoria;
 		this.estreno = estreno;
+		this.promocion = promocion;
 		this.funciones = new HashSet<Funcion>();
 	}
 
@@ -39,6 +41,10 @@ public class Espectaculo {
 
 	public Set<Funcion> getFunciones() {
 		return this.funciones;
+	}
+	
+	public String getPromocion(){
+		return this.promocion;
 	}
 	
 	//devuelve true si se pudo modificar el espectaculo

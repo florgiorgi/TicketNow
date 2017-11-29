@@ -29,14 +29,14 @@ public class Usuario {
 			throw new NombreInvalidoException("El nombre es inválido");
 		if (!apellidoValido(apellido))
 			throw new ApellidoInvalidoException("El apellido es inválido");
-		if (!fechaNacValida(fechaNac))
-			throw new FechaNacInvalidaException("La fecha de nacimiento es inválida");
+		//if (!fechaNacValida(fechaNac))
+			//throw new FechaNacInvalidaException("La fecha de nacimiento es inválida");
 		if (!mailValido(mail))
 			throw new MailInvalidoException("El mail es inválido");
-		if (!telefonoValido(telefono))
-			throw new TelefonoInvalidoException("El teléfono es inválido");
-		if (!DNIValido(DNI))
-			throw new DNIInvalidoException("El DNI es inválido");
+		//if (!telefonoValido(telefono))
+			//throw new TelefonoInvalidoException("El teléfono es inválido");
+		//if (!DNIValido(DNI))
+			//throw new DNIInvalidoException("El DNI es inválido");
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.usuario = usuario;
