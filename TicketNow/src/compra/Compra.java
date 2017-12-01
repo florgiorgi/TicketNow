@@ -3,21 +3,19 @@ package compra;
 import usuario.Cliente;
 import espectaculo.Espectaculo;
 import espectaculo.Funcion;
-import fecha.Fecha;
-import fecha.Hora;
 
 public class Compra {
 
 	private Cliente cliente;
 	private Espectaculo espectaculo;
 	private Funcion funcion;
-	private Fecha fecha;
-	private Hora hora;
+	private String fecha;
+	private String hora;
 	private Ticket ticket;
 	private Double precio;
 	private Integer cantEntradas;
 	
-	public Compra(Cliente cliente, Espectaculo espectaculo, Funcion funcion, Fecha fecha, Hora hora, Integer cantEntradas) {
+	public Compra(Cliente cliente, Espectaculo espectaculo, Funcion funcion, String fecha, String hora, Integer cantEntradas) {
 		if(cliente == null || espectaculo == null || funcion == null || fecha == null || hora == null || cantEntradas == null)
 			throw new IllegalArgumentException();
 		this.cliente = cliente;
@@ -42,11 +40,11 @@ public class Compra {
 		return this.espectaculo;
 	}
 
-	public Fecha getFecha() {
+	public String getFecha() {
 		return this.fecha;
 	}
 	
-	public Hora getHora() {
+	public String getHora() {
 		return this.hora;
 	}
 

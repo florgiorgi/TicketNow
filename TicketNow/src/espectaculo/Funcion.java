@@ -1,19 +1,16 @@
 package espectaculo;
 
-import fecha.Fecha;
-import fecha.Hora;
-
 public class Funcion {
 	
 	private String nombre;
 	private String lugar;
-	private Hora hora;
-	private Fecha fecha;
+	private String hora;
+	private String fecha;
 	private String sala;
 	private Double precio;
 	private Integer cantidadDisp;
 	
-	public Funcion(String nombre, String lugar, Fecha fecha, Hora hora, String sala, Double precio, Integer cantidadDisp) {
+	public Funcion(String nombre, String lugar, String fecha, String hora, String sala, Double precio, Integer cantidadDisp) {
 		if(hora == null || sala == null || precio == null || cantidadDisp == null)
 			throw new IllegalArgumentException();
 		if(precio <= 0 || cantidadDisp <= 0)
@@ -35,11 +32,11 @@ public class Funcion {
 		return this.lugar;
 	}
 	
-	public Hora getHora() {
+	public String getHora() {
 		return this.hora;
 	}
 	
-	public Fecha getFecha() {
+	public String getFecha() {
 		return this.fecha;
 	}
 
@@ -60,7 +57,7 @@ public class Funcion {
 	}
 	
 	//devuelve true si se pudo modificar la funcion
-	public boolean modificarFuncion(Hora hora, String sala, Double precio, Integer cantidadDisp) {
+	public boolean modificarFuncion(String hora, String sala, Double precio, Integer cantidadDisp) {
 		if(hora == null || sala == null || precio == null || cantidadDisp == null)
 			return false;
 		if(precio <= 0 || cantidadDisp <= 0)
@@ -108,4 +105,4 @@ public class Funcion {
 		return "Hora: " + this.hora.toString() + " Sala: " + this.sala;
 	}
 
-}
+  }

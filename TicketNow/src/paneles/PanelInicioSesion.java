@@ -17,8 +17,10 @@ import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import java.awt.GridLayout;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.SwingConstants;
@@ -122,11 +124,11 @@ public class PanelInicioSesion extends JPanel {
 		private JPanel panelInicioSesion = new JPanel();
 
 		private JComboBox tipoDeUsuarioField = new JComboBox();
-		private JTextField usuarioField = new JTextField();
+		private JTextField emailField = new JTextField();
 		private JPasswordField contraseñaField = new JPasswordField();
 
 		private JLabel tipoDeUsuario = new JLabel("Tipo de usuario:");
-		private JLabel nombre = new JLabel("Nombre:");
+		private JLabel email = new JLabel("Email:");
 		private JLabel contraseña = new JLabel("Contraseña:");
 
 		private JButton btnIniciarSesion = new JButton("Iniciar sesion");
@@ -168,11 +170,11 @@ public class PanelInicioSesion extends JPanel {
 			tipoDeUsuarioField.setModel(new DefaultComboBoxModel(new String[] { "Cliente", "Proveedor" }));
 			panelInicioSesion.add(tipoDeUsuarioField);
 
-			nombre.setHorizontalAlignment(SwingConstants.CENTER);
-			panelInicioSesion.add(nombre);
+			email.setHorizontalAlignment(SwingConstants.CENTER);
+			panelInicioSesion.add(email);
 
-			panelInicioSesion.add(usuarioField);
-			usuarioField.setColumns(10);
+			panelInicioSesion.add(emailField);
+			emailField.setColumns(10);
 
 			contraseña.setHorizontalAlignment(SwingConstants.CENTER);
 			panelInicioSesion.add(contraseña);
@@ -195,17 +197,27 @@ public class PanelInicioSesion extends JPanel {
 
 			btnIniciarSesion.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if (controlador.usuarioCorrecto(tipoDeUsuarioField.getSelectedItem().toString(),
-							usuarioField.getText(), contraseñaField.getPassword())) {
-						if (tipoDeUsuarioField.getSelectedItem().equals("Cliente")) {
-							VistaTicketNow.changePanel("cliente", PanelInicioSesion.this, controlador);
+					
+					
+					try {
+						if (controlador.usuarioCorrecto(tipoDeUsuarioField.getSelectedItem().toString(),
+								emailField.getText(), contraseñaField.getPassword())) {
+							if (tipoDeUsuarioField.getSelectedItem().equals("Cliente")) {
+								VistaTicketNow.changePanel("cliente", PanelInicioSesion.this, controlador);
+							} else {
+								VistaTicketNow.changePanel("proveedor", PanelInicioSesion.this, controlador);
+							}
 						} else {
-							VistaTicketNow.changePanel("proveedor", PanelInicioSesion.this, controlador);
+							JOptionPane.showMessageDialog(null,
+									"El usuario y contraseña no coinciden. Inténtelo nuevamente.",
+									"Ocurrió algo inesperado", JOptionPane.ERROR_MESSAGE);
 						}
-					} else {
-						JOptionPane.showMessageDialog(null,
-								"El usuario y contraseña no coinciden. Inténtelo nuevamente.",
-								"Ocurrió algo inesperado", JOptionPane.ERROR_MESSAGE);
+					} catch (HeadlessException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
 					}
 				}
 			});

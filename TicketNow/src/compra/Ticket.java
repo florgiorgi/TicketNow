@@ -1,14 +1,12 @@
 package compra;
 
 
-import fecha.Fecha;
-
 public class Ticket {
 	
 	private Double precio;
-	private Fecha fecha;
+	private String fecha;
 	
-	public Ticket(Double precio, Fecha fecha) {
+	public Ticket(Double precio, String fecha) {
 		if(precio == null || fecha == null)
 			throw new IllegalArgumentException();
 		if(precio < 0)
@@ -21,7 +19,7 @@ public class Ticket {
 		return this.precio;
 	}
 	
-	public Fecha getFecha() { 
+	public String getFecha() { 
 		return this.fecha;
 	}
 	

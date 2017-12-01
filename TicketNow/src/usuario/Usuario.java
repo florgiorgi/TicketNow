@@ -4,39 +4,49 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import fecha.Fecha;
-
 public class Usuario {
-
+	
 	private String nombre;
 	private String apellido;
 	private String usuario;
 	private String mail;
-	private Fecha fechaNac;
+	private String fechaNac;
 	private String DNI;
 	private String telefono;
-	private char[] contraseña;
+	private String contraseña;
+	private String pais;;
+	private String provincia;
+	private String localidad;
+	private String direccion;
+	private String codigoPostal;
 
-	public Usuario(String usuario, char[] contraseña, char[] constraseñaChequeo, String nombre, String apellido,
-			String fechaNac, String mail, String telefono, String DNI) {
+	public Usuario(String usuario, String contraseña, String constraseñaChequeo, String nombre, String apellido,
+			String fechaNac, String mail, String telefono, String DNI, String pais, String provincia, String localidad,
+			String direccion, String codigoPostal) {
 		if (!usuarioValido(usuario))
-			throw new UsuarioInvalidoException("El nombre de usuario es inválido");
+			throw new UsuarioInvalidoException("El nombre de usuario es inválido.");
 		if (!contraseñaValida(contraseña))
-			throw new ContraseñaInvalidaException("La contraseña es inválida");
+			throw new ContraseñaInvalidaException("La contraseña es inválida. Recuerde que la misma debe contener entre 4 y 8 caracteres. ");
 		if (!contraseñaCorrecta(contraseña, constraseñaChequeo))
-			throw new ContraseñaIncorrectaException("Las contraseñas no coinciden");
+			throw new ContraseñaIncorrectaException("Las contraseñas no coinciden.");
 		if (!nombreValido(nombre))
-			throw new NombreInvalidoException("El nombre es inválido");
+			throw new NombreInvalidoException("El nombre es inválido.");
 		if (!apellidoValido(apellido))
-			throw new ApellidoInvalidoException("El apellido es inválido");
-		//if (!fechaNacValida(fechaNac))
-			//throw new FechaNacInvalidaException("La fecha de nacimiento es inválida");
+			throw new ApellidoInvalidoException("El apellido es inválido.");
+		if (!fechaNacValida(fechaNac))
+			throw new FechaNacInvalidaException("La fecha de nacimiento es inválida.");
 		if (!mailValido(mail))
-			throw new MailInvalidoException("El mail es inválido");
-		//if (!telefonoValido(telefono))
-			//throw new TelefonoInvalidoException("El teléfono es inválido");
-		//if (!DNIValido(DNI))
-			//throw new DNIInvalidoException("El DNI es inválido");
+			throw new MailInvalidoException("El mail es inválido.");
+		if (!telefonoValido(telefono))
+			throw new TelefonoInvalidoException("El teléfono es inválido.");
+		if (!dniValido(DNI))
+			throw new DNIInvalidoException("El DNI es inválido. Recuerde que el formato del mismo es unicamente 8 cifras.");
+		if(!localidadValida(localidad))
+			throw new LocalidadInvalidaException("La localidad es inválida.");
+		if(!direccionValida(direccion))
+			throw new DireccionInvalidaException("La dirección es invalida.");
+		if(!codigoPostalValido(codigoPostal))
+			throw new CodigoPostalInvalidoException("El codigo postal es invalido. Recuerde que el formato del mismo es de unicamente 4 cifras.");
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.usuario = usuario;
@@ -44,13 +54,19 @@ public class Usuario {
 		this.telefono = telefono;
 		this.DNI = DNI;
 		this.contraseña = contraseña;
+		this.pais = pais;
+		this.fechaNac = fechaNac;
+		this.provincia = provincia;
+		this.localidad = localidad;
+		this.direccion = direccion;
+		this.codigoPostal = codigoPostal;
 	}
 
-	private boolean contraseñaCorrecta(char[] c1, char[] c2) {
-		if (c1.length != c2.length)
+	private boolean contraseñaCorrecta(String c1, String c2) {
+		if (c1.length() != c2.length())
 			return false;
 		else
-			return Arrays.equals(c1, c2);
+			return c1.equals(c2);
 	}
 
 	private boolean usuarioValido(String usuario) {
@@ -60,7 +76,6 @@ public class Usuario {
 		char[] aux = usuario.toCharArray();
 
 		for (int i = 0; i < aux.length; i++) {
-			/* una letra, un numero o .-_ */
 			if (!Character.isLetterOrDigit(aux[i]) && Character.compare(aux[i], '.') != 0
 					&& Character.compare(aux[i], '_') != 0 && Character.compare(aux[i], '-') != 0)
 				return false;
@@ -68,12 +83,12 @@ public class Usuario {
 		return true;
 	}
 
-	private boolean contraseñaValida(char[] contraseña) {
-		if (contraseña == null || contraseña.length == 0)
+	private boolean contraseñaValida(String contraseña) {
+		if (contraseña == null || contraseña.length() == 0)
 			return false;
 
-		for (int i = 0; i < contraseña.length; i++) {
-			if (!Character.isLetterOrDigit(contraseña[i]))
+		for (int i = 0; i < contraseña.length(); i++) {
+			if (!Character.isLetterOrDigit(contraseña.charAt(i)))
 				return false;
 		}
 		return true;
@@ -106,28 +121,41 @@ public class Usuario {
 	}
 
 	private boolean fechaNacValida(String fecha) {
-		if (formatoValido(fecha)) {
+		if(fecha == null)
+			return false;
+		
+		if (!formatoValido(fecha))
+			return false;
 
-			Integer dia = Integer.valueOf(fecha.substring(0, 2));
-			Integer mes = Integer.valueOf(fecha.substring(3, 5));
-			Integer año = Integer.valueOf(fecha.substring(6, 10));
-
-			try {
-				this.fechaNac = new Fecha(dia, mes, año);
-			} catch (IllegalArgumentException e) {
+		String[] f = fecha.split("-");
+		
+		Integer año = Integer.parseInt(f[0]);
+		Integer mes = Integer.parseInt(f[1]);
+		Integer dia = Integer.parseInt(f[2]);
+		
+		if (dia < 0 || mes < 0 || mes > 12 || año < 1930 || año > 2018)
+			return false;
+		if (f[1] == "01" || f[1] == "03" || f[1] == "05" || f[1] == "07" || f[1] == "08" || f[1] == "10"
+				|| f[1] == "12") {
+			if (dia > 31)
 				return false;
-			}
-			return true;
+		} else if (f[1] == "02") {
+			if (dia > 28)
+				return false;
+		} else {
+			if (dia > 30)
+				return false;
 		}
-		return false;
+		
+		return true;
 	}
 
 	private boolean formatoValido(String fecha) {
 		char[] aux = fecha.toCharArray();
 
 		for (int i = 0; i < aux.length; i++) {
-			if (i == 2 || i == 5) {
-				if (aux[i] != '/')
+			if (i == 4 || i == 7) {
+				if (aux[i] != '-')
 					return false;
 			} else {
 				if (!Character.isDigit(aux[i]))
@@ -136,16 +164,17 @@ public class Usuario {
 		}
 		return true;
 	}
-	
+
 	private boolean mailValido(String mail) {
-		String PATTERN_EMAIL = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-	            + "[A-Za-z]+(\\.[A-Za-z]+)*(\\.[A-Za-z]{2,})$";
+		if(mail == null)
+			return false;
 		
+		String PATTERN_EMAIL = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z]+(\\.[A-Za-z]+)*(\\.[A-Za-z]{2,})$";
+
 		Pattern pattern = Pattern.compile(PATTERN_EMAIL);
-		 
-     
-        Matcher matcher = pattern.matcher(mail);
-        return matcher.matches();
+
+		Matcher matcher = pattern.matcher(mail);
+		return matcher.matches();
 	}
 
 	private boolean telefonoValido(String telefono) {
@@ -161,11 +190,67 @@ public class Usuario {
 		return true;
 	}
 
-	private boolean DNIValido(String dni) {
-		if (dni == null || dni.equals(""))
+	private boolean dniValido(String dni) {
+		if (dni == null || dni.equals("") || dni.length() != 8)
 			return false;
 
 		char[] aux = dni.toCharArray();
+	
+		for (int i = 0; i < aux.length; i++) {
+			if (!Character.isDigit(aux[i]))
+				return false;
+		}
+		return true;
+	}
+
+	private boolean paisValido(String pais) {
+		if (pais.equals("Argentina") || pais.equals("Paraguay") || pais.equals("Uruguay")) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private boolean localidadValida(String localidad) {
+		if(localidad == null || localidad.equals(""))
+			return false;
+		
+		char[] aux = localidad.toCharArray();
+		for (int i = 0; i < aux.length; i++) {
+			if (!Character.isLetter(aux[i]))
+				return false;
+		}
+		return true;
+	}
+
+	private boolean direccionValida(String direccion) {
+		if(direccion == null || direccion.equals(""))
+			return false;
+		
+		String[] str = direccion.split(" ");
+		String calle = str[0];
+		String numero = str[1];
+
+		char[] aux1 = calle.toCharArray();
+		for (int i = 0; i < aux1.length; i++) {
+			if (!Character.isLetter(aux1[i]))
+				return false;
+		}
+
+		char[] aux2 = numero.toCharArray();
+		for (int i = 0; i < aux2.length; i++) {
+			if (!Character.isDigit(aux2[i]))
+				return false;
+		}
+
+		return true;
+	}
+
+	private boolean codigoPostalValido(String codigoPostal) {
+		if (codigoPostal == null || codigoPostal.length() != 4)
+			return false;
+
+		char[] aux = codigoPostal.toCharArray();
 
 		for (int i = 0; i < aux.length; i++) {
 			if (!Character.isDigit(aux[i]))
@@ -190,7 +275,7 @@ public class Usuario {
 		return this.mail;
 	}
 
-	public Fecha getFechaNac() {
+	public String getFechaNac() {
 		return this.fechaNac;
 	}
 
@@ -202,12 +287,32 @@ public class Usuario {
 		return this.DNI;
 	}
 
-	public char[] getContraseña() {
+	public String getContraseña() {
 		return this.contraseña;
 	}
 
-	public void modificarDatos(String nombre, String apellido, String mail, Fecha fechaNac, String DNI,
-			char[] contraseña) {
+	public String getPais() {
+		return this.pais;
+	}
+
+	public String getProvincia() {
+		return this.provincia;
+	}
+
+	public String getLocalidad() {
+		return this.localidad;
+	}
+
+	public String getDireccion() {
+		return this.direccion;
+	}
+
+	public String getCodigoPostal() {
+		return this.codigoPostal;
+	}
+
+	public void modificarDatos(String nombre, String apellido, String mail, String fechaNac, String DNI,
+			String contraseña) {
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.mail = mail;

@@ -1,10 +1,13 @@
 package paneles;
 
 import usuario.ApellidoInvalidoException;
+import usuario.CodigoPostalInvalidoException;
 import usuario.ContraseñaIncorrectaException;
 import usuario.ContraseñaInvalidaException;
 import usuario.DNIInvalidoException;
+import usuario.DireccionInvalidaException;
 import usuario.FechaNacInvalidaException;
+import usuario.LocalidadInvalidaException;
 import usuario.MailInvalidoException;
 import usuario.NombreInvalidoException;
 import usuario.TelefonoInvalidoException;
@@ -27,11 +30,16 @@ import javax.swing.SwingConstants;
 import controlador.Controlador;
 
 import java.awt.GridLayout;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.sql.SQLException;
 
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
+import javax.swing.JRadioButton;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
@@ -94,7 +102,7 @@ public class PanelRegistro extends JPanel {
 		 */
 		private void inicializarBotones() {
 			btnVolver.setBackground(Color.WHITE);
-			ImageIcon icono = new ImageIcon(PanelRegistro.class.getResource("/paneles/volver.png"));
+			ImageIcon icono = new ImageIcon(PanelRegistro.class.getResource("/paneles/back.png"));
 			btnVolver.setIcon(icono);
 			btnVolver.setPreferredSize(new Dimension(icono.getIconWidth(), icono.getIconHeight()));
 			btnVolver.setBorderPainted(false);
@@ -123,18 +131,28 @@ public class PanelRegistro extends JPanel {
 		private JLabel lblTelefono = new JLabel("Teléfono:");
 		private JLabel lblTipoDeDocumento = new JLabel("Tipo de documento:");
 		private JLabel lblDni = new JLabel("Numero de documento:");
+		private JLabel lblPais = new JLabel("Pais:");
+		private JLabel lblProvincia = new JLabel("Provincia:");
+		private JLabel lblLocalidad = new JLabel("Localidad:");
+		private JLabel lblDireccion = new JLabel("Direccion:");
+		private JLabel lblCodigoPostal = new JLabel("Codigo Postal:");
 
 		private JComboBox tipoUsuario = new JComboBox();
 		private JTextField usuarioField = new JTextField();
-		private JPasswordField contraseñaField = new JPasswordField();
-		private JPasswordField contraseñaConfField = new JPasswordField();
+		private JTextField contraseñaField = new JTextField();
+		private JTextField contraseñaConfField = new JTextField();
 		private JTextField nombreField = new JTextField();
 		private JTextField apellidoField = new JTextField();
-		private JTextField fechaNacimientoField = new JTextField("DD/MM/AAAA");
+		private JTextField fechaNacimientoField = new JTextField("AAAA-MM-DD");
 		private JTextField direccionCorreoField = new JTextField();
 		private JTextField telefonoField = new JTextField();
 		private JComboBox tipoDocumentoBox = new JComboBox();
 		private JTextField dniField = new JTextField();
+		private JComboBox paisBox = new JComboBox();
+		private JComboBox provinciaBox = new JComboBox();
+		private JTextField localidadField = new JTextField();
+		private JTextField direccionField = new JTextField();
+		private JTextField codigoPostalField = new JTextField();
 		private JPanel panelInferior;
 
 		private Font fuente = new Font("Dialog", Font.BOLD, 14);
@@ -142,7 +160,7 @@ public class PanelRegistro extends JPanel {
 		public PanelCentral() {
 			setLayout(new BorderLayout(0, 0));
 
-			panelRegistrarse.setLayout(new GridLayout(12, 4, 10, 25));
+			panelRegistrarse.setLayout(new GridLayout(16, 10, 15, 12));
 			panelRegistrarse.setBackground(Color.WHITE);
 			add(panelRegistrarse, BorderLayout.CENTER);
 
@@ -231,7 +249,7 @@ public class PanelRegistro extends JPanel {
 			panelRegistrarse.add(lblTipoDeDocumento);
 			lblTipoDeDocumento.setFont(fuente);
 
-			tipoDocumentoBox.setModel(new DefaultComboBoxModel(new String[] { "DNI", "Pasaporte" }));
+			tipoDocumentoBox.setModel(new DefaultComboBoxModel(new String[] { "DNI", "CI", "Pasaporte" }));
 			panelRegistrarse.add(tipoDocumentoBox);
 			tipoDocumentoBox.setFont(fuente);
 
@@ -242,6 +260,78 @@ public class PanelRegistro extends JPanel {
 			dniField.setColumns(10);
 			panelRegistrarse.add(dniField);
 			dniField.setFont(fuente);
+
+			lblPais.setHorizontalAlignment(SwingConstants.CENTER);
+			panelRegistrarse.add(lblPais);
+			lblPais.setFont(fuente);
+
+			paisBox.setModel(
+					new DefaultComboBoxModel(new String[] { "Seleccione pais", "Argentina", "Paraguay", "Uruguay" }));
+			panelRegistrarse.add(paisBox);
+			paisBox.setFont(fuente);
+
+			lblProvincia.setHorizontalAlignment(SwingConstants.CENTER);
+			panelRegistrarse.add(lblProvincia);
+			lblProvincia.setFont(fuente);
+			System.out.println(paisBox.getSelectedIndex());
+
+			paisBox.addItemListener(new ItemListener() {
+
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					if (e.getStateChange() == ItemEvent.SELECTED) {
+						switch (e.getItem().toString()) {
+						case "Argentina":
+							provinciaBox.setModel(new DefaultComboBoxModel(new String[] { "Buenos Aires", "Catamarca",
+									"Chaco", "Chubut", "Córdoba", "Corrientes", "Entre Ríos", "Formosa", "Jujuy",
+									"La Pampa", "La Rioja", "Mendoza", "Misiones", "Neuquén", "Río Negro", "Salta",
+									"San Juan", "San Luis", "Santa Cruz", "Santa Fe", "Santiago del Estero",
+									"Tierra del Fuego", "Tucumán" }));
+							break;
+						case "Paraguay":
+							provinciaBox.setModel(new DefaultComboBoxModel(new String[] { "Asunción", "Concepcion",
+									"San Pedro", "Cordillera", "Guairá", "Caaguazú", "Caazapá", "Itapúa", "Misiones",
+									"Paraguarí", "Alto Paraná", "Central", "Ñeembucú", "Amambay", "Canindeyú",
+									"Presidente Hayes", "Boquerón", "Alto Paraguay" }));
+							break;
+						case "Uruguay":
+							provinciaBox.setModel(new DefaultComboBoxModel(new String[] { "Artigas", "Canelones",
+									"Cerro Largo", "Colonia", "Durazno", "Flores", "Florida", "Lavalleja", "Maldonado",
+									"Montevideo", "Paysandú", "Rio Negro", "Rivera", "Rocha", "Salto", "San Jose",
+									"Soriano", "Tacuarembó", "Treinta y Tres" }));
+							break;
+						}
+					}
+				}
+			});
+
+			panelRegistrarse.add(provinciaBox);
+			provinciaBox.setFont(fuente);
+
+			lblLocalidad.setHorizontalAlignment(SwingConstants.CENTER);
+			panelRegistrarse.add(lblLocalidad);
+			lblLocalidad.setFont(fuente);
+
+			localidadField.setColumns(10);
+			panelRegistrarse.add(localidadField);
+			localidadField.setFont(fuente);
+
+			lblDireccion.setHorizontalAlignment(SwingConstants.CENTER);
+			panelRegistrarse.add(lblDireccion);
+			lblDireccion.setFont(fuente);
+
+			direccionField.setColumns(10);
+			panelRegistrarse.add(direccionField);
+			direccionField.setFont(fuente);
+
+			lblCodigoPostal.setHorizontalAlignment(SwingConstants.CENTER);
+			panelRegistrarse.add(lblCodigoPostal);
+			lblCodigoPostal.setFont(fuente);
+
+			codigoPostalField.setColumns(10);
+			panelRegistrarse.add(codigoPostalField);
+			codigoPostalField.setFont(fuente);
+
 		}
 
 		private class PanelInferior extends JPanel {
@@ -260,16 +350,20 @@ public class PanelRegistro extends JPanel {
 
 				btnRegistrarse.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-
-						try {
-							if (controlador.agregarUsuario(tipoUsuario.getSelectedItem().toString(),
-									usuarioField.getText(), contraseñaField.getPassword(),
-									contraseñaConfField.getPassword(), nombreField.getText(), apellidoField.getText(),
+						
+						
+						if(!paisBox.getSelectedItem().toString().equals("Seleccione pais")) {
+							try {
+								if (controlador.agregarUsuario(tipoUsuario.getSelectedItem().toString(),
+									usuarioField.getText(), contraseñaField.getText(),
+									contraseñaConfField.getText(), nombreField.getText(), apellidoField.getText(),
 									fechaNacimientoField.getText(), direccionCorreoField.getText(),
-									telefonoField.getText(), dniField.getText())) {
+									telefonoField.getText(), dniField.getText(), paisBox.getSelectedItem().toString(),
+									provinciaBox.getSelectedItem().toString(), localidadField.getText(), direccionField.getText(),
+									codigoPostalField.getText())) {
 								JOptionPane.showMessageDialog(null, "Su cuenta ha sido creada con éxito.");
 								VistaTicketNow.changePanel("menu", PanelRegistro.this, controlador);
-							}
+								}
 						} catch (ContraseñaIncorrectaException m) {
 							JOptionPane.showMessageDialog(null, m.getMessage(), "Ocurrió algo inesperado",
 									JOptionPane.ERROR_MESSAGE);
@@ -309,9 +403,31 @@ public class PanelRegistro extends JPanel {
 						} catch (UsuarioExistenteException m9) {
 							JOptionPane.showMessageDialog(null, m9.getMessage(), "Ocurrió algo inesperado",
 									JOptionPane.ERROR_MESSAGE);
+							
+						} catch (LocalidadInvalidaException m10) {
+							JOptionPane.showMessageDialog(null, m10.getMessage(), "Ocurrió algo inesperado",
+									JOptionPane.ERROR_MESSAGE);
+							
+						} catch (DireccionInvalidaException m11) {
+							JOptionPane.showMessageDialog(null, m11.getMessage(), "Ocurrió algo inesperado",
+									JOptionPane.ERROR_MESSAGE);
+							
+						}  catch (CodigoPostalInvalidoException m12) {
+							JOptionPane.showMessageDialog(null, m12.getMessage(), "Ocurrió algo inesperado",
+									JOptionPane.ERROR_MESSAGE);
+							
+						} catch (HeadlessException e1) {
+							/* */
+							e1.printStackTrace();
+						} catch (SQLException e1) {
+							/* */
+							e1.printStackTrace();
 						}
-
-						controlador.printDatabase();
+						
+						} else {
+							JOptionPane.showMessageDialog(null, "Por favor indique el pais de residencia", "Ocurrió algo inesperado",
+									JOptionPane.ERROR_MESSAGE);
+						}
 					}
 				});
 			}

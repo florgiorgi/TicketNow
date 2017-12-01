@@ -7,9 +7,9 @@ import javax.swing.JPanel;
 
 import controlador.Controlador;
 
-public class PanelPrincipalProveedor extends JPanel {
+public class PanelPerfilCliente extends JPanel {
 	
-	public PanelPrincipalProveedor(Controlador controlador) {
+	public PanelPerfilCliente(Controlador controlador) {
 		this.setLayout(new BorderLayout(0, 0));
 		setBackground(Color.GRAY);
 	}

@@ -70,6 +70,12 @@ public class VistaTicketNow {
 		case "proveedor":
 			panel.add(new PanelPrincipalProveedor(controlador), BorderLayout.CENTER);
 			break;
+		case "lista":
+			panel.add(new PanelResultadosEncontrados(controlador), BorderLayout.CENTER);
+			break;
+		case "perfil":
+			panel.add(new PanelPerfilCliente(controlador), BorderLayout.CENTER);
+			break;
 		}
 	}
 
