@@ -26,17 +26,9 @@ public class Controlador {
 	public boolean usuarioCorrecto(String tipoUsuario, String mail, char[] contraseña) throws SQLException {
 		if (tipoUsuario.equals("Cliente"))
 			return database.containsCliente(mail, contraseña);
-		/* Hacerlo para proveedor */
+		if (tipoUsuario.equals("Proveedor"))
+			return database.containsProveedor(mail, contraseña);
 
 		return false;
 	}
-
-	public void printDatabase() {
-		System.out.println(database);
-	}
-
-	public Database getDatabase() {
-		return database;
-	}
-
 }
