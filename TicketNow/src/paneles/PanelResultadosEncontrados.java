@@ -8,6 +8,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.EventHandler;
 
 import javax.swing.AbstractListModel;
 import javax.swing.BoxLayout;
@@ -81,12 +82,15 @@ public class PanelResultadosEncontrados extends JPanel {
 
 		private void inicializarBotones() {
 			btnMasInfo.setForeground(Color.WHITE);
+			btnMasInfo.setFont(new Font("Dialog", Font.BOLD, 14));
 			btnMasInfo.setBackground(new Color(0, 102, 204));
 			btnMasInfo.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if(listEspectaculos.isSelectionEmpty())
 						JOptionPane.showMessageDialog(null, "Seleccione un espectáculo para ver sus detalles", "Ocurrió algo inesperado",
 								JOptionPane.ERROR_MESSAGE);
+					else
+						VistaTicketNow.changePanel("informacion", PanelResultadosEncontrados.this, controlador);
 				}
 			});
 			add(btnMasInfo);
@@ -98,7 +102,7 @@ public class PanelResultadosEncontrados extends JPanel {
 		JPanel panelCentralCentral = new JPanel();
 		JPanel panelCentralIzquierdo = new JPanel();
 
-		JLabel lblResultadosEncontrados = new JLabel("RESULTADOS ENCONTRADOS");
+		JLabel lblResultadosEncontrados = new JLabel("                 RESULTADOS ENCONTRADOS");
 
 		JButton btnOrdenar = new JButton("Ordenar");
 		JList listOrdenar = new JList();
@@ -109,22 +113,22 @@ public class PanelResultadosEncontrados extends JPanel {
 			panelCentralSuperior.setBackground(new Color(153, 204, 255));
 			add(panelCentralSuperior, BorderLayout.NORTH);
 
-			inicializePanelCentralSuperior();
+			inicializarPanelCentralSuperior();
 
 			panelCentralCentral.setBackground(new Color(255, 255, 255));
 			add(panelCentralCentral, BorderLayout.CENTER);
 			panelCentralCentral.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
-			initializePanelCentralCentral();
+			inicializarPanelCentralCentral();
 
-			panelCentralIzquierdo.setBackground(new Color(204, 204, 204));
+			panelCentralIzquierdo.setBackground(Color.LIGHT_GRAY);
 			add(panelCentralIzquierdo, BorderLayout.WEST);
 			panelCentralIzquierdo.setLayout(new BoxLayout(panelCentralIzquierdo, BoxLayout.Y_AXIS));
 
-			initializePanelCentralIzquierdo();
+			inicializarPanelCentralIzquierdo();
 		}
 
-		private void inicializePanelCentralSuperior() {
+		private void inicializarPanelCentralSuperior() {
 			lblResultadosEncontrados.setFont(new Font("Dialog", Font.BOLD, 18));
 			lblResultadosEncontrados.setHorizontalAlignment(SwingConstants.LEFT);
 			lblResultadosEncontrados.setForeground(Color.WHITE);
@@ -132,12 +136,11 @@ public class PanelResultadosEncontrados extends JPanel {
 			panelCentralSuperior.add(lblResultadosEncontrados);
 		}
 
-		private void initializePanelCentralCentral() {
+		private void inicializarPanelCentralCentral() {
 			listEspectaculos.setFont(new Font("Dialog", Font.BOLD, 13));
 			listEspectaculos.setModel(new AbstractListModel() {
 				String[] values = new String[] { "Nombre: Espectaculo 1 - Lugar: Hoyts Palermo - Precio: 120$",
-						"Espectaculo 2", "Espectaculo 3", "Espectaculo 4", "Espectaculo 5", "Espectaculo 6",
-						"Espectaculo 7", "Espectaculo 8", "Espectaculo 9", "Espectaculo 10", "Espectaculo 11" };
+						"Nombre: Espectaculo 2 - Lugar: Hoyts Abasto - Precio: 120$", "Nombre: Espectaculo 3 - Lugar: Hoyts Unicenter - Precio: 120$", "Nombre: Espectaculo 4 - Lugar: Hoyts Belgrano - Precio: 120$" };
 
 				public int getSize() {
 					return values.length;
@@ -148,9 +151,11 @@ public class PanelResultadosEncontrados extends JPanel {
 				}
 			});
 			panelCentralCentral.add(listEspectaculos);
+			
+			
 		}
 
-		private void initializePanelCentralIzquierdo() {
+		private void inicializarPanelCentralIzquierdo() {
 			btnOrdenar.setForeground(Color.WHITE);
 			btnOrdenar.setBackground(new Color(0, 102, 204));
 			btnOrdenar.setAlignmentX(Component.CENTER_ALIGNMENT);

@@ -3,6 +3,9 @@ package espectaculo;
 import java.util.HashSet;
 import java.util.Set;
 
+import usuario.NombreInvalidoException;
+import usuario.UsuarioInvalidoException;
+
 public class Espectaculo {
 
 	private String nombre;
@@ -10,15 +13,77 @@ public class Espectaculo {
 	private String categoria;
 	private String fechaEstreno;
 	private String promocion;
-	private Set<Funcion> funciones;
 
+	/* Agregar campos nuevos como lugar, cargar foto, precio, cantidad de entradas */
 	public Espectaculo(String nombre, String descripcion, String categoria, String fechaEstreno, String promocion) {
+		if(!nombreValido(nombre))
+			throw new NombreInvalidoException("El nombre de usuario es inválido.");
+		if(!fechaValida(fechaEstreno))
+			throw new FechaEstrenoInvalidaException("La fecha de nacimiento es inválida.");
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.categoria = categoria;
 		this.fechaEstreno = fechaEstreno;
 		this.promocion = promocion;
-		this.funciones = new HashSet<Funcion>();
+	}
+	
+	public boolean nombreValido(String nombre) {
+		if(nombre == null || nombre.equals(" "))
+			return false;
+		
+		char[] aux = nombre.toCharArray();
+		
+		for (int i = 0; i < aux.length; i++) {
+			if (!Character.isLetterOrDigit(aux[i]) && Character.compare(aux[i], '.') != 0
+					&& Character.compare(aux[i], '_') != 0 && Character.compare(aux[i], '-') != 0)
+				return false;
+		}
+		return true;
+	}
+	
+	private boolean fechaValida(String fecha) {
+		if(fecha == null)
+			return false;
+		
+		if (!formatoValido(fecha))
+			return false;
+
+		String[] f = fecha.split("-");
+		
+		Integer año = Integer.parseInt(f[0]);
+		Integer mes = Integer.parseInt(f[1]);
+		Integer dia = Integer.parseInt(f[2]);
+		
+		if (dia < 0 || mes < 0 || mes > 12 || año < 1930 || año > 2018)
+			return false;
+		if (f[1] == "01" || f[1] == "03" || f[1] == "05" || f[1] == "07" || f[1] == "08" || f[1] == "10"
+				|| f[1] == "12") {
+			if (dia > 31)
+				return false;
+		} else if (f[1] == "02") {
+			if (dia > 28)
+				return false;
+		} else {
+			if (dia > 30)
+				return false;
+		}
+		
+		return true;
+	}
+
+	private boolean formatoValido(String fecha) {
+		char[] aux = fecha.toCharArray();
+
+		for (int i = 0; i < aux.length; i++) {
+			if (i == 4 || i == 7) {
+				if (aux[i] != '-')
+					return false;
+			} else {
+				if (!Character.isDigit(aux[i]))
+					return false;
+			}
+		}
+		return true;
 	}
 
 	public String getNombre() {
@@ -37,10 +102,6 @@ public class Espectaculo {
 		return this.fechaEstreno;
 	}
 
-	public Set<Funcion> getFunciones() {
-		return this.funciones;
-	}
-
 	public String getPromocion() {
 		return this.promocion;
 	}
@@ -56,25 +117,6 @@ public class Espectaculo {
 		return true;
 	}
 
-	// devuelve true si pudo agregar la funcion
-	public boolean agregarFuncion(Funcion funcion) {
-		return funciones.add(funcion);
-	}
-
-	// devuelve true si pudo eliminar la funcion
-	public boolean eliminarFuncion(Funcion funcion) {
-		return funciones.remove(funcion);
-	}
-
-	// devuelve true si pudo modificar la funcion
-	public boolean modificarFuncion(Funcion funcion, String hora, String sala, Double precio, Integer cantidadDisp) {
-		for (Funcion f : funciones) {
-			if (f.equals(funcion)) {
-				return f.modificarFuncion(hora, sala, precio, cantidadDisp);
-			}
-		}
-		return false;
-	}
 
 	@Override
 	public int hashCode() {

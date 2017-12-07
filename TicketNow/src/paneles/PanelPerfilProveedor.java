@@ -6,16 +6,19 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -23,7 +26,7 @@ import javax.swing.SwingConstants;
 import controlador.Controlador;
 
 
-public class PanelPerfilCliente extends JPanel {
+public class PanelPerfilProveedor extends JPanel {
 
 	private JPanel panelSuperior;
 	private JPanel panelDerecho;
@@ -32,7 +35,7 @@ public class PanelPerfilCliente extends JPanel {
 
 	private Controlador controlador;
 
-	public PanelPerfilCliente(Controlador controlador) {
+	public PanelPerfilProveedor(Controlador controlador) {
 		/* Tendria que recibir el usuario para completar los campos modificables con sus datos */
 		setLayout(new BorderLayout(0, 0));
 		this.controlador = controlador;
@@ -90,7 +93,7 @@ public class PanelPerfilCliente extends JPanel {
 
 			btnVolver.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					VistaTicketNow.changePanel("cliente", PanelPerfilCliente.this, controlador);
+					VistaTicketNow.changePanel("proveedor", PanelPerfilProveedor.this, controlador);
 				}
 			});
 		}
@@ -155,7 +158,7 @@ public class PanelPerfilCliente extends JPanel {
 			panelRegistrarse.add(lblTipoUsuario);
 			lblTipoUsuario.setFont(fuente);
 
-			tipoUsuario.setModel(new DefaultComboBoxModel(new String[] { "Cliente","Proveedor" }));
+			tipoUsuario.setModel(new DefaultComboBoxModel(new String[] {"Proveedor", "Cliente" }));
 			tipoUsuario.setEnabled(false);
 			panelRegistrarse.add(tipoUsuario);
 			tipoUsuario.setFont(fuente);
@@ -331,7 +334,7 @@ public class PanelPerfilCliente extends JPanel {
 				
 				btnEliminarCuenta.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						VistaTicketNow.changePanel("bajaCliente", PanelPerfilCliente.this, controlador);
+						VistaTicketNow.changePanel("bajaProveedor", PanelPerfilProveedor.this, controlador);
 					}
 				});
 						
@@ -342,5 +345,4 @@ public class PanelPerfilCliente extends JPanel {
 
 	}
 }
-
 

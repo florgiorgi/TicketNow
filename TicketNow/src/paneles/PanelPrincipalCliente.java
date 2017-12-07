@@ -56,12 +56,15 @@ public class PanelPrincipalCliente extends JPanel {
 		JTextField txtBuscar = new JTextField();
 		
 		JPanel panelSuperiorDerecho = new JPanel();
+		JPanel panelBotones = new JPanel();
 
 		ImageIcon icono1 = new ImageIcon(PanelRegistro.class.getResource("/paneles/exit.png"));
 		ImageIcon icono2 = new ImageIcon(PanelRegistro.class.getResource("/paneles/home.png"));
+		ImageIcon icono3 = new ImageIcon(PanelRegistro.class.getResource("/paneles/carrito.png"));
 		
 		JButton btnSalir = new JButton("");
 		JButton btnPerfil = new JButton("");
+		JButton btnCompra = new JButton("");
 		
 		JPanel panelSuperiorIzquierdo = new JPanel();
 		
@@ -95,11 +98,16 @@ public class PanelPrincipalCliente extends JPanel {
 			txtBuscar.setColumns(10);
 			panelSuperiorCentral.add(txtBuscar, BorderLayout.SOUTH);
 			
+			
+			panelSuperiorDerecho.add(panelBotones, BorderLayout.CENTER);
+			panelBotones.setBackground(Color.WHITE);
+			panelBotones.setLayout(new BorderLayout(0, 0));
+			
 			btnSalir.setIcon(icono1);
 			btnSalir.setBorderPainted(false);
 			btnSalir.setPreferredSize(new Dimension(icono1.getIconWidth(), icono1.getIconHeight()));
 			btnSalir.setBackground(Color.WHITE);
-			panelSuperiorDerecho.add(btnSalir, BorderLayout.EAST);
+			panelBotones.add(btnSalir, BorderLayout.EAST);
 		
 			btnSalir.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -111,15 +119,27 @@ public class PanelPrincipalCliente extends JPanel {
 			btnPerfil.setBorderPainted(false);
 			btnPerfil.setPreferredSize(new Dimension(icono2.getIconWidth(), icono2.getIconHeight()));
 			btnPerfil.setBackground(Color.WHITE);
-			panelSuperiorDerecho.add(btnPerfil, BorderLayout.CENTER);
+			panelBotones.add(btnPerfil, BorderLayout.CENTER);
 			
 			btnPerfil.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					VistaTicketNow.changePanel("perfil", PanelPrincipalCliente.this, controlador);
+					VistaTicketNow.changePanel("perfilCliente", PanelPrincipalCliente.this, controlador);
 				}
 			});
 			
-			JLabel labelSpace = new JLabel("                                                                  ");
+			btnCompra.setIcon(icono3);
+			btnCompra.setBorderPainted(false);
+			btnCompra.setPreferredSize(new Dimension(icono3.getIconWidth(), icono3.getIconHeight()));
+			btnCompra.setBackground(Color.WHITE);
+			panelBotones.add(btnCompra, BorderLayout.WEST);
+			
+			btnCompra.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					VistaTicketNow.changePanel("finalizarCompra", PanelPrincipalCliente.this, controlador);
+				}
+			});
+			
+			JLabel labelSpace = new JLabel("                                       ");
 			
 			panelSuperiorDerecho.add(labelSpace, BorderLayout.WEST);
 			
@@ -156,7 +176,7 @@ public class PanelPrincipalCliente extends JPanel {
 			add(lblFiltroLugar);
 			
 			listLugar.setAlignmentX(1.0f);
-			listLugar.setFont(new Font("Dialog", Font.PLAIN, 20));
+			listLugar.setFont(new Font("Dialog", Font.PLAIN, 18));
 			listLugar.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 			listLugar.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			listLugar.setToolTipText("");
@@ -181,12 +201,12 @@ public class PanelPrincipalCliente extends JPanel {
 			add(lblFiltrarPromocion);
 			
 			
-			listPromocion.setFont(new Font("Dialog", Font.PLAIN, 20));
-			listPromocion.setAlignmentX(0.55f);
+			listPromocion.setFont(new Font("Dialog", Font.PLAIN, 18));
+			listPromocion.setAlignmentX(0.32f);
 			listPromocion.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			
 			listPromocion.setModel(new AbstractListModel() {
-				String[] values = new String[] {"2x1", "CITI", "Santander", "Banco Galicia", "Jubilados"};
+				String[] values = new String[] {"2x1", "Banco Asociados", "Descuento a Jubilados"};
 				public int getSize() {
 					return values.length;
 				}
@@ -206,7 +226,7 @@ public class PanelPrincipalCliente extends JPanel {
 			lblFiltrarEstreno.setAlignmentY(Component.TOP_ALIGNMENT);
 			add(lblFiltrarEstreno);
 			
-			listEstreno.setFont(new Font("Dialog", Font.PLAIN, 20));
+			listEstreno.setFont(new Font("Dialog", Font.PLAIN, 18));
 			listEstreno.setAlignmentX(0.4f);
 			listEstreno.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			

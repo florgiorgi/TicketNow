@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import database.Database;
 import usuario.Cliente;
 import usuario.Proveedor;
+import usuario.Usuario;
+import usuario.UsuarioExistenteException;
 
 public class Controlador {
 
@@ -13,6 +15,14 @@ public class Controlador {
 	public boolean agregarUsuario(String tipoUsuario, String usuario, String contraseña, String contraseñaChequeo,
 			String nombre, String apellido, String fechaNac, String mail, String telefono, String DNI, String pais,
 			String provincia, String localidad, String direccion, String codigoPostal) throws SQLException {
+		
+		try {
+			database.addUsuario(tipoUsuario, new Usuario(usuario, contraseña, contraseñaChequeo, nombre, apellido, fechaNac,
+					mail, telefono, DNI, pais, provincia, localidad, direccion, codigoPostal));
+		} catch (UsuarioExistenteException e) {
+			return false;
+		}
+		
 		if (tipoUsuario.equals("Cliente"))
 			return database.addCliente(new Cliente(usuario, contraseña, contraseñaChequeo, nombre, apellido, fechaNac,
 					mail, telefono, DNI, pais, provincia, localidad, direccion, codigoPostal));

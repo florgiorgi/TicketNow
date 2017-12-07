@@ -91,7 +91,7 @@ public class PanelInicioSesion extends JPanel {
 
 		public PanelInferior() {
 			inicializarMensaje();
-			inicializarBotones();
+			inicializarBoton();
 		}
 
 		/**
@@ -105,7 +105,7 @@ public class PanelInicioSesion extends JPanel {
 		/**
 		 * Método que inicializa el boton registrarse y lo agrega al panel
 		 */
-		private void inicializarBotones() {
+		private void inicializarBoton() {
 			btnRegistrarse.setForeground(Color.WHITE);
 			btnRegistrarse.setBackground(new Color(25, 25, 102));
 			btnRegistrarse.setFont(new Font("Dialog", Font.BOLD, 15));
@@ -143,13 +143,13 @@ public class PanelInicioSesion extends JPanel {
 			JPanel panelDerecho = new JPanel();
 			panelDerecho.setBackground(Color.WHITE);
 			FlowLayout flowLayout1 = (FlowLayout) panelDerecho.getLayout();
-			flowLayout1.setHgap(100);
+			flowLayout1.setHgap(110);
 			add(panelDerecho, BorderLayout.WEST);
 
 			JPanel panelIzquierdo = new JPanel();
 			panelIzquierdo.setBackground(Color.WHITE);
 			FlowLayout flowLayout2 = (FlowLayout) panelIzquierdo.getLayout();
-			flowLayout2.setHgap(100);
+			flowLayout2.setHgap(110);
 			add(panelIzquierdo, BorderLayout.EAST);
 
 			inicializarCampos();
@@ -166,25 +166,21 @@ public class PanelInicioSesion extends JPanel {
 
 			tipoDeUsuario.setHorizontalAlignment(SwingConstants.CENTER);
 			panelInicioSesion.add(tipoDeUsuario);
-
+			
 			tipoDeUsuarioField.setModel(new DefaultComboBoxModel(new String[] { "Cliente", "Proveedor" }));
 			panelInicioSesion.add(tipoDeUsuarioField);
 
 			email.setHorizontalAlignment(SwingConstants.CENTER);
 			panelInicioSesion.add(email);
-
 			panelInicioSesion.add(emailField);
-			emailField.setColumns(10);
-
+			
 			contraseña.setHorizontalAlignment(SwingConstants.CENTER);
 			panelInicioSesion.add(contraseña);
-
 			panelInicioSesion.add(contraseñaField);
 
 			btnIniciarSesion.setForeground(Color.WHITE);
 			btnIniciarSesion.setBackground(new Color(0, 102, 204));
 			panelInicioSesion.add(btnIniciarSesion);
-
 		}
 
 		/**
@@ -198,16 +194,16 @@ public class PanelInicioSesion extends JPanel {
 			btnIniciarSesion.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
-					
+					/*
 					try {
 						if (controlador.usuarioCorrecto(tipoDeUsuarioField.getSelectedItem().toString(),
 								emailField.getText(), contraseñaField.getPassword())) {
-							if (tipoDeUsuarioField.getSelectedItem().equals("Cliente")) {
+					*/		if (tipoDeUsuarioField.getSelectedItem().equals("Cliente")) {
 								VistaTicketNow.changePanel("cliente", PanelInicioSesion.this, controlador);
 							} else {
 								VistaTicketNow.changePanel("proveedor", PanelInicioSesion.this, controlador);
 							}
-						} else {
+					/*	} else {
 							JOptionPane.showMessageDialog(null,
 									"El usuario y contraseña no coinciden. Inténtelo nuevamente.",
 									"Ocurrió algo inesperado", JOptionPane.ERROR_MESSAGE);
@@ -218,8 +214,8 @@ public class PanelInicioSesion extends JPanel {
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
-					}
-				}
+					}*/ 
+				} 
 			});
 
 			JLabel label = new JLabel();

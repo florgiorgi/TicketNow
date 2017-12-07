@@ -73,9 +73,31 @@ public class VistaTicketNow {
 		case "lista":
 			panel.add(new PanelResultadosEncontrados(controlador), BorderLayout.CENTER);
 			break;
-		case "perfil":
+		case "perfilCliente":
 			panel.add(new PanelPerfilCliente(controlador), BorderLayout.CENTER);
 			break;
+		case "agregar":
+			panel.add(new PanelAgregarEspectaculo(controlador), BorderLayout.CENTER);
+			break;
+		case "modificar":
+			panel.add(new PanelModificarEspectaculo(controlador), BorderLayout.CENTER);
+			break;
+		case "perfilProveedor":
+			panel.add(new PanelPerfilProveedor(controlador), BorderLayout.CENTER);
+			break;
+		case "bajaCliente":
+			panel.add(new PanelEliminarCuentaCliente(controlador), BorderLayout.CENTER);
+			break;
+		case "bajaProveedor":
+			panel.add(new PanelEliminarCuentaProveedor(controlador), BorderLayout.CENTER);
+			break;
+		case "informacion":
+			panel.add(new PanelInformacionEspectaculo(controlador), BorderLayout.CENTER);
+			break;
+		case "finalizarCompra":
+			panel.add(new PanelFinalizarCompra(controlador), BorderLayout.CENTER);
+			break;
+			
 		}
 	}
 

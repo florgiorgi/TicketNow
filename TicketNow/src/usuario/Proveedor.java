@@ -48,36 +48,6 @@ public class Proveedor extends Usuario {
 		return false;
 	}
 
-	// devuelve true si pudo agregar la funcion
-	public boolean agregarFuncion(Espectaculo esp, Funcion func) {
-		for (Espectaculo e : espectaculos) {
-			if (e.equals(esp)) {
-				return e.agregarFuncion(func);
-			}
-		}
-		return false;
-	}
-
-	// devuelve true si pudo eliminar la funcion
-	public boolean eliminarFuncion(Espectaculo esp, Funcion func) {
-		for (Espectaculo e : espectaculos) {
-			if (e.equals(esp)) {
-				return e.eliminarFuncion(func);
-			}
-		}
-		return false;
-	}
-
-	// devuelve true si pudo modificar la funcion
-	public boolean modificarFuncion(Espectaculo esp, Funcion funcion, String hora, String sala, Double precio,
-			Integer cantidadDisp) {
-		for (Espectaculo e : espectaculos) {
-			if (e.equals(esp)) {
-				return e.modificarFuncion(funcion, hora, sala, precio, cantidadDisp);
-			}
-		}
-		return false;
-	}
-
+	
 
 }

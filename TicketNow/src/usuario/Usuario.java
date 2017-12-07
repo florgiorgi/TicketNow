@@ -217,7 +217,7 @@ public class Usuario {
 		
 		char[] aux = localidad.toCharArray();
 		for (int i = 0; i < aux.length; i++) {
-			if (!Character.isLetter(aux[i]))
+			if (!Character.isLetter(aux[i]) && aux[i] != ' ')
 				return false;
 		}
 		return true;
@@ -226,23 +226,27 @@ public class Usuario {
 	private boolean direccionValida(String direccion) {
 		if(direccion == null || direccion.equals(""))
 			return false;
+		/*
+		boolean flag = true;
+		int i;
+		for(i = 0; i < direccion.length() || flag ; i++) {
+			if(Character.isDigit(direccion.charAt(i))){
+				flag = false;
+			}
+		}
 		
-		String[] str = direccion.split(" ");
-		String calle = str[0];
-		String numero = str[1];
-
-		char[] aux1 = calle.toCharArray();
-		for (int i = 0; i < aux1.length; i++) {
-			if (!Character.isLetter(aux1[i]))
+		String aux1 = direccion.substring(0, i-1);
+		for (int j = 0; j < aux1.length(); j++) {
+			if (!Character.isLetter(aux1.charAt(j)) && aux1.charAt(j) != ' ')
 				return false;
 		}
 
-		char[] aux2 = numero.toCharArray();
-		for (int i = 0; i < aux2.length; i++) {
-			if (!Character.isDigit(aux2[i]))
+		String aux2 = direccion.substring(i);
+		for (int j = 0; j < aux2.length(); j++) {
+			if (!Character.isDigit(aux1.charAt(j)))
 				return false;
 		}
-
+		*/
 		return true;
 	}
 

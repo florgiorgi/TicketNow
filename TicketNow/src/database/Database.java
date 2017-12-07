@@ -1,3 +1,4 @@
+
 package database;
 
 import java.util.Set;
@@ -81,36 +82,35 @@ public class Database {
 
 	// Agrega un usuario a la base de datos
 	public boolean addCliente(Cliente cliente) throws SQLException {
-		if (userExists(cliente.getUsuario()) || mailExists(cliente.getUsuario())) {
-			throw new UsuarioExistenteException(
-					"El usuario que intenta registrar ya existe en el sistema. Verifique el nombre de usuario ingresado.");
-		}
-
 		conectar("u2017b-3", "passwordING1");
-		ejecutasql("INSERT INTO usuario VALUES( " + "'" + cliente.getUsuario() + "'," + "'"
-				+ cliente.getContraseña().toString() + "'," + "'" + cliente.getNombre() + "'," + "'"
-				+ cliente.getApellido() + "'," + "'" + cliente.getMail() + "'," + "'" + cliente.getFechaNac() + "',"
-				+ "'" + cliente.getTelefono() + "'," + "'" + cliente.getDNI() + "'," + "'" + cliente.getPais() + "',"
-				+ "'" + cliente.getProvincia() + "'," + "'" + cliente.getLocalidad() + "'," + "'"
-				+ cliente.getDireccion() + "'," + "'" + cliente.getCodigoPostal() + "');");
-		ejecutasql("INSERT INTO cliente VALUES( " + "'" + cliente.getUsuario() + "');");
+		ejecutasql("INSERT INTO cliente VALUES( " + "'" + cliente.getMail() + "');");
 		return true;
+	}
+	
+	public void addUsuario(String tipoUsuario, Usuario usuario) throws SQLException{
+		if(tipoUsuario.equals("Proveedor")) {
+			if (proveedorMailExists(usuario.getMail())) {
+				throw new UsuarioExistenteException(
+					"El mail que ingresó ya esta registrado en el sistema como un proveedor.");
+			}
+		} else if (tipoUsuario.equals("Cliente")) {
+			if (clienteMailExists(usuario.getMail())) {
+				throw new UsuarioExistenteException(
+						"El mail que ingresó ya esta registrado en el sistema como un cliente.");
+			}
+		}
+		
+		ejecutasql("INSERT INTO usuario VALUES( " + "'" + usuario.getUsuario() + "'," + "'"
+				+ usuario.getContraseña().toString() + "'," + "'" + usuario.getNombre() + "'," + "'"
+				+ usuario.getApellido() + "'," + "'" + usuario.getMail() + "'," + "'" + usuario.getFechaNac() + "',"
+				+ "'" + usuario.getTelefono() + "'," + "'" + usuario.getDNI() + "'," + "'" + usuario.getPais() + "',"
+				+ "'" + usuario.getProvincia() + "'," + "'" + usuario.getLocalidad() + "'," + "'"
+				+ usuario.getDireccion() + "'," + "'" + usuario.getCodigoPostal() + "');");
 	}
 
 	public boolean addProveedor(Proveedor proveedor) throws SQLException {
-		if (userExists(proveedor.getUsuario()) || mailExists(proveedor.getUsuario())) {
-			throw new UsuarioExistenteException(
-					"El usuario que intenta registrar ya existe en el sistema. Verifique el nombre de usuario ingresado.");
-		}
-
 		conectar("u2017b-3", "passwordING1");
-		ejecutasql("INSERT INTO usuario VALUES( " + "'" + proveedor.getUsuario() + "'," + "'"
-				+ proveedor.getContraseña().toString() + "'," + "'" + proveedor.getNombre() + "'," + "'"
-				+ proveedor.getApellido() + "'," + "'" + proveedor.getMail() + "'," + "'" + proveedor.getFechaNac()
-				+ "'," + "'" + proveedor.getTelefono() + "'," + "'" + proveedor.getDNI() + "'," + "'"
-				+ proveedor.getPais() + "'," + "'" + proveedor.getProvincia() + "'," + "'" + proveedor.getLocalidad()
-				+ "'," + "'" + proveedor.getDireccion() + "'," + "'" + proveedor.getCodigoPostal() + "');");
-		ejecutasql("INSERT INTO proveedor VALUES( '" + proveedor.getUsuario() + "';");
+		ejecutasql("INSERT INTO proveedor VALUES( " + "'" + proveedor.getMail() + "');");
 		return true;
 	}
 
@@ -127,18 +127,19 @@ public class Database {
 	 * proveedor y viceversa, porque se fija en la bd si el mail esta en
 	 * usuario(donde estan tanto clientes como proveedores)
 	 */
-	public boolean userExists(String username) throws SQLException {
+	
+	public boolean proveedorMailExists(String mail) throws SQLException {
 		conectar("u2017b-3", "passwordING1");
-		ResultSet rs = gXrGenerico("SELECT * FROM usuario WHERE username = '" + username + "';");
+		ResultSet rs = gXrGenerico("SELECT * FROM proveedor WHERE email = '" + mail + "';");
 		if (rs.getRow() == 0) {
 			return false;
 		}
 		return true;
 	}
 
-	public boolean mailExists(String mail) throws SQLException {
+	public boolean clienteMailExists(String mail) throws SQLException {
 		conectar("u2017b-3", "passwordING1");
-		ResultSet rs = gXrGenerico("SELECT * FROM usuario WHERE email = '" + mail + "';");
+		ResultSet rs = gXrGenerico("SELECT * FROM cliente WHERE email = '" + mail + "';");
 		if (rs.getRow() == 0) {
 			return false;
 		}
@@ -146,7 +147,7 @@ public class Database {
 	}
 
 	public boolean containsCliente(String mail, char[] contraseña) throws SQLException {
-		if (mailExists(mail)) {
+		if (clienteMailExists(mail)) {
 			String c = getUserPassword(mail);
 			if (Arrays.equals(c.toCharArray(), contraseña)) {
 				return true;
@@ -157,10 +158,11 @@ public class Database {
 	}
 
 	public boolean containsProveedor(String mail, char[] contraseña) throws SQLException {
-		if (userExists(mail)) {
+		if (proveedorMailExists(mail)) {	
 			String c = getUserPassword(mail);
-			if (c.toCharArray().equals(contraseña))
+			if (Arrays.equals(c.toCharArray(), contraseña)) {
 				return true;
+			}
 		}
 
 		return false;
@@ -245,29 +247,4 @@ public class Database {
 				+ funcion.getHora().toString() + "'," + "'" + funcion.getFecha() + "'," + "'" + funcion.getPrecio()
 				+ "'," + "'" + funcion.getLugar() + "'," + "'" + funcion.getNombre() + "'" + ");");
 	}
-
-	/*
-	 * 
-	 * public boolean containsProveedor(String mail, char[] contraseña) { for
-	 * (Proveedor each : proveedores) if (each.getMail().equals(mail)) return
-	 * checkContraseña(each, contraseña); return false; }
-	 * 
-	 * public boolean checkContraseña(Usuario c, char[] contraseña) { if
-	 * (c.getContraseña().length != contraseña.length) return false; else return
-	 * Arrays.equals(c.getContraseña(), contraseña); }
-	 * 
-	 * @Override public String toString() { StringBuffer str = new StringBuffer();
-	 * 
-	 * str.append("Clientes:\n"); for (Cliente each : clientes) { str.append(each);
-	 * str.append("\n"); }
-	 * 
-	 * str.append("Proveedores:\n"); for (Proveedor each : proveedores) {
-	 * str.append(each); str.append("\n"); }
-	 * 
-	 * return str.toString(); }
-	 * 
-	 * public Set<Cliente> getClientes() { return clientes; }
-	 * 
-	 * public Set<Proveedor> getProveedores() { return proveedores; }
-	 */
 }

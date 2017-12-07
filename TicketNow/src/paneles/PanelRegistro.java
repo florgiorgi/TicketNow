@@ -80,8 +80,8 @@ public class PanelRegistro extends JPanel {
 	}
 
 	private class PanelSuperior extends JPanel {
-		private JButton btnVolver = new JButton("");
-		private JLabel titulo = new JLabel("      Ingrese sus datos personales:");
+		private JButton btnVolver = new JButton();
+		private JLabel titulo = new JLabel(" Ingrese sus datos personales:");
 
 		public PanelSuperior() {
 			setLayout(new BorderLayout(0, 0));
@@ -273,7 +273,6 @@ public class PanelRegistro extends JPanel {
 			lblProvincia.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblProvincia);
 			lblProvincia.setFont(fuente);
-			System.out.println(paisBox.getSelectedIndex());
 
 			paisBox.addItemListener(new ItemListener() {
 
@@ -367,7 +366,7 @@ public class PanelRegistro extends JPanel {
 						} catch (ContraseñaIncorrectaException m) {
 							JOptionPane.showMessageDialog(null, m.getMessage(), "Ocurrió algo inesperado",
 									JOptionPane.ERROR_MESSAGE);
-							System.out.println(m.getMessage());
+			
 						} catch (ContraseñaInvalidaException m1) {
 							JOptionPane.showMessageDialog(null, m1.getMessage(), "Ocurrió algo inesperado",
 									JOptionPane.ERROR_MESSAGE);
