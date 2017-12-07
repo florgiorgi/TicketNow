@@ -26,7 +26,15 @@ public class Controlador {
 					JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
-		return true;
+		System.out.println("hola");
+		if (tipoUsuario.equals("Cliente"))
+			return database.addCliente(new Cliente(usuario, contraseña, contraseñaChequeo, nombre, apellido, fechaNac,
+					mail, telefono, DNI, pais, provincia, localidad, direccion, codigoPostal));
+		else if (tipoUsuario.equals("Proveedor"))
+			return database.addProveedor(new Proveedor(usuario, contraseña, contraseñaChequeo, nombre, apellido,
+					fechaNac, mail, telefono, DNI, pais, provincia, localidad, direccion, codigoPostal));
+
+		return false;
 	}
 
 	public boolean usuarioCorrecto(String tipoUsuario, String mail, char[] contraseña) throws SQLException {

@@ -226,27 +226,30 @@ public class Usuario {
 	private boolean direccionValida(String direccion) {
 		if(direccion == null || direccion.equals(""))
 			return false;
-		/*
+		
 		boolean flag = true;
 		int i;
-		for(i = 0; i < direccion.length() || flag ; i++) {
+		for(i = 0; i < direccion.length() && flag ; i++) {
 			if(Character.isDigit(direccion.charAt(i))){
 				flag = false;
 			}
 		}
 		
 		String aux1 = direccion.substring(0, i-1);
+		
 		for (int j = 0; j < aux1.length(); j++) {
-			if (!Character.isLetter(aux1.charAt(j)) && aux1.charAt(j) != ' ')
+			if (!Character.isLetter(aux1.charAt(j)) && aux1.charAt(j) != ' ') {
 				return false;
+			}
 		}
-
+		
 		String aux2 = direccion.substring(i);
+		
 		for (int j = 0; j < aux2.length(); j++) {
-			if (!Character.isDigit(aux1.charAt(j)))
+			if (!Character.isDigit(aux2.charAt(j)))
 				return false;
 		}
-		*/
+		
 		return true;
 	}
 

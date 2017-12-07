@@ -80,23 +80,22 @@ public class Database {
 
 	}
 
-	// Agrega un usuario a la base de datos
+
 	public boolean addCliente(Cliente cliente) throws SQLException {
 		conectar("u2017b-3", "passwordING1");
 		ejecutasql("INSERT INTO cliente VALUES( " + "'" + cliente.getMail() + "');");
 		return true;
 	}
-	
-	public void addUsuario(String tipoUsuario, Usuario usuario) throws SQLException{
-		if(usuarioExists(usuario.getUsuario())){
-			throw new UsuarioExistenteException(
-					"El nombre de usuario ya esta registrado."
-			);
+
+	public void addUsuario(String tipoUsuario, Usuario usuario) throws SQLException {
+		if (usuarioExists(usuario.getUsuario())) {
+			throw new UsuarioExistenteException("El nombre de usuario que ingresó ya esta registrado.");
 		}
-		if(tipoUsuario.equals("Proveedor")) {
+
+		if (tipoUsuario.equals("Proveedor")) {
 			if (proveedorMailExists(usuario.getMail())) {
 				throw new UsuarioExistenteException(
-					"El mail que ingresó ya esta registrado en el sistema como un proveedor.");
+						"El mail que ingresó ya esta registrado en el sistema como un proveedor.");
 			}
 		} else if (tipoUsuario.equals("Cliente")) {
 			if (clienteMailExists(usuario.getMail())) {
@@ -104,13 +103,22 @@ public class Database {
 						"El mail que ingresó ya esta registrado en el sistema como un cliente.");
 			}
 		}
-		
+
 		ejecutasql("INSERT INTO usuario VALUES( " + "'" + usuario.getUsuario() + "'," + "'"
 				+ usuario.getContraseña().toString() + "'," + "'" + usuario.getNombre() + "'," + "'"
 				+ usuario.getApellido() + "'," + "'" + usuario.getMail() + "'," + "'" + usuario.getFechaNac() + "',"
 				+ "'" + usuario.getTelefono() + "'," + "'" + usuario.getDNI() + "'," + "'" + usuario.getPais() + "',"
 				+ "'" + usuario.getProvincia() + "'," + "'" + usuario.getLocalidad() + "'," + "'"
 				+ usuario.getDireccion() + "'," + "'" + usuario.getCodigoPostal() + "');");
+	}
+
+	public boolean usuarioExists(String usuario) throws SQLException {
+		conectar("u2017b-3", "passwordING1");
+		ResultSet rs = gXrGenerico("SELECT * FROM usuario WHERE username = '" + usuario + "';");
+		if (rs.getRow() == 0) {
+			return false;
+		}
+		return true;
 	}
 
 	public boolean addProveedor(Proveedor proveedor) throws SQLException {
@@ -125,14 +133,6 @@ public class Database {
 		return rs.getString("contra");
 	}
 
-	/*
-	 * Problema 1 - REGISTRARSE: No puedo registrarme como proveedor con el mismo
-	 * mail o nombre de usuario si ya existo en la bd como cliente o viceversa
-	 * Problema 2 - INGRESAR: Si me registro como cliente puedo entrar como
-	 * proveedor y viceversa, porque se fija en la bd si el mail esta en
-	 * usuario(donde estan tanto clientes como proveedores)
-	 */
-	
 	public boolean proveedorMailExists(String mail) throws SQLException {
 		conectar("u2017b-3", "passwordING1");
 		ResultSet rs = gXrGenerico("SELECT * FROM proveedor WHERE email = '" + mail + "';");
@@ -150,16 +150,6 @@ public class Database {
 		}
 		return true;
 	}
-	
-	public boolean usuarioExists(String usuario) throws SQLException {
-		conectar("u2017b-3", "passwordING1");
-		ResultSet rs = gXrGenerico("SELECT * FROM usuario WHERE username = '" + usuario + "';");
-		if (rs.getRow() == 0) {
-			return false;
-		}
-		return true;
-	}
-	
 
 	public boolean containsCliente(String mail, char[] contraseña) throws SQLException {
 		if (clienteMailExists(mail)) {
@@ -173,7 +163,7 @@ public class Database {
 	}
 
 	public boolean containsProveedor(String mail, char[] contraseña) throws SQLException {
-		if (proveedorMailExists(mail)) {	
+		if (proveedorMailExists(mail)) {
 			String c = getUserPassword(mail);
 			if (Arrays.equals(c.toCharArray(), contraseña)) {
 				return true;

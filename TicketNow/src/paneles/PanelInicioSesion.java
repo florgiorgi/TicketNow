@@ -194,16 +194,16 @@ public class PanelInicioSesion extends JPanel {
 			btnIniciarSesion.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
-					/*
+					
 					try {
 						if (controlador.usuarioCorrecto(tipoDeUsuarioField.getSelectedItem().toString(),
 								emailField.getText(), contraseñaField.getPassword())) {
-					*/		if (tipoDeUsuarioField.getSelectedItem().equals("Cliente")) {
+							if (tipoDeUsuarioField.getSelectedItem().equals("Cliente")) {
 								VistaTicketNow.changePanel("cliente", PanelInicioSesion.this, controlador);
 							} else {
 								VistaTicketNow.changePanel("proveedor", PanelInicioSesion.this, controlador);
 							}
-					/*	} else {
+						} else {
 							JOptionPane.showMessageDialog(null,
 									"El usuario y contraseña no coinciden. Inténtelo nuevamente.",
 									"Ocurrió algo inesperado", JOptionPane.ERROR_MESSAGE);
@@ -214,7 +214,7 @@ public class PanelInicioSesion extends JPanel {
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
-					}*/ 
+					} 
 				} 
 			});
 

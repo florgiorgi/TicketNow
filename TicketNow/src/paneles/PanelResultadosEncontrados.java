@@ -18,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 import controlador.Controlador;
@@ -86,9 +87,9 @@ public class PanelResultadosEncontrados extends JPanel {
 			btnMasInfo.setBackground(new Color(0, 102, 204));
 			btnMasInfo.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if(listEspectaculos.isSelectionEmpty())
-						JOptionPane.showMessageDialog(null, "Seleccione un espectáculo para ver sus detalles", "Ocurrió algo inesperado",
-								JOptionPane.ERROR_MESSAGE);
+					if (listEspectaculos.isSelectionEmpty())
+						JOptionPane.showMessageDialog(null, "Seleccione un espectáculo para ver sus detalles",
+								"Ocurrió algo inesperado", JOptionPane.ERROR_MESSAGE);
 					else
 						VistaTicketNow.changePanel("informacion", PanelResultadosEncontrados.this, controlador);
 				}
@@ -140,7 +141,9 @@ public class PanelResultadosEncontrados extends JPanel {
 			listEspectaculos.setFont(new Font("Dialog", Font.BOLD, 13));
 			listEspectaculos.setModel(new AbstractListModel() {
 				String[] values = new String[] { "Nombre: Espectaculo 1 - Lugar: Hoyts Palermo - Precio: 120$",
-						"Nombre: Espectaculo 2 - Lugar: Hoyts Abasto - Precio: 120$", "Nombre: Espectaculo 3 - Lugar: Hoyts Unicenter - Precio: 120$", "Nombre: Espectaculo 4 - Lugar: Hoyts Belgrano - Precio: 120$" };
+						"Nombre: Espectaculo 2 - Lugar: Hoyts Abasto - Precio: 120$",
+						"Nombre: Espectaculo 3 - Lugar: Hoyts Unicenter - Precio: 120$",
+						"Nombre: Espectaculo 4 - Lugar: Hoyts Belgrano - Precio: 120$" };
 
 				public int getSize() {
 					return values.length;
@@ -151,8 +154,7 @@ public class PanelResultadosEncontrados extends JPanel {
 				}
 			});
 			panelCentralCentral.add(listEspectaculos);
-			
-			
+		
 		}
 
 		private void inicializarPanelCentralIzquierdo() {
@@ -161,9 +163,9 @@ public class PanelResultadosEncontrados extends JPanel {
 			btnOrdenar.setAlignmentX(Component.CENTER_ALIGNMENT);
 			btnOrdenar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if(listOrdenar.isSelectionEmpty())
-						JOptionPane.showMessageDialog(null, "Seleccione una opción para ordenar los resultados", "Ocurrió algo inesperado",
-								JOptionPane.ERROR_MESSAGE);
+					if (listOrdenar.isSelectionEmpty())
+						JOptionPane.showMessageDialog(null, "Seleccione una opción para ordenar los resultados",
+								"Ocurrió algo inesperado", JOptionPane.ERROR_MESSAGE);
 				}
 			});
 
