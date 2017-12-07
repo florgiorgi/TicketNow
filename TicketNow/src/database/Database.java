@@ -88,6 +88,11 @@ public class Database {
 	}
 	
 	public void addUsuario(String tipoUsuario, Usuario usuario) throws SQLException{
+		if(usuarioExists(usuario.getUsuario())){
+			throw new UsuarioExistenteException(
+					"El nombre de usuario ya esta registrado."
+			);
+		}
 		if(tipoUsuario.equals("Proveedor")) {
 			if (proveedorMailExists(usuario.getMail())) {
 				throw new UsuarioExistenteException(
@@ -145,6 +150,16 @@ public class Database {
 		}
 		return true;
 	}
+	
+	public boolean usuarioExists(String usuario) throws SQLException {
+		conectar("u2017b-3", "passwordING1");
+		ResultSet rs = gXrGenerico("SELECT * FROM usuario WHERE username = '" + usuario + "';");
+		if (rs.getRow() == 0) {
+			return false;
+		}
+		return true;
+	}
+	
 
 	public boolean containsCliente(String mail, char[] contraseña) throws SQLException {
 		if (clienteMailExists(mail)) {

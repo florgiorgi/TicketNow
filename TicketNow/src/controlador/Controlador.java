@@ -2,6 +2,8 @@ package controlador;
 
 import java.sql.SQLException;
 
+import javax.swing.JOptionPane;
+
 import database.Database;
 import usuario.Cliente;
 import usuario.Proveedor;
@@ -20,17 +22,11 @@ public class Controlador {
 			database.addUsuario(tipoUsuario, new Usuario(usuario, contraseña, contraseñaChequeo, nombre, apellido, fechaNac,
 					mail, telefono, DNI, pais, provincia, localidad, direccion, codigoPostal));
 		} catch (UsuarioExistenteException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Ocurrió algo inesperado",
+					JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
-		
-		if (tipoUsuario.equals("Cliente"))
-			return database.addCliente(new Cliente(usuario, contraseña, contraseñaChequeo, nombre, apellido, fechaNac,
-					mail, telefono, DNI, pais, provincia, localidad, direccion, codigoPostal));
-		else if (tipoUsuario.equals("Proveedor"))
-			return database.addProveedor(new Proveedor(usuario, contraseña, contraseñaChequeo, nombre, apellido,
-					fechaNac, mail, telefono, DNI, pais, provincia, localidad, direccion, codigoPostal));
-
-		return false;
+		return true;
 	}
 
 	public boolean usuarioCorrecto(String tipoUsuario, String mail, char[] contraseña) throws SQLException {
