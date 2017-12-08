@@ -123,7 +123,7 @@ public class Database {
 
 	public boolean addProveedor(Proveedor proveedor) throws SQLException {
 		conectar("u2017b-3", "passwordING1");
-		ejecutasql("INSERT INTO proveedor VALUES( " + "'" + proveedor.getMail() + "');");
+		ejecutasql("INSERT INTO proveedor VALUES( " + "'" + proveedor.getMail() + "', null" + "');");
 		return true;
 	}
 
@@ -179,9 +179,15 @@ public class Database {
 		conectar("u2017b-3", "passwordING1");
 		ejecutasql("INSERT INTO espectaculo VALUES( " + "'" + espectaculo.getNombre() + "'," + "'"
 				+ espectaculo.getDescripcion() + "'," + "'" + espectaculo.getCategoria() + "'," + "'"
-				+ espectaculo.getEstreno() + "'," + "'" + espectaculo.getPromocion() + "'" + ");");
+				+ espectaculo.getFechaEstreno() + "'," + "'" + espectaculo.getPromocion() + "'," + "'"
+				+ espectaculo.getCantidadEntradas() + "'," + "'" + espectaculo.getLugarDeRetiro() + "'," + "'" 
+				+ espectaculo.getPrecio() + "'," + "1" + ");");
 	}
 
+	
+	//Espectaculo(String nombre, String cantidadEntradas, String fechaEstreno, String promocion, String categoria, String lugarDeRetiro, String precio, String descripcion)
+	//cantidadEntradas, lugarDeRetiro, precio
+	
 	public Set<Espectaculo> getEspectaculos() throws SQLException {
 		Set<Espectaculo> espectaculos = new HashSet<Espectaculo>();
 		conectar("u2017b-3", "passwordING1");
@@ -192,7 +198,10 @@ public class Database {
 			String cat = rs.getString("categoria");
 			String est = rs.getString("estreno");
 			String promo = rs.getString("promocion");
-			Espectaculo e = new Espectaculo(nomb, desc, cat, est, promo);
+			String cantEntradas = rs.getString("cantidadEntradas");
+			String lugarRetiro = rs.getString("lugarRetiro");
+			String precio = rs.getString("precio");
+			Espectaculo e = new Espectaculo(nomb, cantEntradas, est, promo, cat, lugarRetiro, precio, desc);
 			espectaculos.add(e);
 		}
 		return espectaculos;
@@ -220,7 +229,10 @@ public class Database {
 			String cat = rs.getString("categoria");
 			String est = rs.getString("estreno");
 			String promo = rs.getString("promocion");
-			Espectaculo e = new Espectaculo(nomb, desc, cat, est, promo);
+			String cantEntradas = rs.getString("cantidadEntradas");
+			String lugarRetiro = rs.getString("lugarRetiro");
+			String precio = rs.getString("precio");
+			Espectaculo e = new Espectaculo(nomb, cantEntradas, est, promo, cat, lugarRetiro, precio, desc);
 			espectaculos.add(e);
 		}
 		return espectaculos;
@@ -237,7 +249,10 @@ public class Database {
 			String cat = rs.getString("categoria");
 			String est = rs.getString("estreno");
 			String promo = rs.getString("promocion");
-			Espectaculo e = new Espectaculo(nomb, desc, cat, est, promo);
+			String cantEntradas = rs.getString("cantidadEntradas");
+			String lugarRetiro = rs.getString("lugarRetiro");
+			String precio = rs.getString("precio");
+			Espectaculo e = new Espectaculo(nomb, cantEntradas, est, promo, cat, lugarRetiro, precio, desc);
 			espectaculos.add(e);
 			count++;
 		}
