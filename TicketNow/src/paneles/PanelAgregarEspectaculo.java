@@ -37,7 +37,17 @@ import javax.swing.border.Border;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import controlador.Controlador;
+import espectaculo.CantidadDeEntradasInvalidaException;
+import espectaculo.DescripcionInvalidaException;
+import espectaculo.FechaEstrenoInvalidaException;
+import espectaculo.LugarDeRetiroInvalidoException;
+import espectaculo.PrecioInvalidoException;
+import espectaculo.PromocionInvalidaException;
+import usuario.ApellidoInvalidoException;
 import usuario.ContraseñaIncorrectaException;
+import usuario.ContraseñaInvalidaException;
+import usuario.NombreInvalidoException;
+import usuario.UsuarioInvalidoException;
 
 public class PanelAgregarEspectaculo extends JPanel {
 
@@ -47,11 +57,13 @@ public class PanelAgregarEspectaculo extends JPanel {
 	private JPanel panelCentral;
 
 	private Controlador controlador;
-
-	public PanelAgregarEspectaculo(Controlador controlador) {
+	private String proveedor;
+	
+	public PanelAgregarEspectaculo(Controlador controlador, String proveedor) {
 
 		setLayout(new BorderLayout(0, 0));
 		this.controlador = controlador;
+		this.proveedor = proveedor;
 
 		panelSuperior = new PanelSuperior();
 		panelSuperior.setBackground(Color.WHITE);
@@ -106,7 +118,7 @@ public class PanelAgregarEspectaculo extends JPanel {
 
 			btnVolver.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					VistaTicketNow.changePanel("proveedor", PanelAgregarEspectaculo.this, controlador);
+					VistaTicketNow.changePanel("proveedor", PanelAgregarEspectaculo.this, controlador, proveedor);
 				}
 			});
 		}
@@ -135,7 +147,7 @@ public class PanelAgregarEspectaculo extends JPanel {
 		private JComboBox lugarBox = new JComboBox();
 		private JTextField precioField = new JTextField();
 		private JTextArea caracteristicasPane = new JTextArea();
-
+		private File fichero;
 		private JPanel panelInferior = new JPanel();
 
 		private Font fuente = new Font("Dialog", Font.BOLD, 14);
@@ -181,7 +193,7 @@ public class PanelAgregarEspectaculo extends JPanel {
 			lblPromocion.setFont(fuente);
 
 			promocionBox.setModel(
-					new DefaultComboBoxModel(new String[] { "2x1", "Banco Asociados", "Descuento a Jubilados" }));
+					new DefaultComboBoxModel(new String[] { "Sin promocion", "2x1", "Banco Asociados", "Descuento a Jubilados" }));
 			panelRegistrarse.add(promocionBox);
 			promocionBox.setFont(fuente);
 
@@ -196,7 +208,6 @@ public class PanelAgregarEspectaculo extends JPanel {
 
 			fotosBtn.addActionListener(new ActionListener() {
 
-				File fichero;
 
 				public void actionPerformed(ActionEvent e) {
 					int resultado;
@@ -211,7 +222,7 @@ public class PanelAgregarEspectaculo extends JPanel {
 
 					if (JFileChooser.APPROVE_OPTION == resultado) {
 						fichero = ventana.jfchCargarfoto.getSelectedFile();
-
+						
 						try {
 							ImageIcon icon = new ImageIcon(fichero.toString());
 							Icon icono = new ImageIcon(icon.getImage());
@@ -307,19 +318,53 @@ public class PanelAgregarEspectaculo extends JPanel {
 				btnAgregar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						if (!categoriaBox.getSelectedItem().toString().equals("Seleccione categoria")) {
-							/*
-							 * try { if (controlador.agregarEspectaculo( Pasar todos los campos de arriba
-							 * --> HAY QUE CAMBIAR LA CLASE ESPECTACULO PQ NO LOS TIENE A TODOS ) {
-							 */ JOptionPane.showMessageDialog(null,
-									"Su espectaculo ha sido dado de alta en el sistema.");
-							VistaTicketNow.changePanel("proveedor", PanelAgregarEspectaculo.this, controlador);
-							/*
-							 * } } catch (ContraseñaIncorrectaException m) {
-							 * JOptionPane.showMessageDialog(null, m.getMessage(),
-							 * "Ocurrió algo inesperado", JOptionPane.ERROR_MESSAGE);
-							 * 
-							 * }
-							 */
+							try {
+									if(controlador.agregarEspectaculo(nombreField.getText(),
+											cantidadDisponibleField.getValue().toString(), fechaDeEstrenoField.getText(),
+											promocionBox.getSelectedItem().toString(),
+											categoriaBox.getSelectedItem().toString(),
+											lugarBox.getSelectedItem().toString(), precioField.getText(),
+											caracteristicasPane.getText(), proveedor))
+									JOptionPane.showMessageDialog(null,
+											"Su espectaculo ha sido dado de alta en el sistema.");
+									VistaTicketNow.changePanel("proveedor", PanelAgregarEspectaculo.this, controlador, proveedor);
+								
+
+							} catch (NombreInvalidoException m) {
+								JOptionPane.showMessageDialog(null, m.getMessage(), "Ocurrió algo inesperado",
+										JOptionPane.ERROR_MESSAGE);
+
+							} catch (CantidadDeEntradasInvalidaException m1) {
+								JOptionPane.showMessageDialog(null, m1.getMessage(), "Ocurrió algo inesperado",
+										JOptionPane.ERROR_MESSAGE);
+
+							} catch (FechaEstrenoInvalidaException m2) {
+								JOptionPane.showMessageDialog(null, m2.getMessage(), "Ocurrió algo inesperado",
+										JOptionPane.ERROR_MESSAGE);
+
+							} catch (PromocionInvalidaException m3) {
+								JOptionPane.showMessageDialog(null, m3.getMessage(), "Ocurrió algo inesperado",
+										JOptionPane.ERROR_MESSAGE);
+
+							} catch (LugarDeRetiroInvalidoException m4) {
+								JOptionPane.showMessageDialog(null, m4.getMessage(), "Ocurrió algo inesperado",
+										JOptionPane.ERROR_MESSAGE);
+
+							} catch (PrecioInvalidoException m4) {
+								JOptionPane.showMessageDialog(null, m4.getMessage(), "Ocurrió algo inesperado",
+										JOptionPane.ERROR_MESSAGE);
+
+							} catch (DescripcionInvalidaException m4) {
+								JOptionPane.showMessageDialog(null, m4.getMessage(), "Ocurrió algo inesperado",
+										JOptionPane.ERROR_MESSAGE);
+
+							} catch (HeadlessException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 						} else {
 							JOptionPane.showMessageDialog(null, "Por favor indique el la categoria de venta",
 									"Ocurrió algo inesperado", JOptionPane.ERROR_MESSAGE);
@@ -327,11 +372,6 @@ public class PanelAgregarEspectaculo extends JPanel {
 
 					}
 				});
-				/*
-				 * El listener de este boton tiene que hacer algo similar al de panel de
-				 * registrarse ---> Idem al inicializar un espectaculo ( similar a la clase
-				 * usuario con las excepciones )
-				 */
 			}
 
 		}

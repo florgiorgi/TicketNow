@@ -34,11 +34,13 @@ public class PanelPrincipalProveedor extends JPanel {
 	private JPanel panelCentral;
 
 	private Controlador controlador;
-
-	public PanelPrincipalProveedor(Controlador controlador) {
+	private String proveedor;
+	
+	public PanelPrincipalProveedor(Controlador controlador, String proveedor) {
 		setLayout(new BorderLayout(0, 0));
 		this.controlador = controlador;
-
+		this.proveedor = proveedor;
+		
 		panelSuperior = new PanelSuperior();
 		panelSuperior.setBackground(Color.WHITE);
 		add(panelSuperior, BorderLayout.NORTH);
@@ -79,7 +81,7 @@ public class PanelPrincipalProveedor extends JPanel {
 			
 			btnAgregar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					VistaTicketNow.changePanel("agregar", PanelPrincipalProveedor.this, controlador);
+					VistaTicketNow.changePanel("agregar", PanelPrincipalProveedor.this, controlador, proveedor);
 				}
 			});
 			
@@ -91,7 +93,7 @@ public class PanelPrincipalProveedor extends JPanel {
 			
 			btnPerfil.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					VistaTicketNow.changePanel("perfilProveedor", PanelPrincipalProveedor.this, controlador);
+					VistaTicketNow.changePanel("perfilProveedor", PanelPrincipalProveedor.this, controlador, proveedor);
 				}
 			});
 
@@ -183,7 +185,7 @@ public class PanelPrincipalProveedor extends JPanel {
 					if(row == -1)
 						JOptionPane.showMessageDialog(null, "Por favor, elija el espectáculo a modificar", "Error!", JOptionPane.ERROR_MESSAGE);
 					else {
-						VistaTicketNow.changePanel("modificar", PanelPrincipalProveedor.this, controlador);
+						VistaTicketNow.changePanel("modificar", PanelPrincipalProveedor.this, controlador, proveedor);
 					}
 				}
 			});

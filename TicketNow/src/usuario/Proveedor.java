@@ -5,9 +5,6 @@ import java.util.Set;
 import espectaculo.Espectaculo;
 
 
-import espectaculo.Funcion;
-
-
 public class Proveedor extends Usuario {
 
 	private String categoria;

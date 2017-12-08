@@ -4,7 +4,7 @@ package database;
 import java.util.Set;
 
 import espectaculo.Espectaculo;
-import espectaculo.Funcion;
+import espectaculo.EspectaculoExistenteException;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -123,7 +123,7 @@ public class Database {
 
 	public boolean addProveedor(Proveedor proveedor) throws SQLException {
 		conectar("u2017b-3", "passwordING1");
-		ejecutasql("INSERT INTO proveedor VALUES( " + "'" + proveedor.getMail() + "', null" + "');");
+		ejecutasql("INSERT INTO proveedor VALUES( " + "'" + proveedor.getMail() + "');");
 		return true;
 	}
 
@@ -172,21 +172,37 @@ public class Database {
 
 		return false;
 	}
+	
+	public String getProveedorID(String mail) throws SQLException {
+		conectar("u2017b-3", "passwordING1");
+		ResultSet rs = gXrGenerico("SELECT id FROM proveedor WHERE email = '" + mail + "';");
+		return rs.getString("id");
+	}
 
 	// FUNCIONES PARA ESPECTACULO ---------------------------------------------
 
-	public void addEspectaculo(Espectaculo espectaculo) throws SQLException {
+	public void addEspectaculo(Espectaculo espectaculo, String proveedor) throws SQLException {
+		/*if (espectaculoExists(espectaculo.getNombre(), espectaculo.getLugarDeRetiro())) {
+			throw new EspectaculoExistenteException("El espectaculo que ingreso ya esta registrado.");
+		}*/
+		
 		conectar("u2017b-3", "passwordING1");
 		ejecutasql("INSERT INTO espectaculo VALUES( " + "'" + espectaculo.getNombre() + "'," + "'"
 				+ espectaculo.getDescripcion() + "'," + "'" + espectaculo.getCategoria() + "'," + "'"
 				+ espectaculo.getFechaEstreno() + "'," + "'" + espectaculo.getPromocion() + "'," + "'"
 				+ espectaculo.getCantidadEntradas() + "'," + "'" + espectaculo.getLugarDeRetiro() + "'," + "'" 
-				+ espectaculo.getPrecio() + "'," + "1" + ");");
+				+ espectaculo.getPrecio() + "'," + getProveedorID(proveedor) + ");");
 	}
+	/*
+	public boolean espectaculoExists(String name, String lugar) throws SQLException {
+		conectar("u2017b-3", "passwordING1");
+		ResultSet rs = gXrGenerico("SELECT * FROM espectaculo WHERE espnombre = '" + name + "AND lugarretiro = '" + lugar + "';");
+		if (rs.getRow() == 0) {
+			return false;
+		}
+		return true;
+	}*/
 
-	
-	//Espectaculo(String nombre, String cantidadEntradas, String fechaEstreno, String promocion, String categoria, String lugarDeRetiro, String precio, String descripcion)
-	//cantidadEntradas, lugarDeRetiro, precio
 	
 	public Set<Espectaculo> getEspectaculos() throws SQLException {
 		Set<Espectaculo> espectaculos = new HashSet<Espectaculo>();
@@ -259,12 +275,4 @@ public class Database {
 		return espectaculos;
 	}
 
-	// FUNCIONES PARA FUNCIONES
-
-	public void addFuncion(Funcion funcion) {
-		conectar("u2017b-3", "passwordING1");
-		ejecutasql("INSERT INTO funcion VALUES( " + "'" + funcion.getNombre() + "'," + "'"
-				+ funcion.getHora().toString() + "'," + "'" + funcion.getFecha() + "'," + "'" + funcion.getPrecio()
-				+ "'," + "'" + funcion.getLugar() + "'," + "'" + funcion.getNombre() + "'" + ");");
-	}
 }

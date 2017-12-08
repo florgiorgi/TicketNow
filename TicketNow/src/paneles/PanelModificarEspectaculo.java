@@ -39,12 +39,13 @@ public class PanelModificarEspectaculo extends JPanel {
 	private JPanel panelCentral;
 
 	private Controlador controlador;
-
-	public PanelModificarEspectaculo(Controlador controlador) {
+	private String proveedor;
+	public PanelModificarEspectaculo(Controlador controlador, String proovedor) {
 
 		setLayout(new BorderLayout(0, 0));
 		this.controlador = controlador;
-
+		this.proveedor = proveedor;
+		
 		panelSuperior = new PanelSuperior();
 		panelSuperior.setBackground(Color.WHITE);
 		add(panelSuperior, BorderLayout.NORTH);
@@ -98,7 +99,7 @@ public class PanelModificarEspectaculo extends JPanel {
 
 			btnVolver.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					VistaTicketNow.changePanel("proveedor", PanelModificarEspectaculo.this, controlador);
+					VistaTicketNow.changePanel("proveedor", PanelModificarEspectaculo.this, controlador, proveedor);
 				}
 			});
 		}

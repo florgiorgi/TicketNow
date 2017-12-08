@@ -20,7 +20,7 @@ public class VistaTicketNow {
 	private static int alturaPantalla = pantalla.height;
 
 	private static int anchoPanel = alturaPantalla;
-	private static int alturaPanel = alturaPantalla - (100 * (anchoPantalla / alturaPantalla));
+	private static int alturaPanel = alturaPantalla - (70 * (anchoPantalla / alturaPantalla));
 
 	public VistaTicketNow(Controlador controlador) {
 		initializePanel();
@@ -64,32 +64,14 @@ public class VistaTicketNow {
 		case "registrarse":
 			panel.add(new PanelRegistro(controlador), BorderLayout.CENTER);
 			break;
-		case "cliente":
-			panel.add(new PanelPrincipalCliente(controlador), BorderLayout.CENTER);
-			break;
-		case "proveedor":
-			panel.add(new PanelPrincipalProveedor(controlador), BorderLayout.CENTER);
-			break;
 		case "lista":
 			panel.add(new PanelResultadosEncontrados(controlador), BorderLayout.CENTER);
 			break;
 		case "perfilCliente":
 			panel.add(new PanelPerfilCliente(controlador), BorderLayout.CENTER);
 			break;
-		case "agregar":
-			panel.add(new PanelAgregarEspectaculo(controlador), BorderLayout.CENTER);
-			break;
-		case "modificar":
-			panel.add(new PanelModificarEspectaculo(controlador), BorderLayout.CENTER);
-			break;
-		case "perfilProveedor":
-			panel.add(new PanelPerfilProveedor(controlador), BorderLayout.CENTER);
-			break;
 		case "bajaCliente":
 			panel.add(new PanelEliminarCuentaCliente(controlador), BorderLayout.CENTER);
-			break;
-		case "bajaProveedor":
-			panel.add(new PanelEliminarCuentaProveedor(controlador), BorderLayout.CENTER);
 			break;
 		case "informacion":
 			panel.add(new PanelInformacionEspectaculo(controlador), BorderLayout.CENTER);
@@ -98,6 +80,29 @@ public class VistaTicketNow {
 			panel.add(new PanelFinalizarCompra(controlador), BorderLayout.CENTER);
 			break;
 			
+		}
+	}
+	
+	private static void changePanel(String panelNuevo, Controlador controlador, String usuario) {
+		switch (panelNuevo) {
+		case "cliente":
+			panel.add(new PanelPrincipalCliente(controlador, usuario), BorderLayout.CENTER);
+			break;
+		case "proveedor":
+			panel.add(new PanelPrincipalProveedor(controlador, usuario), BorderLayout.CENTER);
+			break;
+		case "agregar":
+			panel.add(new PanelAgregarEspectaculo(controlador, usuario), BorderLayout.CENTER);
+			break;
+		case "perfilProveedor":
+			panel.add(new PanelPerfilProveedor(controlador, usuario), BorderLayout.CENTER);
+			break;
+		case "bajaProveedor":
+			panel.add(new PanelEliminarCuentaProveedor(controlador, usuario), BorderLayout.CENTER);
+			break;
+		case "modificar":
+			panel.add(new PanelModificarEspectaculo(controlador, usuario), BorderLayout.CENTER);
+			break;
 		}
 	}
 
@@ -114,6 +119,12 @@ public class VistaTicketNow {
 		panel.remove(panelActual);
 		panel.revalidate();
 		changePanel(panelNuevo, controlador);
+	}
+	
+	public static void changePanel(String panelNuevo, JPanel panelActual, Controlador controlador, String usuario) {
+		panel.remove(panelActual);
+		panel.revalidate();
+		changePanel(panelNuevo, controlador, usuario);
 	}
 
 }

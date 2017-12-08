@@ -31,7 +31,7 @@ public class PanelPrincipalCliente extends JPanel {
 
 	private Controlador controlador;
 
-	public PanelPrincipalCliente(Controlador controlador) {
+	public PanelPrincipalCliente(Controlador controlador, String cliente) {
 		setLayout(new BorderLayout(0, 0));
 		this.controlador = controlador;
 

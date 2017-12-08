@@ -1,3 +1,4 @@
+
 package espectaculo;
 
 public class PrecioInvalidoException extends RuntimeException {

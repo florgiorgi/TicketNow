@@ -1,14 +1,6 @@
 package espectaculo;
 
-import java.text.DateFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.swing.DefaultComboBoxModel;
-
 import usuario.NombreInvalidoException;
-import usuario.UsuarioInvalidoException;
 
 public class Espectaculo {
 
@@ -20,25 +12,25 @@ public class Espectaculo {
 	private String lugarDeRetiro;
 	private String precio;
 	private String descripcion;
-	private Integer id;
-
-	/* Agregar campos nuevos como lugar, cargar foto, precio, cantidad de entradas */
-	public Espectaculo(String nombre, String cantidadEntradas, String fechaEstreno, String promocion, String categoria, String lugarDeRetiro, String precio, String descripcion) {
-		if(!nombreValido(nombre))
+	private String imagen;
+	
+	public Espectaculo(String nombre, String cantidadEntradas, String fechaEstreno, String promocion, String categoria,
+			String lugarDeRetiro, String precio, String descripcion) {
+		if (!nombreValido(nombre))
 			throw new NombreInvalidoException("El nombre del espectaculo es invalido.");
-		if(!cantidadEntradasValida(cantidadEntradas))
+		if (!cantidadEntradasValida(cantidadEntradas))
 			throw new CantidadDeEntradasInvalidaException("La cantidad de entradas es invalida.");
-		if(!fechaValida(fechaEstreno))
+		if (!fechaValida(fechaEstreno))
 			throw new FechaEstrenoInvalidaException("La fecha de estreno es invalida.");
-		if(!promocionValida(promocion))
+		if (!promocionValida(promocion))
 			throw new PromocionInvalidaException("La promocion es invalida.");
-		if(!categoriaValida(categoria))
+		if (!categoriaValida(categoria))
 			throw new CategoriaInvalidaException("La categoria es invalida.");
-		if(!lugarDeRetiroValido(lugarDeRetiro, categoria))
+		if (!lugarDeRetiroValido(lugarDeRetiro, categoria))
 			throw new LugarDeRetiroInvalidoException("El lugar de retiro es invalido.");
-		if(!precioValido(precio))
+		if (!precioValido(precio))
 			throw new PrecioInvalidoException("El precio es invalido.");
-		if(!descripcionValida(descripcion))
+		if (!descripcionValida(descripcion))
 			throw new DescripcionInvalidaException("La descripcion es inválida.");
 		this.nombre = nombre;
 		this.cantidadEntradas = cantidadEntradas;
@@ -48,23 +40,23 @@ public class Espectaculo {
 		this.lugarDeRetiro = lugarDeRetiro;
 		this.precio = precio;
 		this.descripcion = descripcion;
-		generateId(nombre, lugarDeRetiro);
+		this.imagen = "imagen";
 	}
 
-	private void generateId(String nombre2, String lugarDeRetiro2) {
-		// TODO Auto-generated method stub
-		
+	private int generateId(String nombre, String lugarDeRetiro) {
+		return nombre.hashCode() * 17 + lugarDeRetiro.hashCode() * 31;
+
 	}
 
 	public boolean nombreValido(String nombre) {
-		if(nombre == null || nombre.equals(""))
+		if (nombre == null || nombre.equals(""))
 			return false;
 
 		char[] aux = nombre.toCharArray();
 
 		for (int i = 0; i < aux.length; i++) {
 			if (!Character.isLetterOrDigit(aux[i]) && Character.compare(aux[i], ' ') != 0
-					&& Character.compare(aux[i], '!') != 0 && Character.compare(aux[i], '?') != 0 
+					&& Character.compare(aux[i], '!') != 0 && Character.compare(aux[i], '?') != 0
 					&& Character.compare(aux[i], '-') != 0 && Character.compare(aux[i], '.') != 0)
 				return false;
 		}
@@ -72,7 +64,7 @@ public class Espectaculo {
 	}
 
 	private boolean cantidadEntradasValida(String cantidadEntradas) {
-		if(cantidadEntradas == null || cantidadEntradas == "")
+		if (cantidadEntradas == null || cantidadEntradas == "")
 			return false;
 		char[] aux = cantidadEntradas.toCharArray();
 		for (int i = 0; i < aux.length; i++) {
@@ -81,13 +73,13 @@ public class Espectaculo {
 			}
 		}
 		int auxInt = Integer.parseInt(cantidadEntradas);
-		if(auxInt < 0)
+		if (auxInt < 0)
 			return false;
 		return true;
 	}
 
 	private boolean fechaValida(String fecha) {
-		if(fecha == null)
+		if (fecha == null)
 			return false;
 
 		if (!formatoValido(fecha))
@@ -132,12 +124,12 @@ public class Espectaculo {
 	}
 
 	private boolean promocionValida(String promocion) {
-		if (promocion.equals("") || promocion.equals("2x1") || promocion.equals("Banco Asociados") || promocion.equals("Descuento a Jubilados")) {
+		if (promocion.equals("Sin promocion") || promocion.equals("2x1") || promocion.equals("Banco Asociados")
+				|| promocion.equals("Descuento a Jubilados")) {
 			return true;
 		}
 		return false;
 	}
-
 
 	private boolean categoriaValida(String categoria) {
 		if (categoria.equals("Cine") || categoria.equals("Teatro") || categoria.equals("Cancha")) {
@@ -146,59 +138,60 @@ public class Espectaculo {
 		return false;
 	}
 
-
 	private boolean lugarDeRetiroValido(String lugarDeRetiro, String categoria) {
 
-		switch(categoria) {
+		switch (categoria) {
 		case "Cine":
-			String[] lugaresC = {"Hoyts Abasto", "Hoyts Dot", "Hoyts Moreno", "Hoyts Moron", "Hoyts Quilmes", "Hoyts Rosario", "Hoyts Temperley",
-					"Hoyts Unicenter", "Hoyts NuevoCentro", "Hoyts Patio Olmos", "Hoyts Salta"};
-			for(int i = 0; i < lugaresC.length; i++)
-				if(lugaresC[i].equals(lugarDeRetiro))
+			String[] lugaresC = { "Hoyts Abasto", "Hoyts Dot", "Hoyts Moreno", "Hoyts Moron", "Hoyts Quilmes",
+					"Hoyts Rosario", "Hoyts Temperley", "Hoyts Unicenter", "Hoyts NuevoCentro", "Hoyts Patio Olmos",
+					"Hoyts Salta" };
+			for (int i = 0; i < lugaresC.length; i++)
+				if (lugaresC[i].equals(lugarDeRetiro))
 					return true;
 			break;
 		case "Teatro":
-			String[] lugaresT = {"Teatro Colon", "Teatro Gran Rex", "Teatro Metropolitan", "Teatro Argentino de La Plata", "Teatro Maipo",
-			"Teatro Lola Membrives", "Teatro Opera", "Teatro Coliseo"};
-			for(int i = 0; i < lugaresT.length; i++)
-				if(lugaresT[i].equals(lugarDeRetiro))
+			String[] lugaresT = { "Teatro Colon", "Teatro Gran Rex", "Teatro Metropolitan",
+					"Teatro Argentino de La Plata", "Teatro Maipo", "Teatro Lola Membrives", "Teatro Opera",
+					"Teatro Coliseo" };
+			for (int i = 0; i < lugaresT.length; i++)
+				if (lugaresT[i].equals(lugarDeRetiro))
 					return true;
 			break;
 		case "Cancha":
-			String[] lugaresCh = {"Antonio Vespusio Liberti", "Libertadores de America", "Ciudad de La Plata", "Presidente Peron",
-			"Mario Alberto Kempes", "Jose Amalfitani", "Alberto J. Armando", "Tomas Adolfo Duco", "Pedro Bidegain"};
-			for(int i = 0; i < lugaresCh.length; i++)
-				if(lugaresCh[i].equals(lugarDeRetiro))
+			String[] lugaresCh = { "Antonio Vespusio Liberti", "Libertadores de America", "Ciudad de La Plata",
+					"Presidente Peron", "Mario Alberto Kempes", "Jose Amalfitani", "Alberto J. Armando",
+					"Tomas Adolfo Duco", "Pedro Bidegain" };
+			for (int i = 0; i < lugaresCh.length; i++)
+				if (lugaresCh[i].equals(lugarDeRetiro))
 					return true;
 			break;
 		}
 		return false;
 	}
 
-
 	private boolean precioValido(String precio) {
-		if(precio == null || precio == "")
+		if (precio == null || precio == "")
 			return false;
 		char[] aux = precio.toCharArray();
 		for (int i = 0; i < aux.length; i++) {
 			if (!Character.isDigit(aux[i]))
-					return false;
+				return false;
 		}
 		Integer auxI = Integer.parseInt(precio);
-		if(auxI < 0)
+		if (auxI < 0)
 			return false;
 		return true;
 	}
 
 	private boolean descripcionValida(String descripcion) {
-		if(descripcion == null || descripcion == "")
+		if (descripcion == null || descripcion == "")
 			return false;
 		char[] aux = descripcion.toCharArray();
 		for (int i = 0; i < aux.length; i++) {
 			if (!Character.isLetterOrDigit(aux[i]) && Character.compare(aux[i], ' ') != 0
-				&& Character.compare(aux[i], '!') != 0 && Character.compare(aux[i], '?') != 0 
-				&& Character.compare(aux[i], '-') != 0 && Character.compare(aux[i], '.') != 0)
-					return false;
+					&& Character.compare(aux[i], '!') != 0 && Character.compare(aux[i], '?') != 0
+					&& Character.compare(aux[i], '-') != 0 && Character.compare(aux[i], '.') != 0)
+				return false;
 		}
 		return true;
 	}
@@ -235,9 +228,6 @@ public class Espectaculo {
 		return descripcion;
 	}
 
-	public Integer getId() {
-		return id;
-	}
 
 	// devuelve true si se pudo modificar el espectaculo
 	public boolean modificarEspectaculo(String nombre, String descripcion, String categoria, String fechaEstreno) {
@@ -249,7 +239,6 @@ public class Espectaculo {
 		this.fechaEstreno = fechaEstreno;
 		return true;
 	}
-
 
 	@Override
 	public int hashCode() {

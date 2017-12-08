@@ -34,11 +34,13 @@ public class PanelPerfilProveedor extends JPanel {
 	private JPanel panelCentral;
 
 	private Controlador controlador;
-
-	public PanelPerfilProveedor(Controlador controlador) {
+	private String proveedor;
+	
+	public PanelPerfilProveedor(Controlador controlador, String proveedor) {
 		/* Tendria que recibir el usuario para completar los campos modificables con sus datos */
 		setLayout(new BorderLayout(0, 0));
 		this.controlador = controlador;
+		this.proveedor = proveedor;
 
 		panelSuperior = new PanelSuperior();
 		panelSuperior.setBackground(Color.WHITE);
@@ -93,7 +95,7 @@ public class PanelPerfilProveedor extends JPanel {
 
 			btnVolver.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					VistaTicketNow.changePanel("proveedor", PanelPerfilProveedor.this, controlador);
+					VistaTicketNow.changePanel("proveedor", PanelPerfilProveedor.this, controlador, proveedor);
 				}
 			});
 		}
@@ -334,7 +336,7 @@ public class PanelPerfilProveedor extends JPanel {
 				
 				btnEliminarCuenta.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						VistaTicketNow.changePanel("bajaProveedor", PanelPerfilProveedor.this, controlador);
+						VistaTicketNow.changePanel("bajaProveedor", PanelPerfilProveedor.this, controlador, proveedor);
 					}
 				});
 						

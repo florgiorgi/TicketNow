@@ -19,9 +19,10 @@ import controlador.Controlador;
 public class PanelEliminarCuentaProveedor extends PanelEliminarCuenta {
 
 	private JPanel panelSuperior;
-	
-	public PanelEliminarCuentaProveedor(Controlador controlador) {
+	private String proveedor;
+	public PanelEliminarCuentaProveedor(Controlador controlador, String proveedor) {
 		super(controlador);
+		this.proveedor = proveedor;
 		
 		panelSuperior = new PanelSuperior();
 		panelSuperior.setBackground(Color.WHITE);
@@ -50,7 +51,7 @@ public class PanelEliminarCuentaProveedor extends PanelEliminarCuenta {
 
 			btnVolver.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					VistaTicketNow.changePanel("perfilProveedor", PanelEliminarCuentaProveedor.this, controlador);
+					VistaTicketNow.changePanel("perfilProveedor", PanelEliminarCuentaProveedor.this, controlador, proveedor);
 				}
 			});
 		}

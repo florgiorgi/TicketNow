@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 import database.Database;
+import espectaculo.Espectaculo;
 import usuario.Cliente;
 import usuario.Proveedor;
 import usuario.Usuario;
@@ -26,7 +27,7 @@ public class Controlador {
 					JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
-		System.out.println("hola");
+		
 		if (tipoUsuario.equals("Cliente"))
 			return database.addCliente(new Cliente(usuario, contraseña, contraseñaChequeo, nombre, apellido, fechaNac,
 					mail, telefono, DNI, pais, provincia, localidad, direccion, codigoPostal));
@@ -44,5 +45,10 @@ public class Controlador {
 			return database.containsProveedor(mail, contraseña);
 
 		return false;
+	}
+	
+	public boolean agregarEspectaculo(String nombre, String cantidad, String fechaDeEstreno, String promocion, String categoria, String lugar, String precio, String caracteristicas, String proveedorMail) throws SQLException {
+		database.addEspectaculo(new Espectaculo(nombre, cantidad, fechaDeEstreno, promocion, categoria, lugar, precio, caracteristicas), proveedorMail);
+		return true;
 	}
 }

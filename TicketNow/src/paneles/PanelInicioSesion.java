@@ -199,9 +199,9 @@ public class PanelInicioSesion extends JPanel {
 						if (controlador.usuarioCorrecto(tipoDeUsuarioField.getSelectedItem().toString(),
 								emailField.getText(), contraseñaField.getPassword())) {
 							if (tipoDeUsuarioField.getSelectedItem().equals("Cliente")) {
-								VistaTicketNow.changePanel("cliente", PanelInicioSesion.this, controlador);
+								VistaTicketNow.changePanel("cliente", PanelInicioSesion.this, controlador, emailField.getText());
 							} else {
-								VistaTicketNow.changePanel("proveedor", PanelInicioSesion.this, controlador);
+								VistaTicketNow.changePanel("proveedor", PanelInicioSesion.this, controlador, emailField.getText());
 							}
 						} else {
 							JOptionPane.showMessageDialog(null,
