@@ -52,7 +52,7 @@ public class Controlador {
 			String categoria, String lugar, String precio, String caracteristicas, String proveedorMail)
 			throws SQLException {
 		database.addEspectaculo(
-				new Espectaculo(nombre, cantidad, fechaDeEstreno, promocion, categoria, lugar, precio, caracteristicas),
+				new Espectaculo(nombre, cantidad, fechaDeEstreno, promocion, categoria, lugar, precio, caracteristicas, "0"),
 				proveedorMail);
 		return true;
 	}

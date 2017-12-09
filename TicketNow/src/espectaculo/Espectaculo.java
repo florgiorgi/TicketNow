@@ -13,9 +13,10 @@ public class Espectaculo {
 	private String precio;
 	private String descripcion;
 	private String imagen;
+	private String entradasVendidas;
 	
 	public Espectaculo(String nombre, String cantidadEntradas, String fechaEstreno, String promocion, String categoria,
-			String lugarDeRetiro, String precio, String descripcion) {
+			String lugarDeRetiro, String precio, String descripcion, String entradasVendidas) {
 		if (!nombreValido(nombre))
 			throw new NombreInvalidoException("El nombre del espectaculo es invalido.");
 		if (!cantidadEntradasValida(cantidadEntradas))
@@ -41,6 +42,7 @@ public class Espectaculo {
 		this.precio = precio;
 		this.descripcion = descripcion;
 		this.imagen = "imagen";
+		this.entradasVendidas = entradasVendidas;
 	}
 
 	private int generateId(String nombre, String lugarDeRetiro) {
@@ -275,4 +277,5 @@ public class Espectaculo {
 	public String toString() {
 		return this.nombre;
 	}
+
 }
