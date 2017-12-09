@@ -120,6 +120,33 @@ public class Database {
 		}
 		return true;
 	}
+	
+	public void updateUsuario(String tipoUsuario, Usuario usuario) throws SQLException{
+		if (tipoUsuario.equals("Proveedor")) {
+			if (proveedorMailExists(usuario.getMail())) {
+				throw new UsuarioExistenteException(
+						"El mail que ingresó ya esta registrado en el sistema como un proveedor.");
+			}
+		} else if (tipoUsuario.equals("Cliente")) {
+			if (clienteMailExists(usuario.getMail())) {
+				throw new UsuarioExistenteException(
+						"El mail que ingresó ya esta registrado en el sistema como un cliente.");
+			}
+		}
+		
+		ejecutasql("UPDATE usuario SET contra = '" + usuario.getContraseña().toString() +
+				"', nombre = '" + usuario.getNombre() +
+				"', apellido ='"+ usuario.getApellido() +
+				"', cumple = '" + usuario.getFechaNac() +
+				"', telefono = '" + usuario.getTelefono() +
+				"', dni = '" + usuario.getDNI() +
+				"', pais = '" + usuario.getPais() + 
+				"', provincia = '" + usuario.getProvincia() +
+				"', localidad = '" + usuario.getLocalidad() +
+				"', direccion = '" + usuario.getDireccion() +
+				"', codigoPostal = '" + usuario.getCodigoPostal() +
+				"' WHERE email = '" + usuario.getMail() + "';");
+	}
 
 	public boolean addProveedor(Proveedor proveedor) throws SQLException {
 		conectar("u2017b-3", "passwordING1");
@@ -316,5 +343,16 @@ public class Database {
 		}
 		
 		ejecutasql("UPDATE espectaculo SET entradasVendidas = '" + (entradasYaVendidas + vendidas) + "' WHERE espnombre = '" + nombreEspectaculo + "' AND lugarRetiro = '" + lugarEspectaculo + "';");
+	}
+	
+	public void updateEspectaculo(Espectaculo espectaculo) throws SQLException {
+		conectar("u2017b-3", "passwordING1");
+		ejecutasql("UPDATE espectaculo SET espdescripcion = '" + espectaculo.getDescripcion() +
+				"', categoria = '" + espectaculo.getCategoria() +
+				"', estreno = '" + espectaculo.getFechaEstreno() +
+				"', promocion = '" + espectaculo.getPromocion() +
+				"', precio = '" + espectaculo.getPrecio() +
+				"', cantidadEntradas = '" + espectaculo.getCantidadEntradas() +
+				"' WHERE espnombre = '" + espectaculo.getNombre() + "' AND lugarRetiro = '" + espectaculo.getLugarDeRetiro() + "';");
 	}
 }

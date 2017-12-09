@@ -45,6 +45,7 @@ public class Espectaculo {
 		this.entradasVendidas = entradasVendidas;
 	}
 
+
 	private int generateId(String nombre, String lugarDeRetiro) {
 		return nombre.hashCode() * 17 + lugarDeRetiro.hashCode() * 31;
 
