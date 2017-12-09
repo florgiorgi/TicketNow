@@ -226,7 +226,7 @@ public class PanelAgregarEspectaculo extends JPanel {
 						try {
 							ImageIcon icon = new ImageIcon(fichero.toString());
 							Icon icono = new ImageIcon(icon.getImage());
-							JLabel fotoCargada = new JLabel(); /* Aca guardo la foto que va a ir a la base de datos */
+							JLabel fotoCargada = new JLabel(); 
 							fotoCargada.setText(null);
 							fotoCargada.setIcon(icono);
 						} catch (Exception ex) {

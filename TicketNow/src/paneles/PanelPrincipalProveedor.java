@@ -10,6 +10,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.AbstractListModel;
 import javax.swing.BoxLayout;
@@ -125,13 +126,23 @@ public class PanelPrincipalProveedor extends JPanel {
 		JButton btnEliminar = new JButton("Eliminar espectaculo");
 		JButton btnModificar = new JButton("Modificar espectaculo");
 		
+		Set<Espectaculo> espectaculos = controlador.obtenerEspectaculosProveedor(proveedor);
+		
 		public PanelCentral() {
 			setLayout(new BorderLayout(0, 0));
 			
 			panelTabla.setBackground(Color.WHITE);
 			add(panelTabla, BorderLayout.CENTER);
 			
-			inicializarTabla();
+			
+			if(espectaculos.size() > 0)
+				inicializarTabla();
+			else {
+				JLabel subtitulo = new JLabel("No tienes ningun espectáculo agregado al sistema");
+				panelTabla.add(subtitulo);
+				subtitulo.setFont(new Font("Dialog", Font.PLAIN, 15));
+			}
+				
 			
 			panelTitulo.setForeground(Color.WHITE);
 			FlowLayout fl_panelTitulo = (FlowLayout) panelTitulo.getLayout();
@@ -155,10 +166,14 @@ public class PanelPrincipalProveedor extends JPanel {
 			tabla.getTableHeader().setFont(new Font("Dialog", Font.PLAIN, 15));
 			tabla.setFont(new Font("Dialog", Font.PLAIN, 13));
 			tabla.setForeground(Color.BLACK);
-			tabla.setModel(new DefaultTableModel(
-					new Object[][] { { "Cars 3", "770", "4023" }, { "Coldplay", "8800", "7200" }, { "James Blunt", "800", "2400" },
-							{ "River - Boca", "10650", "9600" }, { "Les Luthiers", "400", "1651" }, },
-					new String[] { "Espect\u00E1culo", "Vendidas", "Remanentes" }));
+			
+			
+			DefaultTableModel model = new DefaultTableModel(new String[] { "Espect\u00E1culo", "Vendidas", "Remanentes" }, 0);
+			
+			for(Espectaculo e : espectaculos)
+				model.addRow(new Object[]{e.getNombre(), "0" /*CAMBIAR*/, e.getCantidadEntradas()});
+			
+			tabla.setModel(model);
 			tabla.getColumnModel().getColumn(0).setPreferredWidth(300);
 			tabla.getColumnModel().getColumn(1).setPreferredWidth(120);
 			tabla.getColumnModel().getColumn(2).setPreferredWidth(120);

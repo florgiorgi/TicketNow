@@ -1,6 +1,8 @@
 package controlador;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Set;
 
 import javax.swing.JOptionPane;
 
@@ -18,16 +20,15 @@ public class Controlador {
 	public boolean agregarUsuario(String tipoUsuario, String usuario, String contraseña, String contraseñaChequeo,
 			String nombre, String apellido, String fechaNac, String mail, String telefono, String DNI, String pais,
 			String provincia, String localidad, String direccion, String codigoPostal) throws SQLException {
-		
+
 		try {
-			database.addUsuario(tipoUsuario, new Usuario(usuario, contraseña, contraseñaChequeo, nombre, apellido, fechaNac,
-					mail, telefono, DNI, pais, provincia, localidad, direccion, codigoPostal));
+			database.addUsuario(tipoUsuario, new Usuario(usuario, contraseña, contraseñaChequeo, nombre, apellido,
+					fechaNac, mail, telefono, DNI, pais, provincia, localidad, direccion, codigoPostal));
 		} catch (UsuarioExistenteException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(), "Ocurrió algo inesperado",
-					JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Ocurrió algo inesperado", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
-		
+
 		if (tipoUsuario.equals("Cliente"))
 			return database.addCliente(new Cliente(usuario, contraseña, contraseñaChequeo, nombre, apellido, fechaNac,
 					mail, telefono, DNI, pais, provincia, localidad, direccion, codigoPostal));
@@ -46,9 +47,35 @@ public class Controlador {
 
 		return false;
 	}
-	
-	public boolean agregarEspectaculo(String nombre, String cantidad, String fechaDeEstreno, String promocion, String categoria, String lugar, String precio, String caracteristicas, String proveedorMail) throws SQLException {
-		database.addEspectaculo(new Espectaculo(nombre, cantidad, fechaDeEstreno, promocion, categoria, lugar, precio, caracteristicas), proveedorMail);
+
+	public boolean agregarEspectaculo(String nombre, String cantidad, String fechaDeEstreno, String promocion,
+			String categoria, String lugar, String precio, String caracteristicas, String proveedorMail)
+			throws SQLException {
+		database.addEspectaculo(
+				new Espectaculo(nombre, cantidad, fechaDeEstreno, promocion, categoria, lugar, precio, caracteristicas),
+				proveedorMail);
 		return true;
+	}
+
+	public Proveedor obtenerProveedor(String mail) {
+		try {
+			ResultSet rs = database.getProveedor(mail);
+			return new Proveedor(rs.getString("username"), rs.getString("contra"), rs.getString("contra"),
+					rs.getString("nombre"), rs.getString("apellido"), rs.getString("cumple"), rs.getString("email"),
+					rs.getString("telefono"), rs.getString("dni"), rs.getString("pais"), rs.getString("provincia"),
+					rs.getString("localidad"), rs.getString("direccion"), rs.getString("codigopostal"));
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public Set<Espectaculo> obtenerEspectaculosProveedor(String mail){
+		try {
+			return database.getEspectaculosPorProveedor(mail);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

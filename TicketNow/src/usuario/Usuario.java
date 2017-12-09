@@ -1,6 +1,5 @@
 package usuario;
 
-import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -201,14 +200,6 @@ public class Usuario {
 				return false;
 		}
 		return true;
-	}
-
-	private boolean paisValido(String pais) {
-		if (pais.equals("Argentina") || pais.equals("Paraguay") || pais.equals("Uruguay")) {
-			return true;
-		}
-
-		return false;
 	}
 
 	private boolean localidadValida(String localidad) {

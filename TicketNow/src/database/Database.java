@@ -173,6 +173,13 @@ public class Database {
 		return false;
 	}
 	
+	/* Si se fija en usuario y existe un cliente y proveedor registrados con el mismo mail va a romper */
+	public ResultSet getProveedor(String mail) throws SQLException {
+		conectar("u2017b-3", "passwordING1");
+		ResultSet rs = gXrGenerico("SELECT * FROM usuario WHERE email = '" + mail + "';");
+		return rs;
+	}
+	
 	public String getProveedorID(String mail) throws SQLException {
 		conectar("u2017b-3", "passwordING1");
 		ResultSet rs = gXrGenerico("SELECT id FROM proveedor WHERE email = '" + mail + "';");
@@ -271,6 +278,26 @@ public class Database {
 			Espectaculo e = new Espectaculo(nomb, cantEntradas, est, promo, cat, lugarRetiro, precio, desc);
 			espectaculos.add(e);
 			count++;
+		}
+		return espectaculos;
+	}
+	
+	public Set<Espectaculo> getEspectaculosPorProveedor(String mail) throws SQLException {
+		Set<Espectaculo> espectaculos = new HashSet<Espectaculo>();
+		String id = getProveedorID(mail);
+		conectar("u2017b-3", "passwordING1");
+		ResultSet rs = gXrGenerico("SELECT * FROM espectaculo WHERE proveedorid = '" + id + "';");
+		while (rs.next()) {
+			String nomb = rs.getString("espnombre");
+			String desc = rs.getString("espdescripcion");
+			String cat = rs.getString("categoria");
+			String est = rs.getString("estreno");
+			String promo = rs.getString("promocion");
+			String cantEntradas = rs.getString("cantidadEntradas");
+			String lugarRetiro = rs.getString("lugarRetiro");
+			String precio = rs.getString("precio");
+			Espectaculo e = new Espectaculo(nomb, cantEntradas, est, promo, cat, lugarRetiro, precio, desc);
+			espectaculos.add(e);
 		}
 		return espectaculos;
 	}
