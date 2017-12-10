@@ -160,6 +160,12 @@ public class Database {
 		ResultSet rs = gXrGenerico("SELECT * FROM usuario WHERE email = '" + mail + "';");
 		return rs;
 	}
+	
+	public ResultSet getCliente(String mail) throws SQLException {
+		conectar("u2017b-3", "passwordING1");
+		ResultSet rs = gXrGenerico("SELECT * FROM usuario WHERE email = '" + mail + "';");
+		return rs;
+	}
 
 	public String getProveedorID(String mail) throws SQLException {
 		conectar("u2017b-3", "passwordING1");
