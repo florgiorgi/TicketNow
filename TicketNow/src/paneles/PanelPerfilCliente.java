@@ -85,7 +85,7 @@ public class PanelPerfilCliente extends JPanel {
 		}
 
 		/**
-		 * MÃ©todo que inicializa el titulo y lo agrega al panel
+		 * Metodo que inicializa el titulo y lo agrega al panel
 		 */
 		private void inicializarTitulo() {
 			titulo.setFont(new Font("Dialog", Font.BOLD, 22));
@@ -93,7 +93,7 @@ public class PanelPerfilCliente extends JPanel {
 		}
 
 		/**
-		 * MÃ©todo que inicializa el boton volver y lo agrega al panel
+		 * Metodo que inicializa el boton volver y lo agrega al panel
 		 */
 		private void inicializarBotones() {
 			btnVolver.setBackground(Color.WHITE);
@@ -123,7 +123,7 @@ public class PanelPerfilCliente extends JPanel {
 		private JLabel lblApellido = new JLabel("Apellido:");
 		private JLabel lblFechaNacimiento = new JLabel("Fecha de nacimiento:");
 		private JLabel lblDireccionDeCorreo = new JLabel("E-mail:");
-		private JLabel lblTelefono = new JLabel("TelÃ©fono:");
+		private JLabel lblTelefono = new JLabel("Telefono:");
 		private JLabel lblTipoDeDocumento = new JLabel("Tipo de documento:");
 		private JLabel lblDni = new JLabel("Numero de documento:");
 		private JLabel lblPais = new JLabel("Pais:");
@@ -135,21 +135,21 @@ public class PanelPerfilCliente extends JPanel {
 		Cliente c = controlador.obtenerCliente(cliente);
 
 		private JComboBox tipoUsuario = new JComboBox();
-		private JTextField usuarioField = new JTextField();
-		private JTextField contraseñaField = new JTextField();
+		private JTextField usuarioField = new JTextField(c.getUsuario());
+		private JTextField contraseñaField = new JTextField(c.getContraseña());
 		private JTextField contraseñaConfField = new JTextField(c.getContraseña());
-		private JTextField nombreField = new JTextField();
-		private JTextField apellidoField = new JTextField();
-		private JTextField fechaNacimientoField = new JTextField();
-		private JTextField direccionCorreoField = new JTextField();
-		private JTextField telefonoField = new JTextField();
+		private JTextField nombreField = new JTextField(c.getNombre());
+		private JTextField apellidoField = new JTextField(c.getApellido());
+		private JTextField fechaNacimientoField = new JTextField(c.getFechaNac());
+		private JTextField direccionCorreoField = new JTextField(c.getMail());
+		private JTextField telefonoField = new JTextField(c.getTelefono());
 		private JComboBox tipoDocumentoBox = new JComboBox();
-		private JTextField dniField = new JTextField();
+		private JTextField dniField = new JTextField(c.getDNI());
 		private JComboBox paisBox = new JComboBox();
 		private JComboBox provinciaBox = new JComboBox();
-		private JTextField localidadField = new JTextField();
-		private JTextField direccionField = new JTextField();
-		private JTextField codigoPostalField = new JTextField();
+		private JTextField localidadField = new JTextField(c.getLocalidad());
+		private JTextField direccionField = new JTextField(c.getDireccion());
+		private JTextField codigoPostalField = new JTextField(c.getCodigoPostal());
 		private JPanel panelInferior;
 
 		private Font fuente = new Font("Dialog", Font.BOLD, 14);
@@ -270,6 +270,7 @@ public class PanelPerfilCliente extends JPanel {
 			paisBox.setModel(
 					new DefaultComboBoxModel(new String[] { "Seleccione pais", "Argentina", "Paraguay", "Uruguay" }));
 			panelRegistrarse.add(paisBox);
+			paisBox.setSelectedItem(c.getPais());
 			paisBox.setFont(fuente1);
 
 			lblProvincia.setHorizontalAlignment(SwingConstants.CENTER);
