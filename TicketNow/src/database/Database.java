@@ -301,7 +301,7 @@ public class Database {
 //			primero=false;
 //			base+="estreno ='"+estreno+"'";
 //		}
-		base+=":";
+		base+=";";
 		
 		ResultSet rs;
 			rs = gXrGenerico(base);
