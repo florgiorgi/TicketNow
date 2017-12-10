@@ -38,17 +38,14 @@ public class PanelResultadosEncontrados extends JPanel {
 	
 	private Controlador controlador;
 	private String cliente;
-	private String condicion;
 	private Set<Espectaculo> espectaculos;
 	
 	
-	public PanelResultadosEncontrados(Controlador controlador, String cliente, String condicion) {
+	public PanelResultadosEncontrados(Controlador controlador, String cliente, Set<Espectaculo> set) {
 		this.setLayout(new BorderLayout(0, 0));
 		this.controlador = controlador;
 		this.cliente = cliente;
-		this.condicion = condicion;
-		
-		this.espectaculos = controlador.obtenerEspectaculoPorCondicion(condicion);
+		this.espectaculos = set;
 		
 		panelSuperior = new PanelSuperior();
 		panelSuperior.setBackground(Color.WHITE);
@@ -105,7 +102,7 @@ public class PanelResultadosEncontrados extends JPanel {
 						JOptionPane.showMessageDialog(null, "Seleccione un espectáculo para ver sus detalles",
 								"Ocurrió algo inesperado", JOptionPane.ERROR_MESSAGE);
 					else
-						VistaTicketNow.changePanel("informacion", PanelResultadosEncontrados.this, controlador, cliente);
+						VistaTicketNow.changePanel("informacion", PanelResultadosEncontrados.this, controlador, cliente, espectaculos);
 				}
 			});
 			add(btnMasInfo);

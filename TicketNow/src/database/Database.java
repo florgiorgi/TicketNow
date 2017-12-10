@@ -228,7 +228,7 @@ public class Database {
 		}
 		return espectaculos;
 	}
-
+	
 	public Set<Espectaculo> getEspectaculos(String condicion) throws SQLException {
 		System.out.println(condicion);
 		Set<Espectaculo> espectaculos = new HashSet<Espectaculo>();
@@ -264,35 +264,36 @@ public class Database {
 		}
 		return espectaculos;
 	}
-	
+
 	public Set<Espectaculo> getEspectaculos(String busqueda, String lugar, String promocion, String estreno) throws SQLException {
+		System.out.println(busqueda + lugar + promocion);
 		Set<Espectaculo> espectaculos = new HashSet<Espectaculo>();
 		boolean primero = true;
 		conectar("u2017b-3", "passwordING1");
 		String base = "SELECT * FROM espectaculo";
 		if(busqueda != null || lugar != null || promocion != null || estreno != null){
-			base+= " WHERE";
+			base+= " WHERE ";
 		}
 		else{
 			base+= ";";
 		}
 		if(busqueda != null){
 			primero=false;
-			base+=" espnombre='"+busqueda +"'";
+			base+="espnombre = '"+busqueda +"'";
 		}
 		if(lugar != null){
 			if(!primero){
-				base+=" AND";
+				base+=" AND ";
 			}
 			primero=false;
 			base+="categoria = '" + lugar + "'";
 		}
 		if(promocion != null){
 			if(!primero){
-				base+=" AND";
+				base+=" AND ";
 			}
 			primero=false;
-			base+="promocion ='" + promocion +"'";
+			base+="promocion = '" + promocion +"'";
 		}
 //		if(estreno != null){
 //			if(!primero){
@@ -322,6 +323,7 @@ public class Database {
 		}
 		return espectaculos;
 	}
+
 
 	public Set<Espectaculo> getEspectaculosMasVendidos() throws SQLException {
 		Set<Espectaculo> espectaculos = new HashSet<Espectaculo>();

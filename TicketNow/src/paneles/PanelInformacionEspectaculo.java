@@ -9,6 +9,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Set;
 
 import javax.swing.AbstractListModel;
 import javax.swing.BorderFactory;
@@ -32,6 +33,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import controlador.Controlador;
+import espectaculo.Espectaculo;
 
 public class PanelInformacionEspectaculo extends JPanel {
 
@@ -40,11 +42,13 @@ public class PanelInformacionEspectaculo extends JPanel {
 	
 	private Controlador controlador;
 	private String cliente;
+	private Set<Espectaculo> espectaculos;
 	
-	public PanelInformacionEspectaculo(Controlador controlador, String cliente) {
+	public PanelInformacionEspectaculo(Controlador controlador, String cliente, Set<Espectaculo> set){
 		setLayout(new BorderLayout(0, 0));
 		this.controlador = controlador;
 		this.cliente = cliente;
+		this.espectaculos = set;
 		
 		JPanel panelSuperior = new PanelSuperior();
 		panelSuperior.setBackground(Color.WHITE);
@@ -80,7 +84,7 @@ public class PanelInformacionEspectaculo extends JPanel {
 			
 			btnVolver.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					VistaTicketNow.changePanel("lista", PanelInformacionEspectaculo.this, controlador, cliente);
+					VistaTicketNow.changePanel("lista", PanelInformacionEspectaculo.this, controlador, cliente, espectaculos);
 				}
 			});
 			

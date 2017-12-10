@@ -128,9 +128,9 @@ public class Controlador {
 	}
 	
 	
-	public Set<Espectaculo> obtenerEspectaculoPorCondicion(String condicion){
+	public Set<Espectaculo> obtenerEspectaculoPorCondicion(String busqueda, String lugar, String promocion, String estreno){
 		try {
-			return database.getEspectaculos(condicion);
+			return database.getEspectaculos(busqueda, lugar, promocion, estreno);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;

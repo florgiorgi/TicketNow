@@ -8,6 +8,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Set;
 
 import javax.swing.AbstractListModel;
 import javax.swing.BoxLayout;
@@ -22,6 +23,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 
 import controlador.Controlador;
+import espectaculo.Espectaculo;
 
 public class PanelPrincipalCliente extends JPanel {
 
@@ -262,15 +264,20 @@ public class PanelPrincipalCliente extends JPanel {
 
 			btnBuscar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					String condicion = "";
-					if (!listLugar.isSelectionEmpty())
-						condicion = (String) listLugar.getSelectedValue();
-					else if (!listPromocion.isSelectionEmpty())
-						condicion = (String) listPromocion.getSelectedValue();
-					else if(!txtBuscar.getText().equals("Buscar..."))
-						condicion = txtBuscar.getText();
-						
-					VistaTicketNow.changePanel("lista", PanelPrincipalCliente.this, controlador, cliente, condicion);
+					String busqueda = null;
+					String lugar = null;
+					String promocion = null;
+					String estreno = null;
+					if(!txtBuscar.getText().equals("Buscar..."))
+						busqueda = txtBuscar.getText();
+					if(!listLugar.isSelectionEmpty())
+						lugar = (String) listLugar.getSelectedValue();
+					if(!listPromocion.isSelectionEmpty())
+						promocion = (String) listPromocion.getSelectedValue();
+					
+					
+					Set<Espectaculo> espectaculos = controlador.obtenerEspectaculoPorCondicion(busqueda, lugar, promocion, estreno);
+					VistaTicketNow.changePanel("lista", PanelPrincipalCliente.this, controlador, cliente, espectaculos);
 				}
 			});
 		}

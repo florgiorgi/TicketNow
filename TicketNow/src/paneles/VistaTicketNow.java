@@ -4,11 +4,13 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import controlador.Controlador;
+import espectaculo.Espectaculo;
 
 public class VistaTicketNow {
 
@@ -90,25 +92,32 @@ public class VistaTicketNow {
 		case "perfilCliente":
 			panel.add(new PanelPerfilCliente(controlador, usuario), BorderLayout.CENTER);
 			break;
-		case "informacion":
-			panel.add(new PanelInformacionEspectaculo(controlador, usuario), BorderLayout.CENTER);
-			break;
 		case "finalizarCompra":
 			panel.add(new PanelFinalizarCompra(controlador, usuario), BorderLayout.CENTER);
 			break;
 		}
 	}
 	
-	private static void changePanel(String panelNuevo, Controlador controlador, String usuario, String argumento1) {
+	private static void changePanel(String panelNuevo, Controlador controlador, String usuario, String espectaculo) {
 		switch (panelNuevo) {
 		case "modificar":
-			panel.add(new PanelModificarEspectaculo(controlador, usuario, argumento1), BorderLayout.CENTER);
-			break;
-		case "lista":		
-			panel.add(new PanelResultadosEncontrados(controlador, usuario, argumento1), BorderLayout.CENTER);
+			panel.add(new PanelModificarEspectaculo(controlador, usuario, espectaculo), BorderLayout.CENTER);
 			break;
 		}
 	}
+	
+	private static void changePanel(String panelNuevo, Controlador controlador, String usuario, Set<Espectaculo> set) {
+		switch (panelNuevo) {
+		case "lista":		
+			panel.add(new PanelResultadosEncontrados(controlador, usuario, set), BorderLayout.CENTER);
+			break;
+		case "informacion":
+			panel.add(new PanelInformacionEspectaculo(controlador, usuario, set), BorderLayout.CENTER);
+			break;
+		}
+	}
+	
+	
 	
 
 	/**
@@ -138,4 +147,9 @@ public class VistaTicketNow {
 		changePanel(panelNuevo, controlador, usuario, espectaculo);
 	}
 
+	public static void changePanel(String panelNuevo, JPanel panelActual, Controlador controlador, String usuario, Set<Espectaculo> espectaculo) {
+		panel.remove(panelActual);
+		panel.revalidate();
+		changePanel(panelNuevo, controlador, usuario, espectaculo);
+	}
 }
