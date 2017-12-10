@@ -12,20 +12,31 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
-
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import controlador.Controlador;
+import usuario.ApellidoInvalidoException;
+import usuario.CodigoPostalInvalidoException;
+import usuario.ContraseñaIncorrectaException;
+import usuario.ContraseñaInvalidaException;
+import usuario.DNIInvalidoException;
+import usuario.DireccionInvalidaException;
+import usuario.FechaNacInvalidaException;
+import usuario.LocalidadInvalidaException;
+import usuario.MailInvalidoException;
+import usuario.NombreInvalidoException;
 import usuario.Proveedor;
-
+import usuario.TelefonoInvalidoException;
+import usuario.UsuarioExistenteException;
+import usuario.UsuarioInvalidoException;
 
 public class PanelPerfilProveedor extends JPanel {
 
@@ -36,9 +47,12 @@ public class PanelPerfilProveedor extends JPanel {
 
 	private Controlador controlador;
 	private String proveedor;
-	
+
 	public PanelPerfilProveedor(Controlador controlador, String proveedor) {
-		/* Tendria que recibir el usuario para completar los campos modificables con sus datos */
+		/*
+		 * Tendria que recibir el usuario para completar los campos modificables con sus
+		 * datos
+		 */
 		setLayout(new BorderLayout(0, 0));
 		this.controlador = controlador;
 		this.proveedor = proveedor;
@@ -109,6 +123,7 @@ public class PanelPerfilProveedor extends JPanel {
 		private JLabel lblTipoUsuario = new JLabel("Tipo de usuario:");
 		private JLabel lblUsuario = new JLabel("Usuario:");
 		private JLabel lblContraseña = new JLabel("Contraseña:");
+		private JLabel lblConfirmarContraseña = new JLabel("Confirmar contraseña:");
 		private JLabel lblNombre = new JLabel("Nombre:");
 		private JLabel lblApellido = new JLabel("Apellido:");
 		private JLabel lblFechaNacimiento = new JLabel("Fecha de nacimiento:");
@@ -121,12 +136,13 @@ public class PanelPerfilProveedor extends JPanel {
 		private JLabel lblLocalidad = new JLabel("Localidad:");
 		private JLabel lblDireccion = new JLabel("Direccion:");
 		private JLabel lblCodigoPostal = new JLabel("Codigo Postal:");
-		
+
 		Proveedor p = controlador.obtenerProveedor(proveedor);
-		
+
 		private JComboBox tipoUsuario = new JComboBox();
 		private JTextField usuarioField = new JTextField(p.getUsuario());
 		private JTextField contraseñaField = new JTextField(p.getContraseña());
+		private JTextField contraseñaConfField = new JTextField(p.getContraseña());
 		private JTextField nombreField = new JTextField(p.getNombre());
 		private JTextField apellidoField = new JTextField(p.getApellido());
 		private JTextField fechaNacimientoField = new JTextField(p.getFechaNac());
@@ -164,7 +180,7 @@ public class PanelPerfilProveedor extends JPanel {
 			panelRegistrarse.add(lblTipoUsuario);
 			lblTipoUsuario.setFont(fuente);
 
-			tipoUsuario.setModel(new DefaultComboBoxModel(new String[] {"Proveedor", "Cliente" }));
+			tipoUsuario.setModel(new DefaultComboBoxModel(new String[] { "Proveedor", "Cliente" }));
 			tipoUsuario.setEnabled(false);
 			panelRegistrarse.add(tipoUsuario);
 			tipoUsuario.setFont(fuente1);
@@ -174,6 +190,7 @@ public class PanelPerfilProveedor extends JPanel {
 			lblUsuario.setFont(fuente);
 
 			usuarioField.setColumns(10);
+			usuarioField.setEditable(false);
 			panelRegistrarse.add(usuarioField);
 			usuarioField.setFont(fuente1);
 
@@ -182,9 +199,16 @@ public class PanelPerfilProveedor extends JPanel {
 			lblContraseña.setFont(fuente);
 
 			contraseñaField.setColumns(10);
-			contraseñaField.setEditable(false);
 			panelRegistrarse.add(contraseñaField);
 			contraseñaField.setFont(fuente1);
+			
+			lblConfirmarContraseña.setHorizontalAlignment(SwingConstants.CENTER);
+			panelRegistrarse.add(lblConfirmarContraseña);
+			lblConfirmarContraseña.setFont(fuente);
+
+			contraseñaConfField.setColumns(10);
+			panelRegistrarse.add(contraseñaConfField);
+			contraseñaConfField.setFont(fuente1);
 
 			lblNombre.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblNombre);
@@ -257,34 +281,34 @@ public class PanelPerfilProveedor extends JPanel {
 			lblProvincia.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblProvincia);
 			lblProvincia.setFont(fuente);
-			
-			DefaultComboBoxModel provinciasArgentina = new DefaultComboBoxModel(new String[] { "Buenos Aires", "Catamarca",
-					"Chaco", "Chubut", "Córdoba", "Corrientes", "Entre Ríos", "Formosa", "Jujuy",
-					"La Pampa", "La Rioja", "Mendoza", "Misiones", "Neuquén", "Río Negro", "Salta",
-					"San Juan", "San Luis", "Santa Cruz", "Santa Fe", "Santiago del Estero",
-					"Tierra del Fuego", "Tucumán" });
-			
-			DefaultComboBoxModel provinciasUruguay = new DefaultComboBoxModel(new String[] { "Asunción", "Concepcion",
-					"San Pedro", "Cordillera", "Guairá", "Caaguazú", "Caazapá", "Itapúa", "Misiones",
-					"Paraguarí", "Alto Paraná", "Central", "Ñeembucú", "Amambay", "Canindeyú",
-					"Presidente Hayes", "Boquerón", "Alto Paraguay" });
-			
-			
-			DefaultComboBoxModel provinciasParaguay = new DefaultComboBoxModel(new String[] { "Artigas", "Canelones",
-					"Cerro Largo", "Colonia", "Durazno", "Flores", "Florida", "Lavalleja", "Maldonado",
-					"Montevideo", "Paysandú", "Rio Negro", "Rivera", "Rocha", "Salto", "San Jose",
-					"Soriano", "Tacuarembó", "Treinta y Tres" });
-			
-			
-			switch(p.getPais()) {
-				case "Argentina" : provinciaBox.setModel(provinciasArgentina);
+
+			DefaultComboBoxModel provinciasArgentina = new DefaultComboBoxModel(new String[] { "Buenos Aires",
+					"Catamarca", "Chaco", "Chubut", "Córdoba", "Corrientes", "Entre Ríos", "Formosa", "Jujuy",
+					"La Pampa", "La Rioja", "Mendoza", "Misiones", "Neuquén", "Río Negro", "Salta", "San Juan",
+					"San Luis", "Santa Cruz", "Santa Fe", "Santiago del Estero", "Tierra del Fuego", "Tucumán" });
+
+			DefaultComboBoxModel provinciasUruguay = new DefaultComboBoxModel(
+					new String[] { "Asunción", "Concepcion", "San Pedro", "Cordillera", "Guairá", "Caaguazú", "Caazapá",
+							"Itapúa", "Misiones", "Paraguarí", "Alto Paraná", "Central", "Ñeembucú", "Amambay",
+							"Canindeyú", "Presidente Hayes", "Boquerón", "Alto Paraguay" });
+
+			DefaultComboBoxModel provinciasParaguay = new DefaultComboBoxModel(
+					new String[] { "Artigas", "Canelones", "Cerro Largo", "Colonia", "Durazno", "Flores", "Florida",
+							"Lavalleja", "Maldonado", "Montevideo", "Paysandú", "Rio Negro", "Rivera", "Rocha", "Salto",
+							"San Jose", "Soriano", "Tacuarembó", "Treinta y Tres" });
+
+			switch (p.getPais()) {
+			case "Argentina":
+				provinciaBox.setModel(provinciasArgentina);
 				break;
-				case "Uruguay" : provinciaBox.setModel(provinciasUruguay);
+			case "Uruguay":
+				provinciaBox.setModel(provinciasUruguay);
 				break;
-				case "Paraguay": provinciaBox.setModel(provinciasParaguay);
+			case "Paraguay":
+				provinciaBox.setModel(provinciasParaguay);
 				break;
 			}
-			
+
 			provinciaBox.setSelectedItem(p.getProvincia());
 			paisBox.addItemListener(new ItemListener() {
 
@@ -339,7 +363,7 @@ public class PanelPerfilProveedor extends JPanel {
 		private class PanelInferior extends JPanel {
 			JButton btnModificarDatos = new JButton("Modificar datos");
 			JButton btnEliminarCuenta = new JButton("Eliminar cuenta");
-			
+
 			public PanelInferior() {
 				inicializarBotones();
 			}
@@ -351,23 +375,78 @@ public class PanelPerfilProveedor extends JPanel {
 				btnModificarDatos.setBackground(new Color(0, 102, 204));
 				add(btnModificarDatos);
 
+				btnModificarDatos.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						try {
+							if (controlador.modificarUsuario(tipoUsuario.getSelectedItem().toString(),
+									usuarioField.getText(), contraseñaField.getText(), contraseñaConfField.getText(),
+									nombreField.getText(), apellidoField.getText(), fechaNacimientoField.getText(),
+									direccionCorreoField.getText(), telefonoField.getText(), dniField.getText(),
+									paisBox.getSelectedItem().toString(), provinciaBox.getSelectedItem().toString(),
+									localidadField.getText(), direccionField.getText(), codigoPostalField.getText())) {
+								JOptionPane.showMessageDialog(null, "Su perfil ha sido modificado.");
+								VistaTicketNow.changePanel("proveedor", PanelPerfilProveedor.this, controlador,
+										proveedor);
+							}
+						} catch (ContraseñaIncorrectaException m) {
+							JOptionPane.showMessageDialog(null, m.getMessage(), "Ocurrió algo inesperado",
+									JOptionPane.ERROR_MESSAGE);
+
+						} catch (ContraseñaInvalidaException m1) {
+							JOptionPane.showMessageDialog(null, m1.getMessage(), "Ocurrió algo inesperado",
+									JOptionPane.ERROR_MESSAGE);
+
+						} catch (NombreInvalidoException m3) {
+							JOptionPane.showMessageDialog(null, m3.getMessage(), "Ocurrió algo inesperado",
+									JOptionPane.ERROR_MESSAGE);
+
+						} catch (ApellidoInvalidoException m4) {
+							JOptionPane.showMessageDialog(null, m4.getMessage(), "Ocurrió algo inesperado",
+									JOptionPane.ERROR_MESSAGE);
+
+						} catch (FechaNacInvalidaException m5) {
+							JOptionPane.showMessageDialog(null, m5.getMessage(), "Ocurrió algo inesperado",
+									JOptionPane.ERROR_MESSAGE);
+
+						} catch (TelefonoInvalidoException m7) {
+							JOptionPane.showMessageDialog(null, m7.getMessage(), "Ocurrió algo inesperado",
+									JOptionPane.ERROR_MESSAGE);
+
+						} catch (UsuarioExistenteException m9) {
+							JOptionPane.showMessageDialog(null, m9.getMessage(), "Ocurrió algo inesperado",
+									JOptionPane.ERROR_MESSAGE);
+
+						} catch (LocalidadInvalidaException m10) {
+							JOptionPane.showMessageDialog(null, m10.getMessage(), "Ocurrió algo inesperado",
+									JOptionPane.ERROR_MESSAGE);
+
+						} catch (DireccionInvalidaException m11) {
+							JOptionPane.showMessageDialog(null, m11.getMessage(), "Ocurrió algo inesperado",
+									JOptionPane.ERROR_MESSAGE);
+
+						} catch (CodigoPostalInvalidoException m12) {
+							JOptionPane.showMessageDialog(null, m12.getMessage(), "Ocurrió algo inesperado",
+									JOptionPane.ERROR_MESSAGE);
+
+						}
+					}
+				});
+
 				btnEliminarCuenta.setFont(new Font("Dialog", Font.BOLD, 15));
 				btnEliminarCuenta.setVerticalAlignment(SwingConstants.TOP);
 				btnEliminarCuenta.setForeground(new Color(255, 255, 255));
 				btnEliminarCuenta.setBackground(Color.RED);
-				add(btnEliminarCuenta);	
-				
+				add(btnEliminarCuenta);
+
 				btnEliminarCuenta.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						VistaTicketNow.changePanel("bajaProveedor", PanelPerfilProveedor.this, controlador, proveedor);
 					}
 				});
-						
+
+			}
 
 		}
 
 	}
-
-	}
 }
-

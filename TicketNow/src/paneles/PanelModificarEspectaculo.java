@@ -29,7 +29,14 @@ import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import controlador.Controlador;
-
+import espectaculo.CantidadDeEntradasInvalidaException;
+import espectaculo.DescripcionInvalidaException;
+import espectaculo.Espectaculo;
+import espectaculo.FechaEstrenoInvalidaException;
+import espectaculo.PrecioInvalidoException;
+import espectaculo.PromocionInvalidaException;
+import usuario.NombreInvalidoException;
+import usuario.Proveedor;
 
 public class PanelModificarEspectaculo extends JPanel {
 
@@ -40,12 +47,14 @@ public class PanelModificarEspectaculo extends JPanel {
 
 	private Controlador controlador;
 	private String proveedor;
-	public PanelModificarEspectaculo(Controlador controlador, String proovedor) {
+	private String espectaculo;
 
+	public PanelModificarEspectaculo(Controlador controlador, String proveedor, String espectaculo) {
 		setLayout(new BorderLayout(0, 0));
 		this.controlador = controlador;
 		this.proveedor = proveedor;
-		
+		this.espectaculo = espectaculo;
+
 		panelSuperior = new PanelSuperior();
 		panelSuperior.setBackground(Color.WHITE);
 		add(panelSuperior, BorderLayout.NORTH);
@@ -119,19 +128,22 @@ public class PanelModificarEspectaculo extends JPanel {
 		private JLabel lblPrecio = new JLabel("Precio:");
 		private JLabel lblCaracteristicas = new JLabel("Caracteristicas:");
 
-		private JTextField nombreField = new JTextField();
+		Espectaculo e = controlador.obtenerEspectaculo(espectaculo);
+
+		private JTextField nombreField = new JTextField(e.getNombre());
 		private JSpinner cantidadDisponibleField = new JSpinner();
-		private JTextField fechaDeEstrenoField = new JTextField("AAAA-MM-DD");
+		private JTextField fechaDeEstrenoField = new JTextField(e.getFechaEstreno());
 		private JComboBox promocionBox = new JComboBox();
 		private JButton fotosBtn = new JButton("Cargar fotos");
 		private JComboBox categoriaBox = new JComboBox();
 		private JComboBox lugarBox = new JComboBox();
-		private JTextField precioField = new JTextField();
-		private JTextArea caracteristicasPane = new JTextArea();
+		private JTextField precioField = new JTextField(e.getPrecio());
+		private JTextArea caracteristicasPane = new JTextArea(e.getDescripcion());
 
-		private JPanel panelInferior = new JPanel();
+		private JPanel panelInferior;
 
 		private Font fuente = new Font("Dialog", Font.BOLD, 14);
+		private Font fuente1 = new Font("Dialog", Font.PLAIN, 14);
 
 		public PanelCentral() {
 			setLayout(new BorderLayout(0, 0));
@@ -152,35 +164,36 @@ public class PanelModificarEspectaculo extends JPanel {
 			lblNombre.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblNombre);
 			lblNombre.setFont(fuente);
-			
+
 			nombreField.setEditable(false);
 			panelRegistrarse.add(nombreField);
-			nombreField.setFont(fuente);
-			
+			nombreField.setFont(fuente1);
+
 			lblCantidadDisponible.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblCantidadDisponible);
 			lblCantidadDisponible.setFont(fuente);
 
-			
+			cantidadDisponibleField.setValue(Integer.parseInt(e.getCantidadEntradas()));
 			panelRegistrarse.add(cantidadDisponibleField);
-			cantidadDisponibleField.setFont(fuente);
+			cantidadDisponibleField.setFont(fuente1);
 
 			lblFechaDeEstreno.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblFechaDeEstreno);
 			lblFechaDeEstreno.setFont(fuente);
 
-			
 			panelRegistrarse.add(fechaDeEstrenoField);
-			fechaDeEstrenoField.setFont(fuente);
-			
+			fechaDeEstrenoField.setFont(fuente1);
+
 			lblPromocion.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblPromocion);
 			lblPromocion.setFont(fuente);
 
-			promocionBox.setModel(new DefaultComboBoxModel(new String[] {"2x1", "Banco Asociados", "Descuento a Jubilados"}));
+			promocionBox.setModel(
+					new DefaultComboBoxModel(new String[] { "2x1", "Banco Asociados", "Descuento a Jubilados" }));
 			panelRegistrarse.add(promocionBox);
-			promocionBox.setFont(fuente);
-			
+			promocionBox.setSelectedItem(e.getPromocion());
+			promocionBox.setFont(fuente1);
+
 			lblFotos.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblFotos);
 			lblFotos.setFont(fuente);
@@ -189,55 +202,81 @@ public class PanelModificarEspectaculo extends JPanel {
 			fotosBtn.setFont(fuente);
 			fotosBtn.setForeground(new Color(255, 255, 255));
 			fotosBtn.setBackground(new Color(0, 102, 204));
-			
+
 			fotosBtn.addActionListener(new ActionListener() {
-				
+
 				File fichero;
+
 				public void actionPerformed(ActionEvent e) {
 					int resultado;
 
-				    CargarFoto ventana = new CargarFoto();
-				    
-				    FileNameExtensionFilter filtro = new FileNameExtensionFilter("JPG y PNG","jpg","png");
-				    
-				    ventana.jfchCargarfoto.setFileFilter(filtro);
-				    
-				    resultado= ventana.jfchCargarfoto.showOpenDialog(null);
+					CargarFoto ventana = new CargarFoto();
 
-				    if (JFileChooser.APPROVE_OPTION == resultado){
-				        fichero = ventana.jfchCargarfoto.getSelectedFile();
-		
-				        try{
-				                ImageIcon icon = new ImageIcon(fichero.toString());
-				                Icon icono = new ImageIcon(icon.getImage());
-				                JLabel fotoCargada = new JLabel(); /* Aca guardo la foto que va a ir a la base de datos */
-				                fotoCargada.setText(null);
-				                fotoCargada.setIcon(icono);
-				        }catch(Exception ex){
-				                JOptionPane.showMessageDialog(null, 
-				                "Error abriendo la imagen "+ ex);
-				        }
+					FileNameExtensionFilter filtro = new FileNameExtensionFilter("JPG y PNG", "jpg", "png");
 
-				    } 
+					ventana.jfchCargarfoto.setFileFilter(filtro);
+
+					resultado = ventana.jfchCargarfoto.showOpenDialog(null);
+
+					if (JFileChooser.APPROVE_OPTION == resultado) {
+						fichero = ventana.jfchCargarfoto.getSelectedFile();
+
+						try {
+							ImageIcon icon = new ImageIcon(fichero.toString());
+							Icon icono = new ImageIcon(icon.getImage());
+							JLabel fotoCargada = new JLabel(); /* Aca guardo la foto que va a ir a la base de datos */
+							fotoCargada.setText(null);
+							fotoCargada.setIcon(icono);
+						} catch (Exception ex) {
+							JOptionPane.showMessageDialog(null, "Error abriendo la imagen " + ex);
+						}
+
+					}
 				}
 			});
-			
+
 			lblCategoria.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblCategoria);
 			lblCategoria.setFont(fuente);
 
 			categoriaBox.setEditable(false);
 			categoriaBox.setEnabled(false);
-			
-			categoriaBox.setModel(new DefaultComboBoxModel(new String[] { "Seleccione categoria", "Cine", "Teatro", "Cancha"}));
+
+			categoriaBox.setModel(
+					new DefaultComboBoxModel(new String[] { "Seleccione categoria", "Cine", "Teatro", "Cancha" }));
 			panelRegistrarse.add(categoriaBox);
-			categoriaBox.setFont(fuente);
-			
+			categoriaBox.setSelectedItem(e.getCategoria());
+			categoriaBox.setFont(fuente1);
+
 			lblLugar.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblLugar);
 			lblLugar.setFont(fuente);
 
-			
+			DefaultComboBoxModel cine = new DefaultComboBoxModel(new String[] { "Hoyts Abasto", "Hoyts Dot",
+					"Hoyts Moreno", "Hoyts Moron", "Hoyts Quilmes", "Hoyts Rosario", "Hoyts Temperley",
+					"Hoyts Unicenter", "Hoyts NuevoCentro", "Hoyts Patio Olmos", "Hoyts Salta" });
+
+			DefaultComboBoxModel teatro = new DefaultComboBoxModel(new String[] { "Teatro Colon", "Teatro Gran Rex",
+					"Teatro Metropolitan", "Teatro Argentino de La Plata", "Teatro Maipo", "Teatro Lola Membrives",
+					"Teatro Opera", "Teatro Coliseo" });
+
+			DefaultComboBoxModel cancha = new DefaultComboBoxModel(new String[] { "Antonio Vespusio Liberti",
+					"Libertadores de América", "Ciudad de La Plata", "Presidente Peron", "Mario Alberto Kempes",
+					"Jose Amalfitani", "Alberto J. Armando", "Tomas Adolfo Ducó", "Pedro Bidegain" });
+
+			switch (e.getCategoria()) {
+			case "Cine":
+				lugarBox.setModel(cine);
+				break;
+			case "Teatro":
+				lugarBox.setModel(teatro);
+				break;
+			case "Cancha":
+				lugarBox.setModel(cancha);
+				break;
+			}
+
+			lugarBox.setSelectedItem(e.getLugarDeRetiro());
 			categoriaBox.addItemListener(new ItemListener() {
 
 				@Override
@@ -245,66 +284,93 @@ public class PanelModificarEspectaculo extends JPanel {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 						switch (e.getItem().toString()) {
 						case "Cine":
-							lugarBox.setModel(new DefaultComboBoxModel(new String[] { "Hoyts Abasto" , "Hoyts Dot", "Hoyts Moreno", "Hoyts Moron", 
-									"Hoyts Quilmes" , "Hoyts Rosario" , "Hoyts Temperley", "Hoyts Unicenter", "Hoyts NuevoCentro", "Hoyts Patio Olmos", "Hoyts Salta"}));
+							lugarBox.setModel(cine);
 							break;
 						case "Teatro":
-							lugarBox.setModel(new DefaultComboBoxModel(new String[] { "Teatro Colon", "Teatro Gran Rex", "Teatro Metropolitan", "Teatro Argentino de La Plata", "Teatro Maipo", "Teatro Lola Membrives", 
-									"Teatro Opera", "Teatro Coliseo"}));
+							lugarBox.setModel(teatro);
 							break;
 						case "Cancha":
-							lugarBox.setModel(new DefaultComboBoxModel(new String[] { "Antonio Vespusio Liberti", "Libertadores de América", "Ciudad de La Plata", "Presidente Peron", "Mario Alberto Kempes", "Jose Amalfitani",
-									"Alberto J. Armando", "Tomas Adolfo Ducó", "Pedro Bidegain"}));
+							lugarBox.setModel(cancha);
 							break;
 						}
 					}
 				}
 			});
-			lugarBox.setEditable(false);
-			lugarBox.setEnabled(false);
 			panelRegistrarse.add(lugarBox);
-			lugarBox.setFont(fuente);
-			
+			lugarBox.setFont(fuente1);
+
 			lblPrecio.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblPrecio);
 			lblPrecio.setFont(fuente);
 
-			precioField.setEditable(false);
 			panelRegistrarse.add(precioField);
-			precioField.setFont(fuente);
-			
+			precioField.setFont(fuente1);
+
 			lblCaracteristicas.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblCaracteristicas);
 			lblCaracteristicas.setFont(fuente);
 
-			JScrollPane scroll = new JScrollPane(caracteristicasPane,
-		            JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-		            JScrollPane.HORIZONTAL_SCROLLBAR_NEVER); 
+			JScrollPane scroll = new JScrollPane(caracteristicasPane, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+					JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 			caracteristicasPane.setWrapStyleWord(true);
 			caracteristicasPane.setLineWrap(true);
+			caracteristicasPane.setFont(fuente1);
 			panelRegistrarse.add(scroll);
 		}
 
-	}
+		private class PanelInferior extends JPanel {
 
-	private class PanelInferior extends JPanel {
+			JButton btnModificar = new JButton("Modificar espectáculo");
 
-		JButton btnModificar = new JButton("Modificar espectáculo");
+			public PanelInferior() {
+				inicializarBotones();
+			}
 
-		public PanelInferior() {
-			inicializarBotones();
+			private void inicializarBotones() {
+				btnModificar.setFont(new Font("Dialog", Font.BOLD, 15));
+				btnModificar.setVerticalAlignment(SwingConstants.TOP);
+				btnModificar.setForeground(new Color(255, 255, 255));
+				btnModificar.setBackground(new Color(0, 102, 204));
+				add(btnModificar);
+
+				btnModificar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+
+						try {
+							if (controlador.modificarEspectaculo(nombreField.getText(),
+									cantidadDisponibleField.getValue().toString(), fechaDeEstrenoField.getText(),
+									promocionBox.getSelectedItem().toString(),
+									categoriaBox.getSelectedItem().toString(), lugarBox.getSelectedItem().toString(),
+									precioField.getText(), caracteristicasPane.getText()))
+								JOptionPane.showMessageDialog(null, "Su espectaculo ha sido modificado.");
+							VistaTicketNow.changePanel("proveedor", PanelModificarEspectaculo.this, controlador,
+									proveedor);
+						} catch (CantidadDeEntradasInvalidaException m1) {
+							JOptionPane.showMessageDialog(null, m1.getMessage(), "Ocurrió algo inesperado",
+									JOptionPane.ERROR_MESSAGE);
+
+						} catch (FechaEstrenoInvalidaException m2) {
+							JOptionPane.showMessageDialog(null, m2.getMessage(), "Ocurrió algo inesperado",
+									JOptionPane.ERROR_MESSAGE);
+
+						} catch (PromocionInvalidaException m3) {
+							JOptionPane.showMessageDialog(null, m3.getMessage(), "Ocurrió algo inesperado",
+									JOptionPane.ERROR_MESSAGE);
+
+						} catch (PrecioInvalidoException m5) {
+							JOptionPane.showMessageDialog(null, m5.getMessage(), "Ocurrió algo inesperado",
+									JOptionPane.ERROR_MESSAGE);
+
+						} catch (DescripcionInvalidaException m6) {
+							JOptionPane.showMessageDialog(null, m6.getMessage(), "Ocurrió algo inesperado",
+									JOptionPane.ERROR_MESSAGE);
+
+						}
+					}
+				});
+			}
+
 		}
-
-		private void inicializarBotones() {
-			btnModificar.setFont(new Font("Dialog", Font.BOLD, 15));
-			btnModificar.setVerticalAlignment(SwingConstants.TOP);
-			btnModificar.setForeground(new Color(255, 255, 255));
-			btnModificar.setBackground(new Color(0, 102, 204));
-			add(btnModificar);
-			
-			
-		}
-
 	}
 
 }

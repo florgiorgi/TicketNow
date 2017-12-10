@@ -33,9 +33,9 @@ public class PanelEliminarCuenta extends JPanel {
 	JPanel panelPrincipal = new JPanel();
 	
 	Controlador controlador;
-
-	public PanelEliminarCuenta(Controlador controlador) {
-
+	private String usuario;
+	public PanelEliminarCuenta(Controlador controlador, String usuario) {
+		this.usuario = usuario;
 		this.setLayout(new BorderLayout(0, 0));
 		this.controlador = controlador;
 
@@ -246,6 +246,7 @@ public class PanelEliminarCuenta extends JPanel {
 		
 			btnEliminarCuenta.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					controlador.eliminarCuenta(usuario);
 					JOptionPane.showMessageDialog(null, "Su cuenta ha sido eliminada con éxito");
 					VistaTicketNow.changePanel("menu", PanelEliminarCuenta.this, controlador);
 				}

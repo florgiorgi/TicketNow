@@ -21,7 +21,7 @@ public class PanelEliminarCuentaProveedor extends PanelEliminarCuenta {
 	private JPanel panelSuperior;
 	private String proveedor;
 	public PanelEliminarCuentaProveedor(Controlador controlador, String proveedor) {
-		super(controlador);
+		super(controlador, proveedor);
 		this.proveedor = proveedor;
 		
 		panelSuperior = new PanelSuperior();

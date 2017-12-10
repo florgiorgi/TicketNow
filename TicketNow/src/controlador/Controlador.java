@@ -78,4 +78,62 @@ public class Controlador {
 			return null;
 		}
 	}
+	
+	public void eliminarEspectaculo(String nombre, String lugar) {
+		try {
+			database.removeEspectaculo(nombre, lugar);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public Espectaculo obtenerEspectaculo(String espectaculo) {
+		try {
+			ResultSet rs = database.getEspetaculo(espectaculo);
+			return new Espectaculo(rs.getString("espnombre"),rs.getString("cantidadentradas"), rs.getString("estreno"), rs.getString("promocion"), rs.getString("categoria")
+					, rs.getString("lugarretiro"), rs.getString("precio"), rs.getString("espdescripcion"), rs.getString("entradasvendidas"));
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public boolean modificarEspectaculo(String nombre, String cantidad, String fechaDeEstreno, String promocion,
+			String categoria, String lugar, String precio, String caracteristicas) {
+		try {
+			return database.updateEspectaculo(
+					new Espectaculo(nombre, cantidad, fechaDeEstreno, promocion, categoria, lugar, precio, caracteristicas, "0"));
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+	}
+
+	public boolean modificarUsuario(String tipoUsuario, String usuario, String contraseña, String contraseñaChequeo,
+			String nombre, String apellido, String fechaNac, String mail, String telefono, String DNI, String pais,
+			String provincia, String localidad, String direccion, String codigoPostal) {
+		try {
+			return database.updateUsuario(
+					new Usuario(usuario, contraseña, contraseñaChequeo, nombre, apellido,
+							fechaNac, mail, telefono, DNI, pais, provincia, localidad, direccion, codigoPostal));
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public void eliminarCuenta(String proveedor) {
+		database.eliminarUsuario(proveedor);
+	}
+	
+	
+	public Set<Espectaculo> obtenerEspectaculoPorCondicion(String condicion){
+		try {
+			return database.getEspectaculos(condicion);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

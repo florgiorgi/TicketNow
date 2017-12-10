@@ -5,7 +5,6 @@ import usuario.NombreInvalidoException;
 public class Espectaculo {
 
 	private String nombre;
-	private String cantidadEntradas;
 	private String fechaEstreno;
 	private String promocion;
 	private String categoria;
@@ -13,6 +12,7 @@ public class Espectaculo {
 	private String precio;
 	private String descripcion;
 	private String imagen;
+	private String cantidadEntradas;
 	private String entradasVendidas;
 	
 	public Espectaculo(String nombre, String cantidadEntradas, String fechaEstreno, String promocion, String categoria,
@@ -27,8 +27,6 @@ public class Espectaculo {
 			throw new PromocionInvalidaException("La promocion es invalida.");
 		if (!categoriaValida(categoria))
 			throw new CategoriaInvalidaException("La categoria es invalida.");
-		if (!lugarDeRetiroValido(lugarDeRetiro, categoria))
-			throw new LugarDeRetiroInvalidoException("El lugar de retiro es invalido.");
 		if (!precioValido(precio))
 			throw new PrecioInvalidoException("El precio es invalido.");
 		if (!descripcionValida(descripcion))
@@ -43,12 +41,6 @@ public class Espectaculo {
 		this.descripcion = descripcion;
 		this.imagen = "imagen";
 		this.entradasVendidas = entradasVendidas;
-	}
-
-
-	private int generateId(String nombre, String lugarDeRetiro) {
-		return nombre.hashCode() * 17 + lugarDeRetiro.hashCode() * 31;
-
 	}
 
 	public boolean nombreValido(String nombre) {
@@ -127,6 +119,7 @@ public class Espectaculo {
 	}
 
 	private boolean promocionValida(String promocion) {
+		
 		if (promocion.equals("Sin promocion") || promocion.equals("2x1") || promocion.equals("Banco Asociados")
 				|| promocion.equals("Descuento a Jubilados")) {
 			return true;
@@ -137,37 +130,6 @@ public class Espectaculo {
 	private boolean categoriaValida(String categoria) {
 		if (categoria.equals("Cine") || categoria.equals("Teatro") || categoria.equals("Cancha")) {
 			return true;
-		}
-		return false;
-	}
-
-	private boolean lugarDeRetiroValido(String lugarDeRetiro, String categoria) {
-
-		switch (categoria) {
-		case "Cine":
-			String[] lugaresC = { "Hoyts Abasto", "Hoyts Dot", "Hoyts Moreno", "Hoyts Moron", "Hoyts Quilmes",
-					"Hoyts Rosario", "Hoyts Temperley", "Hoyts Unicenter", "Hoyts NuevoCentro", "Hoyts Patio Olmos",
-					"Hoyts Salta" };
-			for (int i = 0; i < lugaresC.length; i++)
-				if (lugaresC[i].equals(lugarDeRetiro))
-					return true;
-			break;
-		case "Teatro":
-			String[] lugaresT = { "Teatro Colon", "Teatro Gran Rex", "Teatro Metropolitan",
-					"Teatro Argentino de La Plata", "Teatro Maipo", "Teatro Lola Membrives", "Teatro Opera",
-					"Teatro Coliseo" };
-			for (int i = 0; i < lugaresT.length; i++)
-				if (lugaresT[i].equals(lugarDeRetiro))
-					return true;
-			break;
-		case "Cancha":
-			String[] lugaresCh = { "Antonio Vespusio Liberti", "Libertadores de America", "Ciudad de La Plata",
-					"Presidente Peron", "Mario Alberto Kempes", "Jose Amalfitani", "Alberto J. Armando",
-					"Tomas Adolfo Duco", "Pedro Bidegain" };
-			for (int i = 0; i < lugaresCh.length; i++)
-				if (lugaresCh[i].equals(lugarDeRetiro))
-					return true;
-			break;
 		}
 		return false;
 	}
@@ -205,6 +167,10 @@ public class Espectaculo {
 
 	public String getCantidadEntradas() {
 		return cantidadEntradas;
+	}
+	
+	public String getCantidadEntradasVendidas() {
+		return entradasVendidas;
 	}
 
 	public String getFechaEstreno() {
@@ -278,5 +244,4 @@ public class Espectaculo {
 	public String toString() {
 		return this.nombre;
 	}
-
 }

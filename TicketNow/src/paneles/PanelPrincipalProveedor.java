@@ -115,7 +115,7 @@ public class PanelPrincipalProveedor extends JPanel {
 	}
 
 	private class PanelCentral extends JPanel {
-		
+		JLabel subtitulo = new JLabel("No tienes ningun espectáculo agregado al sistema");
 		JPanel panelTabla = new JPanel();
 		JTable tabla = new JTable();
 		
@@ -138,7 +138,6 @@ public class PanelPrincipalProveedor extends JPanel {
 			if(espectaculos.size() > 0)
 				inicializarTabla();
 			else {
-				JLabel subtitulo = new JLabel("No tienes ningun espectáculo agregado al sistema");
 				panelTabla.add(subtitulo);
 				subtitulo.setFont(new Font("Dialog", Font.PLAIN, 15));
 			}
@@ -168,15 +167,16 @@ public class PanelPrincipalProveedor extends JPanel {
 			tabla.setForeground(Color.BLACK);
 			
 			
-			DefaultTableModel model = new DefaultTableModel(new String[] { "Espect\u00E1culo", "Vendidas", "Remanentes" }, 0);
+			DefaultTableModel model = new DefaultTableModel(new String[] { "Espect\u00E1culo", "Lugar", "Vendidas", "Remanentes" }, 0);
 			
 			for(Espectaculo e : espectaculos)
-				model.addRow(new Object[]{e.getNombre(), "0" /*CAMBIAR*/, e.getCantidadEntradas()});
+				model.addRow(new Object[]{e.getNombre(), e.getLugarDeRetiro(), e.getCantidadEntradasVendidas(), e.getCantidadEntradas()});
 			
 			tabla.setModel(model);
-			tabla.getColumnModel().getColumn(0).setPreferredWidth(300);
-			tabla.getColumnModel().getColumn(1).setPreferredWidth(120);
-			tabla.getColumnModel().getColumn(2).setPreferredWidth(120);
+			tabla.getColumnModel().getColumn(0).setPreferredWidth(200);
+			tabla.getColumnModel().getColumn(1).setPreferredWidth(200);
+			tabla.getColumnModel().getColumn(2).setPreferredWidth(100);
+			tabla.getColumnModel().getColumn(3).setPreferredWidth(130);
 			panelTabla.add(tabla.getTableHeader());
 			panelTabla.add(tabla);
 		}
@@ -200,7 +200,8 @@ public class PanelPrincipalProveedor extends JPanel {
 					if(row == -1)
 						JOptionPane.showMessageDialog(null, "Por favor, elija el espectáculo a modificar", "Error!", JOptionPane.ERROR_MESSAGE);
 					else {
-						VistaTicketNow.changePanel("modificar", PanelPrincipalProveedor.this, controlador, proveedor);
+						String espectaculo = (String) tabla.getValueAt(row, 0);
+						VistaTicketNow.changePanel("modificar", PanelPrincipalProveedor.this, controlador, proveedor, espectaculo);
 					}
 				}
 			});
@@ -216,8 +217,25 @@ public class PanelPrincipalProveedor extends JPanel {
 					if(row == -1)
 						JOptionPane.showMessageDialog(null, "Por favor, elija el espectáculo a eliminar", "Error!", JOptionPane.ERROR_MESSAGE);
 					else {
-						((DefaultTableModel)tabla.getModel()).removeRow(row);
+						if(tabla.getValueAt(row, 2).equals("0")) {
+							controlador.eliminarEspectaculo(tabla.getValueAt(row, 0).toString(), tabla.getValueAt(row, 1).toString());
+							((DefaultTableModel)tabla.getModel()).removeRow(row);
+							
+							
+							if(tabla.getRowCount() == 0) {
+								panelTabla.remove(tabla.getTableHeader());
+								panelTabla.add(subtitulo);
+								subtitulo.setFont(new Font("Dialog", Font.PLAIN, 15));
+							}
+						
+							JOptionPane.showMessageDialog(null, "El espectaculo se ha eliminado del sistema de forma correcta", "Operacion exitosa", JOptionPane.INFORMATION_MESSAGE);
+						}
+						else {
+							JOptionPane.showMessageDialog(null, "No puede eliminar un espectaculo si tiene entradas vendidas", "Error!", JOptionPane.ERROR_MESSAGE);
+						}
 					}
+					
+					
 				}
 			});
 		}

@@ -1,4 +1,3 @@
-
 package database;
 
 import java.util.Set;
@@ -80,7 +79,6 @@ public class Database {
 
 	}
 
-
 	public boolean addCliente(Cliente cliente) throws SQLException {
 		conectar("u2017b-3", "passwordING1");
 		ejecutasql("INSERT INTO cliente VALUES( " + "'" + cliente.getMail() + "');");
@@ -92,16 +90,9 @@ public class Database {
 			throw new UsuarioExistenteException("El nombre de usuario que ingresó ya esta registrado.");
 		}
 
-		if (tipoUsuario.equals("Proveedor")) {
-			if (proveedorMailExists(usuario.getMail())) {
-				throw new UsuarioExistenteException(
-						"El mail que ingresó ya esta registrado en el sistema como un proveedor.");
-			}
-		} else if (tipoUsuario.equals("Cliente")) {
-			if (clienteMailExists(usuario.getMail())) {
-				throw new UsuarioExistenteException(
-						"El mail que ingresó ya esta registrado en el sistema como un cliente.");
-			}
+		if (usuarioMailExists(usuario.getMail())) {
+			throw new UsuarioExistenteException(
+					"El mail que ingresó ya esta registrado en el sistema.");
 		}
 
 		ejecutasql("INSERT INTO usuario VALUES( " + "'" + usuario.getUsuario() + "'," + "'"
@@ -120,33 +111,6 @@ public class Database {
 		}
 		return true;
 	}
-	
-	public void updateUsuario(String tipoUsuario, Usuario usuario) throws SQLException{
-		if (tipoUsuario.equals("Proveedor")) {
-			if (proveedorMailExists(usuario.getMail())) {
-				throw new UsuarioExistenteException(
-						"El mail que ingresó ya esta registrado en el sistema como un proveedor.");
-			}
-		} else if (tipoUsuario.equals("Cliente")) {
-			if (clienteMailExists(usuario.getMail())) {
-				throw new UsuarioExistenteException(
-						"El mail que ingresó ya esta registrado en el sistema como un cliente.");
-			}
-		}
-		
-		ejecutasql("UPDATE usuario SET contra = '" + usuario.getContraseña().toString() +
-				"', nombre = '" + usuario.getNombre() +
-				"', apellido ='"+ usuario.getApellido() +
-				"', cumple = '" + usuario.getFechaNac() +
-				"', telefono = '" + usuario.getTelefono() +
-				"', dni = '" + usuario.getDNI() +
-				"', pais = '" + usuario.getPais() + 
-				"', provincia = '" + usuario.getProvincia() +
-				"', localidad = '" + usuario.getLocalidad() +
-				"', direccion = '" + usuario.getDireccion() +
-				"', codigoPostal = '" + usuario.getCodigoPostal() +
-				"' WHERE email = '" + usuario.getMail() + "';");
-	}
 
 	public boolean addProveedor(Proveedor proveedor) throws SQLException {
 		conectar("u2017b-3", "passwordING1");
@@ -160,18 +124,9 @@ public class Database {
 		return rs.getString("contra");
 	}
 
-	public boolean proveedorMailExists(String mail) throws SQLException {
+	public boolean usuarioMailExists(String mail) throws SQLException {
 		conectar("u2017b-3", "passwordING1");
-		ResultSet rs = gXrGenerico("SELECT * FROM proveedor WHERE email = '" + mail + "';");
-		if (rs.getRow() == 0) {
-			return false;
-		}
-		return true;
-	}
-
-	public boolean clienteMailExists(String mail) throws SQLException {
-		conectar("u2017b-3", "passwordING1");
-		ResultSet rs = gXrGenerico("SELECT * FROM cliente WHERE email = '" + mail + "';");
+		ResultSet rs = gXrGenerico("SELECT * FROM usuario WHERE email = '" + mail + "';");
 		if (rs.getRow() == 0) {
 			return false;
 		}
@@ -179,7 +134,7 @@ public class Database {
 	}
 
 	public boolean containsCliente(String mail, char[] contraseña) throws SQLException {
-		if (clienteMailExists(mail)) {
+		if (usuarioMailExists(mail)) {
 			String c = getUserPassword(mail);
 			if (Arrays.equals(c.toCharArray(), contraseña)) {
 				return true;
@@ -190,7 +145,7 @@ public class Database {
 	}
 
 	public boolean containsProveedor(String mail, char[] contraseña) throws SQLException {
-		if (proveedorMailExists(mail)) {
+		if (usuarioMailExists(mail)) {
 			String c = getUserPassword(mail);
 			if (Arrays.equals(c.toCharArray(), contraseña)) {
 				return true;
@@ -199,18 +154,32 @@ public class Database {
 
 		return false;
 	}
-	
-	/* Si se fija en usuario y existe un cliente y proveedor registrados con el mismo mail va a romper */
+
 	public ResultSet getProveedor(String mail) throws SQLException {
 		conectar("u2017b-3", "passwordING1");
 		ResultSet rs = gXrGenerico("SELECT * FROM usuario WHERE email = '" + mail + "';");
 		return rs;
 	}
-	
+
 	public String getProveedorID(String mail) throws SQLException {
 		conectar("u2017b-3", "passwordING1");
 		ResultSet rs = gXrGenerico("SELECT id FROM proveedor WHERE email = '" + mail + "';");
 		return rs.getString("id");
+	}
+
+	public void eliminarUsuario(String mail) {
+		conectar("u2017b-3", "passwordING1");
+		ejecutasql("DELETE FROM usuario WHERE email = '" + mail + "';");
+	}
+
+	public boolean updateUsuario(Usuario usuario) throws SQLException {
+		ejecutasql("UPDATE usuario SET contra = '" + usuario.getContraseña() + "', nombre = '" + usuario.getNombre()
+				+ "', apellido ='" + usuario.getApellido() + "', cumple = '" + usuario.getFechaNac() + "', telefono = '"
+				+ usuario.getTelefono() + "', pais = '" + usuario.getPais() + "', provincia = '"
+				+ usuario.getProvincia() + "', localidad = '" + usuario.getLocalidad() + "', direccion = '"
+				+ usuario.getDireccion() + "', codigoPostal = '" + usuario.getCodigoPostal() + "' WHERE email = '"
+				+ usuario.getMail() + "';");
+		return true;
 	}
 
 	// FUNCIONES PARA ESPECTACULO ---------------------------------------------
@@ -219,25 +188,26 @@ public class Database {
 		if (espectaculoExists(espectaculo.getNombre(), espectaculo.getLugarDeRetiro())) {
 			throw new EspectaculoExistenteException("El espectaculo que ingreso ya esta registrado.");
 		}
-		
+
 		conectar("u2017b-3", "passwordING1");
 		ejecutasql("INSERT INTO espectaculo VALUES( " + "'" + espectaculo.getNombre() + "'," + "'"
 				+ espectaculo.getDescripcion() + "'," + "'" + espectaculo.getCategoria() + "'," + "'"
 				+ espectaculo.getFechaEstreno() + "'," + "'" + espectaculo.getPromocion() + "'," + "'"
-				+ espectaculo.getCantidadEntradas() + "'," + "'" + espectaculo.getLugarDeRetiro() + "'," + "'" 
-				+ espectaculo.getPrecio() + "'," + getProveedorID(proveedor) + ", '0');");
+				+ espectaculo.getCantidadEntradas() + "'," + "'" + espectaculo.getLugarDeRetiro() + "'," + "'"
+				+ espectaculo.getPrecio() + "'," + "'" + getProveedorID(proveedor) + "'," + "'"
+				+ espectaculo.getCantidadEntradasVendidas() + "');");
 	}
-	
+
 	public boolean espectaculoExists(String name, String lugar) throws SQLException {
 		conectar("u2017b-3", "passwordING1");
-		ResultSet rs = gXrGenerico("SELECT * FROM espectaculo WHERE espnombre = '" + name + "' AND lugarretiro = '" + lugar + "';");
+		ResultSet rs = gXrGenerico(
+				"SELECT * FROM espectaculo WHERE espnombre = '" + name + "' AND lugarretiro = '" + lugar + "';");
 		if (rs.getRow() == 0) {
 			return false;
 		}
 		return true;
 	}
 
-	
 	public Set<Espectaculo> getEspectaculos() throws SQLException {
 		Set<Espectaculo> espectaculos = new HashSet<Espectaculo>();
 		conectar("u2017b-3", "passwordING1");
@@ -252,28 +222,32 @@ public class Database {
 			String lugarRetiro = rs.getString("lugarRetiro");
 			String precio = rs.getString("precio");
 			String entradasVendidas = rs.getString("entradasVendidas");
-			Espectaculo e = new Espectaculo(nomb, cantEntradas, est, promo, cat, lugarRetiro, precio, desc, entradasVendidas);
+			Espectaculo e = new Espectaculo(nomb, cantEntradas, est, promo, cat, lugarRetiro, precio, desc,
+					entradasVendidas);
 			espectaculos.add(e);
 		}
 		return espectaculos;
 	}
 
 	public Set<Espectaculo> getEspectaculos(String condicion) throws SQLException {
+		System.out.println(condicion);
 		Set<Espectaculo> espectaculos = new HashSet<Espectaculo>();
 		conectar("u2017b-3", "passwordING1");
 		String lugar = "WHERE categoria = '" + condicion + "'";
 		String promocion = "WHERE promocion = '" + condicion + "'";
-		// String fecha = "WHERE estreno = '" + condicion + "'";
+		
 		ResultSet rs;
-		if (condicion.equals("teatro") || condicion.equals("cine") || condicion.equals("canchas")) {
+		if (condicion.equals("Teatro") || condicion.equals("Cine") || condicion.equals("Cancha")) {
 			rs = gXrGenerico("SELECT * FROM espectaculo " + lugar + ";");
 		} else if (condicion.equals("2x1") || condicion.equals("Banco Asociados")
 				|| condicion.equals("Descuento a Jubilados")) {
 			rs = gXrGenerico("SELECT * FROM espectaculo " + promocion + ";");
-		} else {
+		} else if(condicion.equals("")){
 			rs = gXrGenerico("SELECT * FROM espectaculo;");
-		}
-
+		} else {
+			rs = gXrGenerico("SELECT * FROM espectaculo WHERE espnombre LIKE '" + condicion + "%';");
+		} 
+		
 		while (rs.next()) {
 			String nomb = rs.getString("espnombre");
 			String desc = rs.getString("espdescripcion");
@@ -284,7 +258,8 @@ public class Database {
 			String lugarRetiro = rs.getString("lugarRetiro");
 			String precio = rs.getString("precio");
 			String entradasVendidas = rs.getString("entradasVendidas");
-			Espectaculo e = new Espectaculo(nomb, cantEntradas, est, promo, cat, lugarRetiro, precio, desc, entradasVendidas);
+			Espectaculo e = new Espectaculo(nomb, cantEntradas, est, promo, cat, lugarRetiro, precio, desc,
+					entradasVendidas);
 			espectaculos.add(e);
 		}
 		return espectaculos;
@@ -305,13 +280,14 @@ public class Database {
 			String lugarRetiro = rs.getString("lugarRetiro");
 			String precio = rs.getString("precio");
 			String entradasVendidas = rs.getString("entradasVendidas");
-			Espectaculo e = new Espectaculo(nomb, cantEntradas, est, promo, cat, lugarRetiro, precio, desc, entradasVendidas);
+			Espectaculo e = new Espectaculo(nomb, cantEntradas, est, promo, cat, lugarRetiro, precio, desc,
+					entradasVendidas);
 			espectaculos.add(e);
 			count++;
 		}
 		return espectaculos;
 	}
-	
+
 	public Set<Espectaculo> getEspectaculosPorProveedor(String mail) throws SQLException {
 		Set<Espectaculo> espectaculos = new HashSet<Espectaculo>();
 		String id = getProveedorID(mail);
@@ -327,32 +303,47 @@ public class Database {
 			String lugarRetiro = rs.getString("lugarRetiro");
 			String precio = rs.getString("precio");
 			String entradasVendidas = rs.getString("entradasVendidas");
-			Espectaculo e = new Espectaculo(nomb, cantEntradas, est, promo, cat, lugarRetiro, precio, desc, entradasVendidas);
+			Espectaculo e = new Espectaculo(nomb, cantEntradas, est, promo, cat, lugarRetiro, precio, desc,
+					entradasVendidas);
 			espectaculos.add(e);
 		}
 		return espectaculos;
 	}
 
-	
-	public void addEntradasVendidas(String nombreEspectaculo, String lugarEspectaculo, int vendidas) throws SQLException {
+	public boolean removeEspectaculo(String nombre, String lugar) throws SQLException {
+		conectar("u2017b-3", "passwordING1");
+		ejecutasql("DELETE FROM espectaculo WHERE espnombre = '" + nombre + "'AND lugarretiro = '" + lugar + "';");
+		return true;
+	}
+
+	public void addEntradasVendidas(String nombreEspectaculo, String lugarEspectaculo, int vendidas)
+			throws SQLException {
 		int entradasYaVendidas = 0;
 		conectar("u2017b-3", "passwordING1");
-		ResultSet rs = gXrGenerico("SELECT * FROM espectaculo WHERE espnombre = '" + nombreEspectaculo + "' AND lugarRetiro = '" + lugarEspectaculo + "';");
+		ResultSet rs = gXrGenerico("SELECT * FROM espectaculo WHERE espnombre = '" + nombreEspectaculo
+				+ "' AND lugarRetiro = '" + lugarEspectaculo + "';");
 		if (rs.next()) {
 			entradasYaVendidas = Integer.parseInt(rs.getString("entradasVendidas"));
 		}
-		
-		ejecutasql("UPDATE espectaculo SET entradasVendidas = '" + (entradasYaVendidas + vendidas) + "' WHERE espnombre = '" + nombreEspectaculo + "' AND lugarRetiro = '" + lugarEspectaculo + "';");
+
+		ejecutasql("UPDATE espectaculo SET entradasVendidas = '" + (entradasYaVendidas + vendidas)
+				+ "' WHERE espnombre = '" + nombreEspectaculo + "' AND lugarRetiro = '" + lugarEspectaculo + "';");
 	}
-	
-	public void updateEspectaculo(Espectaculo espectaculo) throws SQLException {
+
+	public ResultSet getEspetaculo(String espectaculo) {
 		conectar("u2017b-3", "passwordING1");
-		ejecutasql("UPDATE espectaculo SET espdescripcion = '" + espectaculo.getDescripcion() +
-				"', categoria = '" + espectaculo.getCategoria() +
-				"', estreno = '" + espectaculo.getFechaEstreno() +
-				"', promocion = '" + espectaculo.getPromocion() +
-				"', precio = '" + espectaculo.getPrecio() +
-				"', cantidadEntradas = '" + espectaculo.getCantidadEntradas() +
-				"' WHERE espnombre = '" + espectaculo.getNombre() + "' AND lugarRetiro = '" + espectaculo.getLugarDeRetiro() + "';");
+		ResultSet rs = gXrGenerico("SELECT * FROM espectaculo WHERE espnombre = '" + espectaculo + "';");
+		return rs;
 	}
+
+	public boolean updateEspectaculo(Espectaculo espectaculo) throws SQLException {
+		conectar("u2017b-3", "passwordING1");
+		ejecutasql("UPDATE espectaculo SET espdescripcion = '" + espectaculo.getDescripcion() + "', lugarretiro = '"
+				+ espectaculo.getLugarDeRetiro() + "', estreno = '" + espectaculo.getFechaEstreno() + "', promocion = '"
+				+ espectaculo.getPromocion() + "', precio = '" + espectaculo.getPrecio() + "', cantidadEntradas = '"
+				+ espectaculo.getCantidadEntradas() + "' WHERE espnombre = '" + espectaculo.getNombre()
+				+ "' AND lugarRetiro = '" + espectaculo.getLugarDeRetiro() + "';");
+		return true;
+	}
+
 }

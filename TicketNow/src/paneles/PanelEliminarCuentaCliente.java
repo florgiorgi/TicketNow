@@ -19,8 +19,8 @@ public class PanelEliminarCuentaCliente extends PanelEliminarCuenta {
 
 	private JPanel panelSuperior;
 
-	public PanelEliminarCuentaCliente(Controlador controlador) {
-		super(controlador);
+	public PanelEliminarCuentaCliente(Controlador controlador, String cliente) {
+		super(controlador, cliente);
 
 		panelSuperior = new PanelSuperior();
 		panelSuperior.setBackground(Color.WHITE);

@@ -34,11 +34,13 @@ public class PanelFinalizarCompra extends JPanel {
 	private JPanel panelCentral;
 
 	private Controlador controlador;
-
-	public PanelFinalizarCompra(Controlador controlador) {
+	private String cliente;
+	
+	public PanelFinalizarCompra(Controlador controlador, String cliente) {
 		setLayout(new BorderLayout(0, 0));
 		this.controlador = controlador;
-
+		this.cliente = cliente;
+		
 		panelSuperior = new PanelSuperior();
 		panelSuperior.setBackground(Color.WHITE);
 		add(panelSuperior, BorderLayout.NORTH);
@@ -75,7 +77,7 @@ public class PanelFinalizarCompra extends JPanel {
 
 			btnVolver.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					VistaTicketNow.changePanel("cliente", PanelFinalizarCompra.this, controlador);
+					VistaTicketNow.changePanel("cliente", PanelFinalizarCompra.this, controlador, cliente);
 				}
 			});
 
@@ -257,12 +259,15 @@ public class PanelFinalizarCompra extends JPanel {
 			
 			btnFinalizar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if(rdbtnEfectivo.isSelected())
+					if(rdbtnEfectivo.isSelected()) {
 						JOptionPane.showMessageDialog(null, "Reserva exitosa. Puede retirar sus entradas en boleteria");
-					else if(rdbtnPagoConTarjeta.isSelected() ||  rdbtnTransferenciaBancaria.isSelected())
+						VistaTicketNow.changePanel("cliente", PanelFinalizarCompra.this, controlador, cliente);
+					} else if(rdbtnPagoConTarjeta.isSelected() ||  rdbtnTransferenciaBancaria.isSelected()) {
 						JOptionPane.showMessageDialog(null, "Compra exitosa. Puede retirar sus entradas en boleteria");
-					else
+						VistaTicketNow.changePanel("cliente", PanelFinalizarCompra.this, controlador, cliente);
+					} else
 						JOptionPane.showMessageDialog(null, "Por favor, elija su medio de pago", "Error!", JOptionPane.ERROR_MESSAGE);
+					
 					
 				}
 			});

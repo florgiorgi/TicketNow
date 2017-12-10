@@ -40,7 +40,6 @@ import controlador.Controlador;
 import espectaculo.CantidadDeEntradasInvalidaException;
 import espectaculo.DescripcionInvalidaException;
 import espectaculo.FechaEstrenoInvalidaException;
-import espectaculo.LugarDeRetiroInvalidoException;
 import espectaculo.PrecioInvalidoException;
 import espectaculo.PromocionInvalidaException;
 import usuario.ApellidoInvalidoException;
@@ -346,16 +345,12 @@ public class PanelAgregarEspectaculo extends JPanel {
 								JOptionPane.showMessageDialog(null, m3.getMessage(), "Ocurrió algo inesperado",
 										JOptionPane.ERROR_MESSAGE);
 
-							} catch (LugarDeRetiroInvalidoException m4) {
-								JOptionPane.showMessageDialog(null, m4.getMessage(), "Ocurrió algo inesperado",
+							} catch (PrecioInvalidoException m5) {
+								JOptionPane.showMessageDialog(null, m5.getMessage(), "Ocurrió algo inesperado",
 										JOptionPane.ERROR_MESSAGE);
 
-							} catch (PrecioInvalidoException m4) {
-								JOptionPane.showMessageDialog(null, m4.getMessage(), "Ocurrió algo inesperado",
-										JOptionPane.ERROR_MESSAGE);
-
-							} catch (DescripcionInvalidaException m4) {
-								JOptionPane.showMessageDialog(null, m4.getMessage(), "Ocurrió algo inesperado",
+							} catch (DescripcionInvalidaException m6) {
+								JOptionPane.showMessageDialog(null, m6.getMessage(), "Ocurrió algo inesperado",
 										JOptionPane.ERROR_MESSAGE);
 
 							} catch (HeadlessException e1) {

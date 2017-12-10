@@ -31,11 +31,13 @@ public class PanelPerfilCliente extends JPanel {
 	private JPanel panelCentral;
 
 	private Controlador controlador;
-
-	public PanelPerfilCliente(Controlador controlador) {
+	private String cliente;
+	
+	public PanelPerfilCliente(Controlador controlador, String cliente)  {
 		/* Tendria que recibir el usuario para completar los campos modificables con sus datos */
 		setLayout(new BorderLayout(0, 0));
 		this.controlador = controlador;
+		this.cliente = cliente;
 
 		panelSuperior = new PanelSuperior();
 		panelSuperior.setBackground(Color.WHITE);
@@ -90,7 +92,7 @@ public class PanelPerfilCliente extends JPanel {
 
 			btnVolver.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					VistaTicketNow.changePanel("cliente", PanelPerfilCliente.this, controlador);
+					VistaTicketNow.changePanel("cliente", PanelPerfilCliente.this, controlador, cliente);
 				}
 			});
 		}
@@ -331,7 +333,7 @@ public class PanelPerfilCliente extends JPanel {
 				
 				btnEliminarCuenta.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						VistaTicketNow.changePanel("bajaCliente", PanelPerfilCliente.this, controlador);
+						VistaTicketNow.changePanel("bajaCliente", PanelPerfilCliente.this, controlador, cliente);
 					}
 				});
 						

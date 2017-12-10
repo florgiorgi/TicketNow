@@ -64,22 +64,6 @@ public class VistaTicketNow {
 		case "registrarse":
 			panel.add(new PanelRegistro(controlador), BorderLayout.CENTER);
 			break;
-		case "lista":
-			panel.add(new PanelResultadosEncontrados(controlador), BorderLayout.CENTER);
-			break;
-		case "perfilCliente":
-			panel.add(new PanelPerfilCliente(controlador), BorderLayout.CENTER);
-			break;
-		case "bajaCliente":
-			panel.add(new PanelEliminarCuentaCliente(controlador), BorderLayout.CENTER);
-			break;
-		case "informacion":
-			panel.add(new PanelInformacionEspectaculo(controlador), BorderLayout.CENTER);
-			break;
-		case "finalizarCompra":
-			panel.add(new PanelFinalizarCompra(controlador), BorderLayout.CENTER);
-			break;
-			
 		}
 	}
 	
@@ -100,11 +84,32 @@ public class VistaTicketNow {
 		case "bajaProveedor":
 			panel.add(new PanelEliminarCuentaProveedor(controlador, usuario), BorderLayout.CENTER);
 			break;
-		case "modificar":
-			panel.add(new PanelModificarEspectaculo(controlador, usuario), BorderLayout.CENTER);
+		case "bajaCliente":
+			panel.add(new PanelEliminarCuentaCliente(controlador, usuario), BorderLayout.CENTER);
+			break;
+		case "perfilCliente":
+			panel.add(new PanelPerfilCliente(controlador, usuario), BorderLayout.CENTER);
+			break;
+		case "informacion":
+			panel.add(new PanelInformacionEspectaculo(controlador, usuario), BorderLayout.CENTER);
+			break;
+		case "finalizarCompra":
+			panel.add(new PanelFinalizarCompra(controlador, usuario), BorderLayout.CENTER);
 			break;
 		}
 	}
+	
+	private static void changePanel(String panelNuevo, Controlador controlador, String usuario, String argumento1) {
+		switch (panelNuevo) {
+		case "modificar":
+			panel.add(new PanelModificarEspectaculo(controlador, usuario, argumento1), BorderLayout.CENTER);
+			break;
+		case "lista":		
+			panel.add(new PanelResultadosEncontrados(controlador, usuario, argumento1), BorderLayout.CENTER);
+			break;
+		}
+	}
+	
 
 	/**
 	 * Método que cambia el panel actual
@@ -125,6 +130,12 @@ public class VistaTicketNow {
 		panel.remove(panelActual);
 		panel.revalidate();
 		changePanel(panelNuevo, controlador, usuario);
+	}
+	
+	public static void changePanel(String panelNuevo, JPanel panelActual, Controlador controlador, String usuario, String espectaculo) {
+		panel.remove(panelActual);
+		panel.revalidate();
+		changePanel(panelNuevo, controlador, usuario, espectaculo);
 	}
 
 }
