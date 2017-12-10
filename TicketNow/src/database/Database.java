@@ -264,6 +264,64 @@ public class Database {
 		}
 		return espectaculos;
 	}
+	
+	public Set<Espectaculo> getEspectaculos(String busqueda, String lugar, String promocion, String estreno) throws SQLException {
+		Set<Espectaculo> espectaculos = new HashSet<Espectaculo>();
+		boolean primero = true;
+		conectar("u2017b-3", "passwordING1");
+		String base = "SELECT * FROM espectaculo";
+		if(busqueda != null || lugar != null || promocion != null || estreno != null){
+			base+= " WHERE";
+		}
+		else{
+			base+= ";";
+		}
+		if(busqueda != null){
+			primero=false;
+			base+=" espnombre='"+busqueda +"'";
+		}
+		if(lugar != null){
+			if(!primero){
+				base+=" AND";
+			}
+			primero=false;
+			base+="categoria = '" + lugar + "'";
+		}
+		if(promocion != null){
+			if(!primero){
+				base+=" AND";
+			}
+			primero=false;
+			base+="promocion ='" + promocion +"'";
+		}
+//		if(estreno != null){
+//			if(!primero){
+//				base+=" AND";
+//			}
+//			primero=false;
+//			base+="estreno ='"+estreno+"'";
+//		}
+		base+=":";
+		
+		ResultSet rs;
+			rs = gXrGenerico(base);
+
+		while (rs.next()) {
+			String nomb = rs.getString("espnombre");
+			String desc = rs.getString("espdescripcion");
+			String cat = rs.getString("categoria");
+			String est = rs.getString("estreno");
+			String promo = rs.getString("promocion");
+			String cantEntradas = rs.getString("cantidadEntradas");
+			String lugarRetiro = rs.getString("lugarRetiro");
+			String precio = rs.getString("precio");
+			String entradasVendidas = rs.getString("entradasVendidas");
+			Espectaculo e = new Espectaculo(nomb, cantEntradas, est, promo, cat, lugarRetiro, precio, desc,
+					entradasVendidas);
+			espectaculos.add(e);
+		}
+		return espectaculos;
+	}
 
 	public Set<Espectaculo> getEspectaculosMasVendidos() throws SQLException {
 		Set<Espectaculo> espectaculos = new HashSet<Espectaculo>();
