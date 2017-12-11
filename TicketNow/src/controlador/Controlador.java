@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.swing.JOptionPane;
 
+import compra.Compra;
 import database.Database;
 import espectaculo.Espectaculo;
 import usuario.Cliente;
@@ -52,7 +53,7 @@ public class Controlador {
 			String categoria, String lugar, String precio, String caracteristicas, String proveedorMail)
 			throws SQLException {
 		database.addEspectaculo(
-				new Espectaculo(nombre, cantidad, fechaDeEstreno, promocion, categoria, lugar, precio, caracteristicas, "0"),
+				new Espectaculo(nombre, cantidad, fechaDeEstreno, promocion, categoria, lugar, precio, caracteristicas, "0", null),
 				proveedorMail);
 		return true;
 	}
@@ -61,19 +62,6 @@ public class Controlador {
 		try {
 			ResultSet rs = database.getProveedor(mail);
 			return new Proveedor(rs.getString("username"), rs.getString("contra"), rs.getString("contra"),
-					rs.getString("nombre"), rs.getString("apellido"), rs.getString("cumple"), rs.getString("email"),
-					rs.getString("telefono"), rs.getString("dni"), rs.getString("pais"), rs.getString("provincia"),
-					rs.getString("localidad"), rs.getString("direccion"), rs.getString("codigopostal"));
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-	
-	public Cliente obtenerCliente(String mail) {
-		try {
-			ResultSet rs = database.getCliente(mail);
-			return new Cliente(rs.getString("username"), rs.getString("contra"), rs.getString("contra"),
 					rs.getString("nombre"), rs.getString("apellido"), rs.getString("cumple"), rs.getString("email"),
 					rs.getString("telefono"), rs.getString("dni"), rs.getString("pais"), rs.getString("provincia"),
 					rs.getString("localidad"), rs.getString("direccion"), rs.getString("codigopostal"));
@@ -92,6 +80,15 @@ public class Controlador {
 		}
 	}
 	
+	public Set<Compra> obtenerComprasCliente(String mail){
+		try {
+			return database.getComprasCliente(mail);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	public void eliminarEspectaculo(String nombre, String lugar) {
 		try {
 			database.removeEspectaculo(nombre, lugar);
@@ -104,7 +101,7 @@ public class Controlador {
 		try {
 			ResultSet rs = database.getEspetaculo(espectaculo);
 			return new Espectaculo(rs.getString("espnombre"),rs.getString("cantidadentradas"), rs.getString("estreno"), rs.getString("promocion"), rs.getString("categoria")
-					, rs.getString("lugarretiro"), rs.getString("precio"), rs.getString("espdescripcion"), rs.getString("entradasvendidas"));
+					, rs.getString("lugarretiro"), rs.getString("precio"), rs.getString("espdescripcion"), rs.getString("entradasvendidas"), rs.getString("puntaje"));
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
@@ -115,7 +112,7 @@ public class Controlador {
 			String categoria, String lugar, String precio, String caracteristicas) {
 		try {
 			return database.updateEspectaculo(
-					new Espectaculo(nombre, cantidad, fechaDeEstreno, promocion, categoria, lugar, precio, caracteristicas, "0"));
+					nombre, cantidad, fechaDeEstreno, promocion, categoria, lugar, precio, caracteristicas);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
@@ -136,17 +133,64 @@ public class Controlador {
 		}
 	}
 
-	public void eliminarCuenta(String usuario) {
-		database.eliminarUsuario(usuario);
+	public void eliminarCuenta(String proveedor) {
+		database.eliminarUsuario(proveedor);
 	}
 	
 	
-	public Set<Espectaculo> obtenerEspectaculoPorCondicion(String busqueda, String lugar, String promocion, String estreno){
+	public Set<Espectaculo> obtenerEspectaculoPorCondicion(String busqueda, String lugar, String promocion){
 		try {
-			return database.getEspectaculos(busqueda, lugar, promocion, estreno);
+			return database.getEspectaculos(busqueda, lugar, promocion);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
+		}
+	}
+
+	public Espectaculo puntuarEspectaculo(String nombre, String lugar, int value) {
+		try {
+			database.puntuarEspectaculo(nombre, lugar, value);
+			return obtenerEspectaculo(nombre);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public void agregarCompra(String espectaculo, String lugar, Integer cantidad, Integer precio, String nombreUsuario) {
+		try {
+			database.agregarCompra(espectaculo, lugar, cantidad, precio, nombreUsuario);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	public void modificarCompra(String espectaculo, String lugar, Integer cantEntradas, String mail, Integer precio){
+		try {
+			database.modificarCompra(espectaculo, lugar, cantEntradas, mail, precio);
+			database.actualizarEspectaculo(espectaculo, lugar, cantEntradas, mail);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void removerCompra(String espectaculo, String lugar, String mail) {
+		database.removerCompra(espectaculo, lugar, mail);
+		
+	}
+
+	public void eliminarCompras(String mail) {
+		database.removerCompras(mail);
+		
+	}
+	
+	public void actualizarEspectaculo(String nombre, String lugar, Integer cantidad, String mail) {
+		try {
+			System.out.println("hola");
+			database.actualizarEspectaculo(nombre, lugar, cantidad, mail);
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 }

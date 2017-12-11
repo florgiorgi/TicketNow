@@ -106,13 +106,18 @@ public class VistaTicketNow {
 		}
 	}
 	
-	private static void changePanel(String panelNuevo, Controlador controlador, String usuario, Set<Espectaculo> set) {
+	private static void changePanel(String panelNuevo, Controlador controlador, String usuario, Set<Espectaculo> set, String[] str) {
 		switch (panelNuevo) {
 		case "lista":		
-			panel.add(new PanelResultadosEncontrados(controlador, usuario, set), BorderLayout.CENTER);
+			panel.add(new PanelResultadosEncontrados(controlador, usuario, set, str), BorderLayout.CENTER);
 			break;
+		}
+	}
+	
+	private static void changePanel(String panelNuevo, Controlador controlador, String usuario, Set<Espectaculo> set, String espectaculo, String[] str) {
+		switch (panelNuevo) {
 		case "informacion":
-			panel.add(new PanelInformacionEspectaculo(controlador, usuario, set), BorderLayout.CENTER);
+			panel.add(new PanelInformacionEspectaculo(controlador, usuario, set, espectaculo, str), BorderLayout.CENTER);
 			break;
 		}
 	}
@@ -147,9 +152,15 @@ public class VistaTicketNow {
 		changePanel(panelNuevo, controlador, usuario, espectaculo);
 	}
 
-	public static void changePanel(String panelNuevo, JPanel panelActual, Controlador controlador, String usuario, Set<Espectaculo> espectaculo) {
+	public static void changePanel(String panelNuevo, JPanel panelActual, Controlador controlador, String usuario, Set<Espectaculo> espectaculo, String[] str) {
 		panel.remove(panelActual);
 		panel.revalidate();
-		changePanel(panelNuevo, controlador, usuario, espectaculo);
+		changePanel(panelNuevo, controlador, usuario, espectaculo, str);
+	}
+	
+	public static void changePanel(String panelNuevo, JPanel panelActual, Controlador controlador, String usuario, Set<Espectaculo> espectaculo, String espect, String[] cond) {
+		panel.remove(panelActual);
+		panel.revalidate();
+		changePanel(panelNuevo, controlador, usuario, espectaculo, espect, cond);
 	}
 }

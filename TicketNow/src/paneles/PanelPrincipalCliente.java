@@ -224,32 +224,6 @@ public class PanelPrincipalCliente extends JPanel {
 			});
 			add(listPromocion);
 
-			JLabel lblSpace2 = new JLabel(" ");
-			lblSpace2.setFont(new Font("Dialog", Font.PLAIN, 30));
-			add(lblSpace2);
-
-			lblFiltrarEstreno.setForeground(new Color(0, 51, 102));
-			lblFiltrarEstreno.setFont(new Font("Dialog", Font.PLAIN, 20));
-			lblFiltrarEstreno.setAlignmentX(0.85f);
-			lblFiltrarEstreno.setAlignmentY(Component.TOP_ALIGNMENT);
-			add(lblFiltrarEstreno);
-
-			listEstreno.setFont(new Font("Dialog", Font.PLAIN, 18));
-			listEstreno.setAlignmentX(0.4f);
-			listEstreno.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-			listEstreno.setModel(new AbstractListModel() {
-				String[] values = new String[] { "En cartelera", "Proximos 6 meses", "Proximo año" };
-
-				public int getSize() {
-					return values.length;
-				}
-
-				public Object getElementAt(int index) {
-					return values[index];
-				}
-			});
-			add(listEstreno);
 
 			JLabel lblSpace3 = new JLabel(" ");
 			lblSpace3.setFont(new Font("Dialog", Font.PLAIN, 30));
@@ -268,16 +242,18 @@ public class PanelPrincipalCliente extends JPanel {
 					String lugar = null;
 					String promocion = null;
 					String estreno = null;
+					
 					if(!txtBuscar.getText().equals("Buscar..."))
-						busqueda = txtBuscar.getText();
+					busqueda = txtBuscar.getText();
 					if(!listLugar.isSelectionEmpty())
-						lugar = (String) listLugar.getSelectedValue();
+					lugar = (String) listLugar.getSelectedValue();
 					if(!listPromocion.isSelectionEmpty())
-						promocion = (String) listPromocion.getSelectedValue();
+					promocion = (String) listPromocion.getSelectedValue();
 					
 					
-					Set<Espectaculo> espectaculos = controlador.obtenerEspectaculoPorCondicion(busqueda, lugar, promocion, estreno);
-					VistaTicketNow.changePanel("lista", PanelPrincipalCliente.this, controlador, cliente, espectaculos);
+					Set<Espectaculo> espectaculos = controlador.obtenerEspectaculoPorCondicion(busqueda, lugar, promocion);
+					String[] str = new String[3];
+					VistaTicketNow.changePanel("lista", PanelPrincipalCliente.this, controlador, cliente, espectaculos, str);
 				}
 			});
 		}

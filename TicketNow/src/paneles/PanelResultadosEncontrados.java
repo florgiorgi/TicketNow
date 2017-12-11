@@ -8,6 +8,8 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.EventHandler;
 import java.util.Comparator;
 import java.util.Set;
@@ -31,7 +33,6 @@ import espectaculo.Espectaculo;
 public class PanelResultadosEncontrados extends JPanel {
 
 	private JPanel panelSuperior;
-	private JPanel panelInferior;
 	private JPanel panelCentral;
 
 	JList listEspectaculos = new JList();
@@ -39,21 +40,18 @@ public class PanelResultadosEncontrados extends JPanel {
 	private Controlador controlador;
 	private String cliente;
 	private Set<Espectaculo> espectaculos;
+	private String[] condiciones;
 	
-	
-	public PanelResultadosEncontrados(Controlador controlador, String cliente, Set<Espectaculo> set) {
+	public PanelResultadosEncontrados(Controlador controlador, String cliente, Set<Espectaculo> set, String[] str) {
 		this.setLayout(new BorderLayout(0, 0));
 		this.controlador = controlador;
 		this.cliente = cliente;
 		this.espectaculos = set;
+		this.condiciones = str;
 		
 		panelSuperior = new PanelSuperior();
 		panelSuperior.setBackground(Color.WHITE);
 		add(panelSuperior, BorderLayout.NORTH);
-
-		panelInferior = new PanelInferior();
-		panelInferior.setBackground(Color.WHITE);
-		add(panelInferior, BorderLayout.SOUTH);
 
 		panelCentral = new PanelCentral();
 		panelCentral.setBackground(Color.WHITE);
@@ -82,30 +80,6 @@ public class PanelResultadosEncontrados extends JPanel {
 				}
 			});
 
-		}
-	}
-
-	private class PanelInferior extends JPanel {
-		JButton btnMasInfo = new JButton("Más información");
-
-		public PanelInferior() {
-			inicializarBotones();
-		}
-
-		private void inicializarBotones() {
-			btnMasInfo.setForeground(Color.WHITE);
-			btnMasInfo.setFont(new Font("Dialog", Font.BOLD, 14));
-			btnMasInfo.setBackground(new Color(0, 102, 204));
-			btnMasInfo.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if (listEspectaculos.isSelectionEmpty())
-						JOptionPane.showMessageDialog(null, "Seleccione un espectáculo para ver sus detalles",
-								"Ocurrió algo inesperado", JOptionPane.ERROR_MESSAGE);
-					else
-						VistaTicketNow.changePanel("informacion", PanelResultadosEncontrados.this, controlador, cliente, espectaculos);
-				}
-			});
-			add(btnMasInfo);
 		}
 	}
 
@@ -150,17 +124,18 @@ public class PanelResultadosEncontrados extends JPanel {
 		}
 
 		private void inicializarPanelCentralCentral() {
-			for(Espectaculo esp : espectaculos)
-				System.out.println(esp.getPrecio());
-			
-			System.out.println(espectaculos.size());
 			if(espectaculos.size() > 0) {
 			String[] esp = new String[espectaculos.size()];
 			
 			int i = 0;
-			for(Espectaculo e : espectaculos)
-				esp[i++] = "Nombre: " + e .getNombre() + " - Lugar: " + e.getLugarDeRetiro() + " - Precio: " + e.getPrecio() + "$";
-			
+			for(Espectaculo e : espectaculos) {
+				System.out.println(e.getNombre() + e.getPuntaje());
+				if(e.getPuntaje() !=  null)
+					esp[i] = "Nombre: " + e .getNombre() + " - Lugar: " + e.getLugarDeRetiro() + " - Precio: " + e.getPrecio() + "$" + " - Puntaje: " + e.getPuntaje();
+				else
+					esp[i] = "Nombre: " + e .getNombre() + " - Lugar: " + e.getLugarDeRetiro() + " - Precio: " + e.getPrecio() + "$";
+				i++;
+			}
 			this.model = new DefaultListModel() {
 				String[] values = esp;
 
@@ -175,6 +150,18 @@ public class PanelResultadosEncontrados extends JPanel {
 			
 			listEspectaculos.setFont(new Font("Dialog", Font.BOLD, 13));
 			listEspectaculos.setModel(model);
+			
+			listEspectaculos.addMouseListener(new MouseAdapter() {
+			    public void mouseClicked(MouseEvent evt) {
+			        JList list = (JList)evt.getSource();
+			        if (evt.getClickCount() == 2) {
+			            String str = (String) listEspectaculos.getSelectedValue();
+			            String espec = str.substring(8, str.indexOf("-")-1);
+			            VistaTicketNow.changePanel("informacion", PanelResultadosEncontrados.this, controlador, cliente, espectaculos, espec, condiciones);
+			        }
+			    }
+			});
+		
 			panelCentralCentral.add(listEspectaculos);
 			} else {
 				JLabel subtitulo = new JLabel("No tienes ningun espectáculo agregado al sistema");
@@ -216,6 +203,11 @@ public class PanelResultadosEncontrados extends JPanel {
 						if(orden.equals("Lugar")) {
 							Comparator cmp = new Comparator<Espectaculo>() {
 								public int compare(Espectaculo o1, Espectaculo o2) {
+									String lugar1 = o1.getLugarDeRetiro();
+									String lugar2 = o2.getLugarDeRetiro();
+									if(lugar1.equals(lugar2))
+										return 1;
+									else
 									return o1.getLugarDeRetiro().compareTo(o2.getLugarDeRetiro());
 								}
 							};
@@ -227,13 +219,39 @@ public class PanelResultadosEncontrados extends JPanel {
 								public int compare(Espectaculo o1, Espectaculo o2) {
 									Integer precio1 = Integer.parseInt(o1.getPrecio());
 									Integer precio2 = Integer.parseInt(o2.getPrecio());
-									
-									return precio1-precio2;
+									if(precio1.equals(precio2))
+										return 1;
+									else
+										return precio1-precio2;
 								}
 							};
 							ordenado = new TreeSet<Espectaculo>(cmp);
 							ordenado.addAll(espectaculos);
 						
+						} else if(orden.equals("Puntuaciones")) {
+							Comparator cmp = new Comparator<Espectaculo>() {
+								public int compare(Espectaculo o1, Espectaculo o2) {
+									Integer puntaje1;
+									Integer puntaje2;
+									if(o1.getPuntaje() == null)
+										puntaje1 = 0;
+									else 
+										puntaje1 = Integer.parseInt(o1.getPuntaje());
+									if(o2.getPuntaje() == null)
+										puntaje2 = 0;
+									else
+										puntaje2 = Integer.parseInt(o2.getPuntaje());
+									
+									
+									
+									if(puntaje1.equals(puntaje2))
+										return 1;
+									else
+										return puntaje2-puntaje1;
+								}
+							};
+							ordenado = new TreeSet<Espectaculo>(cmp);
+							ordenado.addAll(espectaculos);
 						} else {
 							ordenado = new TreeSet<Espectaculo>();
 						}
@@ -241,12 +259,15 @@ public class PanelResultadosEncontrados extends JPanel {
 						model.removeAllElements();
 						
 						String[] esp = new String[ordenado.size()];
-						for(Espectaculo espec : ordenado)
-							System.out.println(espec.getPrecio() + espec.getLugarDeRetiro());
-						int i = 0;
-						for(Espectaculo e1 : ordenado)
-							esp[i++] = "Nombre: " + e1.getNombre() + " - Lugar: " + e1.getLugarDeRetiro() + " - Precio: " + e1.getPrecio() + "$";
 						
+						int i = 0;
+						for(Espectaculo e1 : ordenado) {
+							if(e1.getPuntaje() !=  null)
+								esp[i] = "Nombre: " + e1.getNombre() + " - Lugar: " + e1.getLugarDeRetiro() + " - Precio: " + e1.getPrecio() + "$" + " - Puntaje: " + e1.getPuntaje();
+							else
+								esp[i] = "Nombre: " + e1.getNombre() + " - Lugar: " + e1.getLugarDeRetiro() + " - Precio: " + e1.getPrecio() + "$";
+							i++;
+						}
 						listEspectaculos.setFont(new Font("Dialog", Font.BOLD, 13));
 						listEspectaculos.setModel(new DefaultListModel() {
 							String[] values = esp;

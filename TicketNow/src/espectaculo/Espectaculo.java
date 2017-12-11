@@ -14,9 +14,10 @@ public class Espectaculo {
 	private String imagen;
 	private String cantidadEntradas;
 	private String entradasVendidas;
+	private String puntaje;
 	
 	public Espectaculo(String nombre, String cantidadEntradas, String fechaEstreno, String promocion, String categoria,
-			String lugarDeRetiro, String precio, String descripcion, String entradasVendidas) {
+			String lugarDeRetiro, String precio, String descripcion, String entradasVendidas, String puntaje) {
 		if (!nombreValido(nombre))
 			throw new NombreInvalidoException("El nombre del espectaculo es invalido.");
 		if (!cantidadEntradasValida(cantidadEntradas))
@@ -41,6 +42,7 @@ public class Espectaculo {
 		this.descripcion = descripcion;
 		this.imagen = "imagen";
 		this.entradasVendidas = entradasVendidas;
+		this.puntaje = puntaje;
 	}
 
 	public boolean nombreValido(String nombre) {
@@ -195,6 +197,10 @@ public class Espectaculo {
 
 	public String getDescripcion() {
 		return descripcion;
+	}
+	
+	public String getPuntaje() {
+		return puntaje;
 	}
 
 
