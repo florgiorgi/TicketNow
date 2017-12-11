@@ -52,9 +52,8 @@ public class Controlador {
 	public boolean agregarEspectaculo(String nombre, String cantidad, String fechaDeEstreno, String promocion,
 			String categoria, String lugar, String precio, String caracteristicas, String proveedorMail)
 			throws SQLException {
-		database.addEspectaculo(
-				new Espectaculo(nombre, cantidad, fechaDeEstreno, promocion, categoria, lugar, precio, caracteristicas, "0", null),
-				proveedorMail);
+		database.addEspectaculo(new Espectaculo(nombre, cantidad, fechaDeEstreno, promocion, categoria, lugar, precio,
+				caracteristicas, "0", null), proveedorMail);
 		return true;
 	}
 
@@ -70,7 +69,46 @@ public class Controlador {
 			return null;
 		}
 	}
-	
+
+	public Set<Espectaculo> obtenerEspectaculosProveedor(String mail) {
+		try {
+			return database.getEspectaculosPorProveedor(mail);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public Set<Compra> obtenerComprasCliente(String mail) {
+		try {
+			return database.getComprasCliente(mail);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public void eliminarEspectaculo(String nombre, String lugar) {
+		try {
+			database.removeEspectaculo(nombre, lugar);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public Espectaculo obtenerEspectaculo(String espectaculo, String lugar) {
+		try {
+			ResultSet rs = database.getEspetaculo(espectaculo, lugar);
+			return new Espectaculo(rs.getString("espnombre"), rs.getString("cantidadentradas"), rs.getString("estreno"),
+					rs.getString("promocion"), rs.getString("categoria"), rs.getString("lugarretiro"),
+					rs.getString("precio"), rs.getString("espdescripcion"), rs.getString("entradasvendidas"),
+					rs.getString("puntaje"));
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	public Cliente obtenerCliente(String mail) {
 		try {
 			ResultSet rs = database.getCliente(mail);
@@ -83,63 +121,25 @@ public class Controlador {
 			return null;
 		}
 	}
-	
-	public Set<Espectaculo> obtenerEspectaculosProveedor(String mail){
-		try {
-			return database.getEspectaculosPorProveedor(mail);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-	
-	public Set<Compra> obtenerComprasCliente(String mail){
-		try {
-			return database.getComprasCliente(mail);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-	
-	public void eliminarEspectaculo(String nombre, String lugar) {
-		try {
-			database.removeEspectaculo(nombre, lugar);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public Espectaculo obtenerEspectaculo(String espectaculo) {
-		try {
-			ResultSet rs = database.getEspetaculo(espectaculo);
-			return new Espectaculo(rs.getString("espnombre"),rs.getString("cantidadentradas"), rs.getString("estreno"), rs.getString("promocion"), rs.getString("categoria")
-					, rs.getString("lugarretiro"), rs.getString("precio"), rs.getString("espdescripcion"), rs.getString("entradasvendidas"), rs.getString("puntaje"));
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
 
 	public boolean modificarEspectaculo(String nombre, String cantidad, String fechaDeEstreno, String promocion,
 			String categoria, String lugar, String precio, String caracteristicas) {
 		try {
-			return database.updateEspectaculo(
-					nombre, cantidad, fechaDeEstreno, promocion, categoria, lugar, precio, caracteristicas);
+			return database.updateEspectaculo(nombre, cantidad, fechaDeEstreno, promocion, categoria, lugar, precio,
+					caracteristicas);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
 		}
-		
+
 	}
 
 	public boolean modificarUsuario(String tipoUsuario, String usuario, String contraseña, String contraseñaChequeo,
 			String nombre, String apellido, String fechaNac, String mail, String telefono, String DNI, String pais,
 			String provincia, String localidad, String direccion, String codigoPostal) {
 		try {
-			return database.updateUsuario(
-					new Usuario(usuario, contraseña, contraseñaChequeo, nombre, apellido,
-							fechaNac, mail, telefono, DNI, pais, provincia, localidad, direccion, codigoPostal));
+			return database.updateUsuario(new Usuario(usuario, contraseña, contraseñaChequeo, nombre, apellido,
+					fechaNac, mail, telefono, DNI, pais, provincia, localidad, direccion, codigoPostal));
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
@@ -149,9 +149,8 @@ public class Controlador {
 	public void eliminarCuenta(String proveedor) {
 		database.eliminarUsuario(proveedor);
 	}
-	
-	
-	public Set<Espectaculo> obtenerEspectaculoPorCondicion(String busqueda, String lugar, String promocion){
+
+	public Set<Espectaculo> obtenerEspectaculoPorCondicion(String busqueda, String lugar, String promocion) {
 		try {
 			return database.getEspectaculos(busqueda, lugar, promocion);
 		} catch (SQLException e) {
@@ -163,23 +162,24 @@ public class Controlador {
 	public Espectaculo puntuarEspectaculo(String nombre, String lugar, int value) {
 		try {
 			database.puntuarEspectaculo(nombre, lugar, value);
-			return obtenerEspectaculo(nombre);
+			return obtenerEspectaculo(nombre, lugar);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
-	public void agregarCompra(String espectaculo, String lugar, Integer cantidad, Integer precio, String nombreUsuario) {
+	public void agregarCompra(String espectaculo, String lugar, Integer cantidad, Integer precio,
+			String nombreUsuario) {
 		try {
 			database.agregarCompra(espectaculo, lugar, cantidad, precio, nombreUsuario);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
-	public void modificarCompra(String espectaculo, String lugar, Integer cantEntradas, String mail, Integer precio){
+	public void modificarCompra(String espectaculo, String lugar, Integer cantEntradas, String mail, Integer precio) {
 		try {
 			database.modificarCompra(espectaculo, lugar, cantEntradas, mail, precio);
 			database.actualizarEspectaculo(espectaculo, lugar, cantEntradas, mail);
@@ -187,23 +187,34 @@ public class Controlador {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void removerCompra(String espectaculo, String lugar, String mail) {
 		database.removerCompra(espectaculo, lugar, mail);
-		
+
 	}
 
 	public void eliminarCompras(String mail) {
 		database.removerCompras(mail);
-		
+
 	}
-	
-	public void actualizarEspectaculo(String nombre, String lugar, Integer cantidad, String mail) {
+
+	public Espectaculo actualizarEspectaculo(String nombre, String lugar, Integer cantidad, String mail) {
 		try {
-			System.out.println("hola");
 			database.actualizarEspectaculo(nombre, lugar, cantidad, mail);
+			return obtenerEspectaculo(nombre, lugar);
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return null;
 		}
+	}
+
+	public Set<Espectaculo> obtenerMasVendidos() {
+		try {
+			return database.getEspectaculosMasVendidos();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+
 	}
 }

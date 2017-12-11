@@ -98,10 +98,10 @@ public class VistaTicketNow {
 		}
 	}
 	
-	private static void changePanel(String panelNuevo, Controlador controlador, String usuario, String espectaculo) {
+	private static void changePanel(String panelNuevo, Controlador controlador, String usuario, String espectaculo, String lugar) {
 		switch (panelNuevo) {
 		case "modificar":
-			panel.add(new PanelModificarEspectaculo(controlador, usuario, espectaculo), BorderLayout.CENTER);
+			panel.add(new PanelModificarEspectaculo(controlador, usuario, espectaculo, lugar), BorderLayout.CENTER);
 			break;
 		}
 	}
@@ -114,10 +114,10 @@ public class VistaTicketNow {
 		}
 	}
 	
-	private static void changePanel(String panelNuevo, Controlador controlador, String usuario, Set<Espectaculo> set, String espectaculo, String[] str) {
+	private static void changePanel(String panelNuevo, Controlador controlador, String usuario, Set<Espectaculo> set, String espectaculo, String lugar, String[] str) {
 		switch (panelNuevo) {
 		case "informacion":
-			panel.add(new PanelInformacionEspectaculo(controlador, usuario, set, espectaculo, str), BorderLayout.CENTER);
+			panel.add(new PanelInformacionEspectaculo(controlador, usuario, set, espectaculo, lugar, str), BorderLayout.CENTER);
 			break;
 		}
 	}
@@ -146,10 +146,10 @@ public class VistaTicketNow {
 		changePanel(panelNuevo, controlador, usuario);
 	}
 	
-	public static void changePanel(String panelNuevo, JPanel panelActual, Controlador controlador, String usuario, String espectaculo) {
+	public static void changePanel(String panelNuevo, JPanel panelActual, Controlador controlador, String usuario, String espectaculo, String lugar) {
 		panel.remove(panelActual);
 		panel.revalidate();
-		changePanel(panelNuevo, controlador, usuario, espectaculo);
+		changePanel(panelNuevo, controlador, usuario, espectaculo, lugar);
 	}
 
 	public static void changePanel(String panelNuevo, JPanel panelActual, Controlador controlador, String usuario, Set<Espectaculo> espectaculo, String[] str) {
@@ -158,9 +158,9 @@ public class VistaTicketNow {
 		changePanel(panelNuevo, controlador, usuario, espectaculo, str);
 	}
 	
-	public static void changePanel(String panelNuevo, JPanel panelActual, Controlador controlador, String usuario, Set<Espectaculo> espectaculo, String espect, String[] cond) {
+	public static void changePanel(String panelNuevo, JPanel panelActual, Controlador controlador, String usuario, Set<Espectaculo> espectaculo, String espect, String lugar, String[] cond) {
 		panel.remove(panelActual);
 		panel.revalidate();
-		changePanel(panelNuevo, controlador, usuario, espectaculo, espect, cond);
+		changePanel(panelNuevo, controlador, usuario, espectaculo, espect,lugar,  cond);
 	}
 }

@@ -14,13 +14,16 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import controlador.Controlador;
+import usuario.Cliente;
 
 public class PanelEliminarCuentaCliente extends PanelEliminarCuenta {
 
 	private JPanel panelSuperior;
-
+	private String cliente;
+	
 	public PanelEliminarCuentaCliente(Controlador controlador, String cliente) {
 		super(controlador, cliente);
+		this.cliente = cliente;
 
 		panelSuperior = new PanelSuperior();
 		panelSuperior.setBackground(Color.WHITE);
@@ -49,7 +52,7 @@ public class PanelEliminarCuentaCliente extends PanelEliminarCuenta {
 
 			btnVolver.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					VistaTicketNow.changePanel("perfilCliente", PanelEliminarCuentaCliente.this, controlador);
+					VistaTicketNow.changePanel("perfilCliente", PanelEliminarCuentaCliente.this, controlador, cliente);
 				}
 			});
 		}

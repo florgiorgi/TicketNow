@@ -61,7 +61,7 @@ public class Espectaculo {
 	}
 
 	private boolean cantidadEntradasValida(String cantidadEntradas) {
-		if (cantidadEntradas == null || cantidadEntradas == "")
+		if (cantidadEntradas == null || cantidadEntradas.equals("0") || cantidadEntradas.equals(""))
 			return false;
 		char[] aux = cantidadEntradas.toCharArray();
 		for (int i = 0; i < aux.length; i++) {
@@ -137,7 +137,7 @@ public class Espectaculo {
 	}
 
 	private boolean precioValido(String precio) {
-		if (precio == null || precio == "")
+		if (precio == null || precio.equals(""))
 			return false;
 		char[] aux = precio.toCharArray();
 		for (int i = 0; i < aux.length; i++) {
@@ -151,15 +151,10 @@ public class Espectaculo {
 	}
 
 	private boolean descripcionValida(String descripcion) {
-		if (descripcion == null || descripcion == "")
+		if (descripcion == null || descripcion.equals(""))
 			return false;
-		char[] aux = descripcion.toCharArray();
-		for (int i = 0; i < aux.length; i++) {
-			if (!Character.isLetterOrDigit(aux[i]) && Character.compare(aux[i], ' ') != 0
-					&& Character.compare(aux[i], '!') != 0 && Character.compare(aux[i], '?') != 0
-					&& Character.compare(aux[i], '-') != 0 && Character.compare(aux[i], '.') != 0)
-				return false;
-		}
+		
+		
 		return true;
 	}
 

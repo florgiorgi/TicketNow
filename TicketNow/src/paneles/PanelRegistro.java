@@ -156,6 +156,7 @@ public class PanelRegistro extends JPanel {
 		private JPanel panelInferior;
 
 		private Font fuente = new Font("Dialog", Font.BOLD, 14);
+		private Font fuente1 = new Font("Dialog", Font.PLAIN, 14);
 
 		public PanelCentral() {
 			setLayout(new BorderLayout(0, 0));
@@ -179,7 +180,7 @@ public class PanelRegistro extends JPanel {
 
 			tipoUsuario.setModel(new DefaultComboBoxModel(new String[] { "Cliente", "Proveedor" }));
 			panelRegistrarse.add(tipoUsuario);
-			tipoUsuario.setFont(fuente);
+			tipoUsuario.setFont(fuente1);
 
 			lblUsuario.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblUsuario);
@@ -187,7 +188,7 @@ public class PanelRegistro extends JPanel {
 
 			usuarioField.setColumns(10);
 			panelRegistrarse.add(usuarioField);
-			usuarioField.setFont(fuente);
+			usuarioField.setFont(fuente1);
 
 			lblContraseña.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblContraseña);
@@ -195,7 +196,7 @@ public class PanelRegistro extends JPanel {
 
 			contraseñaField.setColumns(10);
 			panelRegistrarse.add(contraseñaField);
-			contraseñaField.setFont(new Font("Dialog", Font.BOLD, 15));
+			contraseñaField.setFont(fuente1);
 
 			lblConfirmarContraseña.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblConfirmarContraseña);
@@ -203,7 +204,7 @@ public class PanelRegistro extends JPanel {
 
 			contraseñaConfField.setColumns(10);
 			panelRegistrarse.add(contraseñaConfField);
-			contraseñaConfField.setFont(fuente);
+			contraseñaConfField.setFont(fuente1);
 
 			lblNombre.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblNombre);
@@ -211,7 +212,7 @@ public class PanelRegistro extends JPanel {
 
 			nombreField.setColumns(10);
 			panelRegistrarse.add(nombreField);
-			nombreField.setFont(fuente);
+			nombreField.setFont(fuente1);
 
 			lblApellido.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblApellido);
@@ -219,7 +220,7 @@ public class PanelRegistro extends JPanel {
 
 			apellidoField.setColumns(10);
 			panelRegistrarse.add(apellidoField);
-			apellidoField.setFont(fuente);
+			apellidoField.setFont(fuente1);
 
 			lblFechaNacimiento.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblFechaNacimiento);
@@ -227,7 +228,7 @@ public class PanelRegistro extends JPanel {
 
 			fechaNacimientoField.setColumns(10);
 			panelRegistrarse.add(fechaNacimientoField);
-			fechaNacimientoField.setFont(fuente);
+			fechaNacimientoField.setFont(fuente1);
 
 			lblDireccionDeCorreo.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblDireccionDeCorreo);
@@ -235,7 +236,7 @@ public class PanelRegistro extends JPanel {
 
 			direccionCorreoField.setColumns(10);
 			panelRegistrarse.add(direccionCorreoField);
-			direccionCorreoField.setFont(fuente);
+			direccionCorreoField.setFont(fuente1);
 
 			lblTelefono.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblTelefono);
@@ -243,7 +244,7 @@ public class PanelRegistro extends JPanel {
 
 			telefonoField.setColumns(10);
 			panelRegistrarse.add(telefonoField);
-			telefonoField.setFont(fuente);
+			telefonoField.setFont(fuente1);
 
 			lblTipoDeDocumento.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblTipoDeDocumento);
@@ -251,7 +252,7 @@ public class PanelRegistro extends JPanel {
 
 			tipoDocumentoBox.setModel(new DefaultComboBoxModel(new String[] { "DNI", "CI", "Pasaporte" }));
 			panelRegistrarse.add(tipoDocumentoBox);
-			tipoDocumentoBox.setFont(fuente);
+			tipoDocumentoBox.setFont(fuente1);
 
 			lblDni.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblDni);
@@ -259,7 +260,7 @@ public class PanelRegistro extends JPanel {
 
 			dniField.setColumns(10);
 			panelRegistrarse.add(dniField);
-			dniField.setFont(fuente);
+			dniField.setFont(fuente1);
 
 			lblPais.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblPais);
@@ -268,7 +269,7 @@ public class PanelRegistro extends JPanel {
 			paisBox.setModel(
 					new DefaultComboBoxModel(new String[] { "Seleccione pais", "Argentina", "Paraguay", "Uruguay" }));
 			panelRegistrarse.add(paisBox);
-			paisBox.setFont(fuente);
+			paisBox.setFont(fuente1);
 
 			lblProvincia.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblProvincia);
@@ -305,7 +306,7 @@ public class PanelRegistro extends JPanel {
 			});
 
 			panelRegistrarse.add(provinciaBox);
-			provinciaBox.setFont(fuente);
+			provinciaBox.setFont(fuente1);
 
 			lblLocalidad.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblLocalidad);
@@ -313,7 +314,7 @@ public class PanelRegistro extends JPanel {
 
 			localidadField.setColumns(10);
 			panelRegistrarse.add(localidadField);
-			localidadField.setFont(fuente);
+			localidadField.setFont(fuente1);
 
 			lblDireccion.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblDireccion);
@@ -321,7 +322,7 @@ public class PanelRegistro extends JPanel {
 
 			direccionField.setColumns(10);
 			panelRegistrarse.add(direccionField);
-			direccionField.setFont(fuente);
+			direccionField.setFont(fuente1);
 
 			lblCodigoPostal.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblCodigoPostal);
@@ -329,7 +330,7 @@ public class PanelRegistro extends JPanel {
 
 			codigoPostalField.setColumns(10);
 			panelRegistrarse.add(codigoPostalField);
-			codigoPostalField.setFont(fuente);
+			codigoPostalField.setFont(fuente1);
 
 		}
 

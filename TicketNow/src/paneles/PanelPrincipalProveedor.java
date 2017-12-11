@@ -167,7 +167,12 @@ public class PanelPrincipalProveedor extends JPanel {
 			tabla.setForeground(Color.BLACK);
 			
 			
-			DefaultTableModel model = new DefaultTableModel(new String[] { "Espect\u00E1culo", "Lugar", "Vendidas", "Remanentes" }, 0);
+			DefaultTableModel model = new DefaultTableModel(new String[] { "Espect\u00E1culo", "Lugar", "Vendidas", "Remanentes" }, 0) {
+				@Override
+			    public boolean isCellEditable(int row, int column) {
+			       return false;
+			    }
+			};
 			
 			for(Espectaculo e : espectaculos)
 				model.addRow(new Object[]{e.getNombre(), e.getLugarDeRetiro(), e.getCantidadEntradasVendidas(), e.getCantidadEntradas()});
@@ -201,7 +206,8 @@ public class PanelPrincipalProveedor extends JPanel {
 						JOptionPane.showMessageDialog(null, "Por favor, elija el espectáculo a modificar", "Error!", JOptionPane.ERROR_MESSAGE);
 					else {
 						String espectaculo = (String) tabla.getValueAt(row, 0);
-						VistaTicketNow.changePanel("modificar", PanelPrincipalProveedor.this, controlador, proveedor, espectaculo);
+						String lugar = (String) tabla.getValueAt(row, 1);
+						VistaTicketNow.changePanel("modificar", PanelPrincipalProveedor.this, controlador, proveedor, espectaculo, lugar);
 					}
 				}
 			});

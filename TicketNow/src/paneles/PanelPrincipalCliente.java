@@ -92,7 +92,7 @@ public class PanelPrincipalCliente extends JPanel {
 		}
 
 		private void inicializarCampos() {
-
+			
 			title.setHorizontalAlignment(SwingConstants.LEFT);
 			title.setFont(new Font("Dialog", Font.BOLD, 30));
 			panelSuperiorCentral.add(title, BorderLayout.CENTER);
@@ -265,21 +265,60 @@ public class PanelPrincipalCliente extends JPanel {
 		JLabel lbl1 = new JLabel();
 		JLabel lbl2 = new JLabel();
 		JLabel lbl3 = new JLabel();
+		
+		ImageIcon icono1;
+		ImageIcon icono2;
+		ImageIcon icono3;
+		
 
 		public PanelDerecho() {
 			setLayout(new GridLayout(0, 1, 0, 0));
 
-			ImageIcon icono1 = new ImageIcon(PanelRegistro.class.getResource("/paneles/cars.png"));
+			Set<Espectaculo> masvendidos = controlador.obtenerMasVendidos();
+			String[] nombre = new String[3];
+			int i = 0;
+			for(Espectaculo e : masvendidos) {
+				nombre[i++] = e.getNombre();
+			}	
+			String nombre1, nombre2, nombre3;
+			if(nombre[0] != null) {
+			nombre1 = nombre[0];
+			nombre1 = nombre1.replace(" ", "_");
+			if(PanelInformacionEspectaculo.class.getResource("/paneles/" + nombre1 + ".png") == null)
+				icono1 = new ImageIcon(PanelInformacionEspectaculo.class.getResource("/paneles/default.png"));
+			else
+				icono1 = (new ImageIcon(PanelInformacionEspectaculo.class.getResource("/paneles/" + nombre1 + ".png")));
+			} else {
+				icono1 = new ImageIcon(PanelInformacionEspectaculo.class.getResource("/paneles/default.png"));
+			}
+			if(nombre[1] != null) {
+			nombre2 = nombre[1];
+			nombre2 = nombre2.replace(" ", "_");
+			if(PanelInformacionEspectaculo.class.getResource("/paneles/" + nombre2 + ".png") == null)
+				icono2 = new ImageIcon(PanelInformacionEspectaculo.class.getResource("/paneles/default.png"));
+			else
+				icono2 = (new ImageIcon(PanelInformacionEspectaculo.class.getResource("/paneles/" + nombre2 + ".png")));
+			} else {
+				icono2 = new ImageIcon(PanelInformacionEspectaculo.class.getResource("/paneles/default.png"));
+			}
+			if(nombre[2] != null) {
+			nombre3 = nombre[2];
+			nombre3 = nombre3.replace(" ", "_");
+			if(PanelInformacionEspectaculo.class.getResource("/paneles/" + nombre3 + ".png") == null)
+				icono3 = new ImageIcon(PanelInformacionEspectaculo.class.getResource("/paneles/default.png"));
+			else
+				icono3 = (new ImageIcon(PanelInformacionEspectaculo.class.getResource("/paneles/" + nombre3 + ".png")));
+			} else {
+				icono3 = new ImageIcon(PanelInformacionEspectaculo.class.getResource("/paneles/default.png"));
+			}
 			lbl1.setIcon(icono1);
 			lbl1.setHorizontalAlignment(SwingConstants.CENTER);
 			add(lbl1);
 
-			ImageIcon icono2 = new ImageIcon(PanelRegistro.class.getResource("/paneles/bm.png"));
 			lbl2.setIcon(icono2);
 			lbl2.setHorizontalAlignment(SwingConstants.CENTER);
 			add(lbl2);
 
-			ImageIcon icono3 = new ImageIcon(PanelRegistro.class.getResource("/paneles/loll.png"));
 			lbl3.setIcon(icono3);
 			lbl3.setHorizontalAlignment(SwingConstants.CENTER);
 			add(lbl3);

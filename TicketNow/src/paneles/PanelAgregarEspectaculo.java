@@ -150,6 +150,7 @@ public class PanelAgregarEspectaculo extends JPanel {
 		private JPanel panelInferior = new JPanel();
 
 		private Font fuente = new Font("Dialog", Font.BOLD, 14);
+		private Font fuente1 = new Font("Dialog", Font.PLAIN, 14);
 
 		public PanelCentral() {
 			setLayout(new BorderLayout(0, 0));
@@ -171,21 +172,21 @@ public class PanelAgregarEspectaculo extends JPanel {
 			lblNombre.setFont(fuente);
 
 			panelRegistrarse.add(nombreField);
-			nombreField.setFont(fuente);
+			nombreField.setFont(fuente1);
 
 			lblCantidadDisponible.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblCantidadDisponible);
 			lblCantidadDisponible.setFont(fuente);
 
 			panelRegistrarse.add(cantidadDisponibleField);
-			cantidadDisponibleField.setFont(fuente);
+			cantidadDisponibleField.setFont(fuente1);
 
 			lblFechaDeEstreno.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblFechaDeEstreno);
 			lblFechaDeEstreno.setFont(fuente);
 
 			panelRegistrarse.add(fechaDeEstrenoField);
-			fechaDeEstrenoField.setFont(fuente);
+			fechaDeEstrenoField.setFont(fuente1);
 
 			lblPromocion.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblPromocion);
@@ -194,7 +195,7 @@ public class PanelAgregarEspectaculo extends JPanel {
 			promocionBox.setModel(
 					new DefaultComboBoxModel(new String[] { "Sin promocion", "2x1", "Banco Asociados", "Descuento a Jubilados" }));
 			panelRegistrarse.add(promocionBox);
-			promocionBox.setFont(fuente);
+			promocionBox.setFont(fuente1);
 
 			lblFotos.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblFotos);
@@ -243,7 +244,7 @@ public class PanelAgregarEspectaculo extends JPanel {
 			categoriaBox.setModel(
 					new DefaultComboBoxModel(new String[] { "Seleccione categoria", "Cine", "Teatro", "Cancha" }));
 			panelRegistrarse.add(categoriaBox);
-			categoriaBox.setFont(fuente);
+			categoriaBox.setFont(fuente1);
 
 			lblLugar.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblLugar);
@@ -277,14 +278,14 @@ public class PanelAgregarEspectaculo extends JPanel {
 			});
 
 			panelRegistrarse.add(lugarBox);
-			lugarBox.setFont(fuente);
+			lugarBox.setFont(fuente1);
 
 			lblPrecio.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblPrecio);
 			lblPrecio.setFont(fuente);
 
 			panelRegistrarse.add(precioField);
-			precioField.setFont(fuente);
+			precioField.setFont(fuente1);
 
 			lblCaracteristicas.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblCaracteristicas);
@@ -293,6 +294,7 @@ public class PanelAgregarEspectaculo extends JPanel {
 			JScrollPane scroll = new JScrollPane(caracteristicasPane, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 					JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 			caracteristicasPane.setWrapStyleWord(true);
+			caracteristicasPane.setFont(fuente1);
 			caracteristicasPane.setLineWrap(true);
 			panelRegistrarse.add(scroll);
 		}

@@ -48,12 +48,14 @@ public class PanelModificarEspectaculo extends JPanel {
 	private Controlador controlador;
 	private String proveedor;
 	private String espectaculo;
+	private String lugar;
 
-	public PanelModificarEspectaculo(Controlador controlador, String proveedor, String espectaculo) {
+	public PanelModificarEspectaculo(Controlador controlador, String proveedor, String espectaculo, String lugar) {
 		setLayout(new BorderLayout(0, 0));
 		this.controlador = controlador;
 		this.proveedor = proveedor;
 		this.espectaculo = espectaculo;
+		this.lugar = lugar;
 
 		panelSuperior = new PanelSuperior();
 		panelSuperior.setBackground(Color.WHITE);
@@ -128,7 +130,7 @@ public class PanelModificarEspectaculo extends JPanel {
 		private JLabel lblPrecio = new JLabel("Precio:");
 		private JLabel lblCaracteristicas = new JLabel("Caracteristicas:");
 
-		Espectaculo e = controlador.obtenerEspectaculo(espectaculo);
+		Espectaculo e = controlador.obtenerEspectaculo(espectaculo, lugar);
 
 		private JTextField nombreField = new JTextField(e.getNombre());
 		private JSpinner cantidadDisponibleField = new JSpinner();
@@ -189,7 +191,7 @@ public class PanelModificarEspectaculo extends JPanel {
 			lblPromocion.setFont(fuente);
 
 			promocionBox.setModel(
-					new DefaultComboBoxModel(new String[] { "2x1", "Banco Asociados", "Descuento a Jubilados" }));
+					new DefaultComboBoxModel(new String[] { "Sin promocion", "2x1", "Banco Asociados", "Descuento a Jubilados" }));
 			panelRegistrarse.add(promocionBox);
 			promocionBox.setSelectedItem(e.getPromocion());
 			promocionBox.setFont(fuente1);
@@ -277,25 +279,8 @@ public class PanelModificarEspectaculo extends JPanel {
 			}
 
 			lugarBox.setSelectedItem(e.getLugarDeRetiro());
-			categoriaBox.addItemListener(new ItemListener() {
-
-				@Override
-				public void itemStateChanged(ItemEvent e) {
-					if (e.getStateChange() == ItemEvent.SELECTED) {
-						switch (e.getItem().toString()) {
-						case "Cine":
-							lugarBox.setModel(cine);
-							break;
-						case "Teatro":
-							lugarBox.setModel(teatro);
-							break;
-						case "Cancha":
-							lugarBox.setModel(cancha);
-							break;
-						}
-					}
-				}
-			});
+			lugarBox.setEditable(false);
+			lugarBox.setEnabled(false);
 			panelRegistrarse.add(lugarBox);
 			lugarBox.setFont(fuente1);
 

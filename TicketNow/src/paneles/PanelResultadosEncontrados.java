@@ -129,7 +129,6 @@ public class PanelResultadosEncontrados extends JPanel {
 			
 			int i = 0;
 			for(Espectaculo e : espectaculos) {
-				System.out.println(e.getNombre() + e.getPuntaje());
 				if(e.getPuntaje() !=  null)
 					esp[i] = "Nombre: " + e .getNombre() + " - Lugar: " + e.getLugarDeRetiro() + " - Precio: " + e.getPrecio() + "$" + " - Puntaje: " + e.getPuntaje();
 				else
@@ -156,8 +155,13 @@ public class PanelResultadosEncontrados extends JPanel {
 			        JList list = (JList)evt.getSource();
 			        if (evt.getClickCount() == 2) {
 			            String str = (String) listEspectaculos.getSelectedValue();
+			            String[] lista = str.split("-");
+			           
+			            
 			            String espec = str.substring(8, str.indexOf("-")-1);
-			            VistaTicketNow.changePanel("informacion", PanelResultadosEncontrados.this, controlador, cliente, espectaculos, espec, condiciones);
+			            String lugar = lista[1].substring(8, lista[1].length()-1);
+			     
+			            VistaTicketNow.changePanel("informacion", PanelResultadosEncontrados.this, controlador, cliente, espectaculos, espec, lugar, condiciones);
 			        }
 			    }
 			});

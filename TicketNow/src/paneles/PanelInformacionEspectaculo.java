@@ -46,14 +46,15 @@ public class PanelInformacionEspectaculo extends JPanel {
 	private Set<Espectaculo> espectaculos;
 	private Espectaculo espectaculo;
 	private String[] condicion;
+	JLabel label_2;
 
 	public PanelInformacionEspectaculo(Controlador controlador, String cliente, Set<Espectaculo> set,
-			String espectaculo, String[] condicion) {
+			String espectaculo, String lugar, String[] condicion) {
 		setLayout(new BorderLayout(0, 0));
 		this.controlador = controlador;
 		this.cliente = cliente;
 		this.espectaculos = set;
-		this.espectaculo = controlador.obtenerEspectaculo(espectaculo);
+		this.espectaculo = controlador.obtenerEspectaculo(espectaculo, lugar);
 		this.condicion = condicion;
 		
 		JPanel panelSuperior = new PanelSuperior();
@@ -124,7 +125,7 @@ public class PanelInformacionEspectaculo extends JPanel {
 								(Integer) spinner.getValue(), Integer.parseInt(espectaculo.getPrecio()), cliente);
 						
 						try {
-						controlador.actualizarEspectaculo(espectaculo.getNombre(), espectaculo.getLugarDeRetiro(),
+						espectaculo = controlador.actualizarEspectaculo(espectaculo.getNombre(), espectaculo.getLugarDeRetiro(),
 								(Integer) spinner.getValue(), cliente);
 						JOptionPane.showMessageDialog(null, "Operación realizada correctamente");
 						} catch (NoHayEntradasRemanentesException m1) {
@@ -133,9 +134,13 @@ public class PanelInformacionEspectaculo extends JPanel {
 						}
 						
 					}
+					
+					label_2.setText(espectaculo.getCantidadEntradas());
 				}
 			});
-
+			
+			
+			
 		}
 	}
 
@@ -149,7 +154,12 @@ public class PanelInformacionEspectaculo extends JPanel {
 			add(panelCentralImagen, BorderLayout.NORTH);
 
 			JLabel label = new JLabel("");
-			label.setIcon(new ImageIcon(PanelInformacionEspectaculo.class.getResource("/paneles/cars.png")));
+			String nombre = espectaculo.getNombre();
+			nombre = nombre.replace(" ", "_");
+			if(PanelInformacionEspectaculo.class.getResource("/paneles/" + nombre + ".png") == null)
+				label.setIcon(new ImageIcon(PanelInformacionEspectaculo.class.getResource("/paneles/default.png")));
+			else
+				label.setIcon(new ImageIcon(PanelInformacionEspectaculo.class.getResource("/paneles/" + nombre + ".png")));
 			panelCentralImagen.add(label);
 
 			JLabel label_14 = new JLabel("    ");
@@ -169,7 +179,7 @@ public class PanelInformacionEspectaculo extends JPanel {
 			lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 14));
 			panelCaracteristicas.add(lblNewLabel);
 
-			JLabel label_2 = new JLabel(espectaculo.getCantidadEntradas());
+			label_2 = new JLabel(espectaculo.getCantidadEntradas());
 			label_2.setFont(new Font("Dialog", Font.PLAIN, 13));
 			panelCaracteristicas.add(label_2);
 
@@ -265,6 +275,7 @@ public class PanelInformacionEspectaculo extends JPanel {
 				}
 
 			});
+			
 
 			JPanel panelIzquierdo = new JPanel();
 			panelIzquierdo.setBackground(Color.WHITE);
@@ -296,8 +307,7 @@ public class PanelInformacionEspectaculo extends JPanel {
 			list.setFont(new Font("Dialog", Font.PLAIN, 12));
 			list.setModel(new AbstractListModel() {
 				String[] values = new String[] { "Usuario: MariaM - Comentario: Hermosa pelicula!",
-						"Usuario: MariaM - Comentario: Hermosa pelicula!",
-						"Usuario: MariaM - Comentario: Hermosa pelicula!" };
+						"Usuario: LautaroG - Comentario: Un poco aburrida!" };
 
 				public int getSize() {
 					return values.length;

@@ -108,15 +108,12 @@ public class PanelFinalizarCompra extends JPanel {
 			add(panelCompras, BorderLayout.CENTER);
 			panelCompras.setLayout(new BoxLayout(panelCompras, BoxLayout.Y_AXIS));
 
-			
-			
 			JPanel panelTabla = new JPanel();
 			panelTabla.setBackground(Color.WHITE);
 			panelCompras.add(panelTabla);
-			
-			
+
 			JTable table_1 = new JTable();
-			
+
 			JPanel panelFinalizar = new JPanel();
 			panelFinalizar.setBackground(Color.WHITE);
 			add(panelFinalizar, BorderLayout.SOUTH);
@@ -136,45 +133,47 @@ public class PanelFinalizarCompra extends JPanel {
 			lblSubtotal.setAlignmentX(Component.CENTER_ALIGNMENT);
 			lblSubtotal.setHorizontalAlignment(SwingConstants.CENTER);
 			lblSubtotal.setFont(new Font("Dialog", Font.BOLD, 30));
-			
-			if(compras.size() > 0) {
-			
 
-			DefaultTableModel model = new DefaultTableModel(
-					new String[] { "Espect\u00E1culo", "Lugar", "Cantidad", "Total" }, 0);
+			if (compras.size() > 0) {
 
-			for (Compra c : compras) {
-				model.addRow(new Object[] { c.getEspectaculo(), c.getLugar(), c.getCantidadEntradas(),
-						c.getTotal() });
-			}
+				DefaultTableModel model = new DefaultTableModel(
+						new String[] { "Espect\u00E1culo", "Lugar", "Cantidad", "Total" }, 0) {
+					@Override
+					public boolean isCellEditable(int row, int column) {
+						return false;
+					}
+				};
 
-			table_1.setFont(new Font("Dialog", Font.PLAIN, 13));
-			table_1.setForeground(Color.BLACK);
-			table_1.setModel(model);
-			table_1.getColumnModel().getColumn(0).setPreferredWidth(300);
-			table_1.getColumnModel().getColumn(1).setPreferredWidth(200);
-			table_1.getColumnModel().getColumn(2).setPreferredWidth(130);
-			table_1.getColumnModel().getColumn(3).setPreferredWidth(130);
-			panelTabla.add(table_1.getTableHeader());
-			panelTabla.add(table_1);
+				for (Compra c : compras) {
+					model.addRow(
+							new Object[] { c.getEspectaculo(), c.getLugar(), c.getCantidadEntradas(), c.getTotal() });
+				}
+
+				table_1.setFont(new Font("Dialog", Font.PLAIN, 13));
+				table_1.setForeground(Color.BLACK);
+				table_1.setModel(model);
+				table_1.getColumnModel().getColumn(0).setPreferredWidth(300);
+				table_1.getColumnModel().getColumn(1).setPreferredWidth(200);
+				table_1.getColumnModel().getColumn(2).setPreferredWidth(130);
+				table_1.getColumnModel().getColumn(3).setPreferredWidth(130);
+				panelTabla.add(table_1.getTableHeader());
+				panelTabla.add(table_1);
 			} else {
 				JLabel labelmsg = new JLabel("No tienes espectaculos agregados al carrito");
 				labelmsg.setFont(new Font("Dialog", Font.PLAIN, 14));
 				panelTabla.add(labelmsg);
 			}
-			
+
 			Integer sb = 0;
-			for(int i=0; i<table_1.getRowCount(); i++) {
-				sb += (Integer)table_1.getValueAt(i, 3);
+			for (int i = 0; i < table_1.getRowCount(); i++) {
+				sb += (Integer) table_1.getValueAt(i, 3);
 			}
 			String subTotal = "" + sb;
 			JLabel subtotal = new JLabel(subTotal);
 			panelTotal.add(subtotal);
 			subtotal.setAlignmentX(Component.CENTER_ALIGNMENT);
 			subtotal.setFont(new Font("Dialog", Font.PLAIN, 16));
-			
-			
-			
+
 			JPanel panelBotones = new JPanel();
 			panelBotones.setBackground(Color.WHITE);
 			FlowLayout fl_panelBotones = (FlowLayout) panelBotones.getLayout();
@@ -190,59 +189,62 @@ public class PanelFinalizarCompra extends JPanel {
 			Integer valor = sb;
 			btnModificarCantidad.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if(compras.size() > 0) {
-					ImageIcon icono_ticket = new ImageIcon(
-							PanelRegistro.class.getResource("/paneles/icono-ticket.png"));
+					if (compras.size() > 0) {
+						ImageIcon icono_ticket = new ImageIcon(
+								PanelRegistro.class.getResource("/paneles/icono-ticket.png"));
 
-					int row = table_1.getSelectedRow();
-					if (row == -1)
-						JOptionPane.showMessageDialog(null, "Por favor, elija el espectaculo a modificar", "Error!",
-								JOptionPane.ERROR_MESSAGE);
-					else {
-						Integer cantidad = (Integer) table_1.getValueAt(row, 2);
-						int c = cantidad;
-						SpinnerNumberModel sModel = new SpinnerNumberModel(c, 0,
-								30/* Poner el maximo segun lo q hay en la bd */, 1);
-						JSpinner spinner = new JSpinner(sModel);
-						JOptionPane optionpane = new JOptionPane();
-						UIManager UI = new UIManager();
-						UI.put("OptionPane.background", Color.white);
-						UI.put("Panel.background", Color.white);
+						int row = table_1.getSelectedRow();
+						if (row == -1)
+							JOptionPane.showMessageDialog(null, "Por favor, elija el espectaculo a modificar", "Error!",
+									JOptionPane.ERROR_MESSAGE);
+						else {
+							Integer cantidad = (Integer) table_1.getValueAt(row, 2);
+							int c = cantidad;
+							SpinnerNumberModel sModel = new SpinnerNumberModel(c, 0,
+									30/* Poner el maximo segun lo q hay en la bd */, 1);
+							JSpinner spinner = new JSpinner(sModel);
+							JOptionPane optionpane = new JOptionPane();
+							UIManager UI = new UIManager();
+							UI.put("OptionPane.background", Color.white);
+							UI.put("Panel.background", Color.white);
 
-						int option = optionpane.showOptionDialog(null, spinner, "Modificar cantidad",
-								JOptionPane.OK_OPTION, JOptionPane.QUESTION_MESSAGE, icono_ticket, null, null);
-						if (option == optionpane.OK_OPTION) {
-							int precio = (Integer)table_1.getValueAt(table_1.getSelectedRow(), 3) / (Integer)table_1.getValueAt(table_1.getSelectedRow(), 2);
-							Integer resta = (Integer)table_1.getValueAt(table_1.getSelectedRow(), 3);
-							try {
-								controlador.modificarCompra((String) table_1.getValueAt(table_1.getSelectedRow(), 0),
-										(String) table_1.getValueAt(table_1.getSelectedRow(), 1),
-										(Integer) spinner.getValue(), cliente, precio);
-								table_1.setValueAt(spinner.getValue(), row, 2);
-								table_1.setValueAt((Integer)spinner.getValue() * precio, table_1.getSelectedRow(), 3);
-								Integer dif = (Integer)table_1.getValueAt(table_1.getSelectedRow(), 3) - resta;
-								JOptionPane.showMessageDialog(null, "Operación realizada correctamente");
-								Integer value = valor;
-								if(dif < 0)
-									value = valor + dif;
-								else
-									value = valor - dif;
-								
-								subtotal.setText(value + "");
-							} catch (NoHayEntradasRemanentesException m1) {
-								JOptionPane.showMessageDialog(null, m1.getMessage(), "Ocurrió algo inesperado",
-										JOptionPane.ERROR_MESSAGE);
+							int option = optionpane.showOptionDialog(null, spinner, "Modificar cantidad",
+									JOptionPane.OK_OPTION, JOptionPane.QUESTION_MESSAGE, icono_ticket, null, null);
+							if (option == optionpane.OK_OPTION) {
+								int precio = (Integer) table_1.getValueAt(table_1.getSelectedRow(), 3)
+										/ (Integer) table_1.getValueAt(table_1.getSelectedRow(), 2);
+								Integer resta = (Integer) table_1.getValueAt(table_1.getSelectedRow(), 3);
+								try {
+									controlador.modificarCompra(
+											(String) table_1.getValueAt(table_1.getSelectedRow(), 0),
+											(String) table_1.getValueAt(table_1.getSelectedRow(), 1),
+											(Integer) spinner.getValue(), cliente, precio);
+									table_1.setValueAt(spinner.getValue(), row, 2);
+									table_1.setValueAt((Integer) spinner.getValue() * precio, table_1.getSelectedRow(),
+											3);
+									Integer dif = (Integer) table_1.getValueAt(table_1.getSelectedRow(), 3) - resta;
+									JOptionPane.showMessageDialog(null, "Operación realizada correctamente");
+									Integer value = valor;
+									if (dif < 0)
+										value = valor + dif;
+									else
+										value = valor - dif;
+
+									subtotal.setText(value + "");
+								} catch (NoHayEntradasRemanentesException m1) {
+									JOptionPane.showMessageDialog(null, m1.getMessage(), "Ocurrió algo inesperado",
+											JOptionPane.ERROR_MESSAGE);
+								}
+
 							}
-							
-							
 						}
+					} else {
+						JOptionPane.showMessageDialog(null,
+								"No tienes espectaculos agregados al carrito para modificar", "Error!",
+								JOptionPane.ERROR_MESSAGE);
 					}
 				}
-				 else {
-					JOptionPane.showMessageDialog(null, "No tienes espectaculos agregados al carrito para modificar", "Error!",
-							JOptionPane.ERROR_MESSAGE);
-				}}
-				
+
 			});
 
 			JButton btnRemoverEspectaculo = new JButton("Remover espectáculo");
@@ -254,29 +256,28 @@ public class PanelFinalizarCompra extends JPanel {
 
 			btnRemoverEspectaculo.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if(compras.size() > 0) {
-					int row = table_1.getSelectedRow();
-					if (row == -1)
-						JOptionPane.showMessageDialog(null, "Por favor, elija el espectáculo a eliminar", "Error!",
-								JOptionPane.ERROR_MESSAGE);
-					else {
-						controlador.removerCompra((String) table_1.getValueAt(table_1.getSelectedRow(), 0),
-								(String) table_1.getValueAt(table_1.getSelectedRow(), 1), cliente);
-						((DefaultTableModel) table_1.getModel()).removeRow(row);
-						if(table_1.getRowCount() == 0) {
-							panelTabla.remove(table_1.getTableHeader());
-							JLabel label = new JLabel("No tienes espectaculos agregados al carrito");
-							label.setFont(new Font("Dialog", Font.PLAIN, 14));
-							panelTabla.add(label);
+					if (compras.size() > 0) {
+						int row = table_1.getSelectedRow();
+						if (row == -1)
+							JOptionPane.showMessageDialog(null, "Por favor, elija el espectáculo a eliminar", "Error!",
+									JOptionPane.ERROR_MESSAGE);
+						else {
+							controlador.removerCompra((String) table_1.getValueAt(table_1.getSelectedRow(), 0),
+									(String) table_1.getValueAt(table_1.getSelectedRow(), 1), cliente);
+							((DefaultTableModel) table_1.getModel()).removeRow(row);
+							if (table_1.getRowCount() == 0) {
+								panelTabla.remove(table_1.getTableHeader());
+								JLabel label = new JLabel("No tienes espectaculos agregados al carrito");
+								label.setFont(new Font("Dialog", Font.PLAIN, 14));
+								panelTabla.add(label);
+							}
 						}
+					} else {
+						JOptionPane.showMessageDialog(null, "No tienes espectaculos agregados al carrito para eliminar",
+								"Error!", JOptionPane.ERROR_MESSAGE);
 					}
-				} else {
-					JOptionPane.showMessageDialog(null, "No tienes espectaculos agregados al carrito para eliminar", "Error!",
-							JOptionPane.ERROR_MESSAGE);
-				}}
+				}
 			});
-
-			
 
 			JLabel label_1 = new JLabel(" ");
 			panelFinalizar.add(label_1);
