@@ -71,6 +71,19 @@ public class Controlador {
 		}
 	}
 	
+	public Cliente obtenerCliente(String mail) {
+		try {
+			ResultSet rs = database.getCliente(mail);
+			return new Cliente(rs.getString("username"), rs.getString("contra"), rs.getString("contra"),
+					rs.getString("nombre"), rs.getString("apellido"), rs.getString("cumple"), rs.getString("email"),
+					rs.getString("telefono"), rs.getString("dni"), rs.getString("pais"), rs.getString("provincia"),
+					rs.getString("localidad"), rs.getString("direccion"), rs.getString("codigopostal"));
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	public Set<Espectaculo> obtenerEspectaculosProveedor(String mail){
 		try {
 			return database.getEspectaculosPorProveedor(mail);
