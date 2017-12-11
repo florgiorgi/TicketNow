@@ -16,11 +16,24 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import controlador.Controlador;
+import usuario.ApellidoInvalidoException;
+import usuario.Cliente;
+import usuario.CodigoPostalInvalidoException;
+import usuario.ContraseñaIncorrectaException;
+import usuario.ContraseñaInvalidaException;
+import usuario.DireccionInvalidaException;
+import usuario.FechaNacInvalidaException;
+import usuario.LocalidadInvalidaException;
+import usuario.NombreInvalidoException;
+import usuario.Proveedor;
+import usuario.TelefonoInvalidoException;
+import usuario.UsuarioExistenteException;
 
 
 public class PanelPerfilCliente extends JPanel {
@@ -32,7 +45,7 @@ public class PanelPerfilCliente extends JPanel {
 
 	private Controlador controlador;
 	private String cliente;
-	
+
 	public PanelPerfilCliente(Controlador controlador, String cliente)  {
 		/* Tendria que recibir el usuario para completar los campos modificables con sus datos */
 		setLayout(new BorderLayout(0, 0));
@@ -72,7 +85,7 @@ public class PanelPerfilCliente extends JPanel {
 		}
 
 		/**
-		 * Método que inicializa el titulo y lo agrega al panel
+		 * Metodo que inicializa el titulo y lo agrega al panel
 		 */
 		private void inicializarTitulo() {
 			titulo.setFont(new Font("Dialog", Font.BOLD, 22));
@@ -80,7 +93,7 @@ public class PanelPerfilCliente extends JPanel {
 		}
 
 		/**
-		 * Método que inicializa el boton volver y lo agrega al panel
+		 * Metodo que inicializa el boton volver y lo agrega al panel
 		 */
 		private void inicializarBotones() {
 			btnVolver.setBackground(Color.WHITE);
@@ -105,11 +118,12 @@ public class PanelPerfilCliente extends JPanel {
 		private JLabel lblTipoUsuario = new JLabel("Tipo de usuario:");
 		private JLabel lblUsuario = new JLabel("Usuario:");
 		private JLabel lblContraseña = new JLabel("Contraseña:");
+		private JLabel lblConfirmarContraseña = new JLabel("Confirmar contraseña:");
 		private JLabel lblNombre = new JLabel("Nombre:");
 		private JLabel lblApellido = new JLabel("Apellido:");
 		private JLabel lblFechaNacimiento = new JLabel("Fecha de nacimiento:");
 		private JLabel lblDireccionDeCorreo = new JLabel("E-mail:");
-		private JLabel lblTelefono = new JLabel("Teléfono:");
+		private JLabel lblTelefono = new JLabel("Telefono:");
 		private JLabel lblTipoDeDocumento = new JLabel("Tipo de documento:");
 		private JLabel lblDni = new JLabel("Numero de documento:");
 		private JLabel lblPais = new JLabel("Pais:");
@@ -118,24 +132,28 @@ public class PanelPerfilCliente extends JPanel {
 		private JLabel lblDireccion = new JLabel("Direccion:");
 		private JLabel lblCodigoPostal = new JLabel("Codigo Postal:");
 
+		Cliente c = controlador.obtenerCliente(cliente);
+
 		private JComboBox tipoUsuario = new JComboBox();
-		private JTextField usuarioField = new JTextField();
-		private JTextField contraseñaField = new JTextField();
-		private JTextField nombreField = new JTextField();
-		private JTextField apellidoField = new JTextField();
-		private JTextField fechaNacimientoField = new JTextField();
-		private JTextField direccionCorreoField = new JTextField();
-		private JTextField telefonoField = new JTextField();
+		private JTextField usuarioField = new JTextField(c.getUsuario());
+		private JTextField contraseñaField = new JTextField(c.getContraseña());
+		private JTextField contraseñaConfField = new JTextField(c.getContraseña());
+		private JTextField nombreField = new JTextField(c.getNombre());
+		private JTextField apellidoField = new JTextField(c.getApellido());
+		private JTextField fechaNacimientoField = new JTextField(c.getFechaNac());
+		private JTextField direccionCorreoField = new JTextField(c.getMail());
+		private JTextField telefonoField = new JTextField(c.getTelefono());
 		private JComboBox tipoDocumentoBox = new JComboBox();
-		private JTextField dniField = new JTextField();
+		private JTextField dniField = new JTextField(c.getDNI());
 		private JComboBox paisBox = new JComboBox();
 		private JComboBox provinciaBox = new JComboBox();
-		private JTextField localidadField = new JTextField();
-		private JTextField direccionField = new JTextField();
-		private JTextField codigoPostalField = new JTextField();
+		private JTextField localidadField = new JTextField(c.getLocalidad());
+		private JTextField direccionField = new JTextField(c.getDireccion());
+		private JTextField codigoPostalField = new JTextField(c.getCodigoPostal());
 		private JPanel panelInferior;
 
 		private Font fuente = new Font("Dialog", Font.BOLD, 14);
+		private Font fuente1 = new Font("Dialog", Font.PLAIN, 14);
 
 		public PanelCentral() {
 			setLayout(new BorderLayout(0, 0));
@@ -160,24 +178,32 @@ public class PanelPerfilCliente extends JPanel {
 			tipoUsuario.setModel(new DefaultComboBoxModel(new String[] { "Cliente","Proveedor" }));
 			tipoUsuario.setEnabled(false);
 			panelRegistrarse.add(tipoUsuario);
-			tipoUsuario.setFont(fuente);
+			tipoUsuario.setFont(fuente1);
 
 			lblUsuario.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblUsuario);
 			lblUsuario.setFont(fuente);
 
 			usuarioField.setColumns(10);
+			usuarioField.setEditable(false);
 			panelRegistrarse.add(usuarioField);
-			usuarioField.setFont(fuente);
+			usuarioField.setFont(fuente1);
 
 			lblContraseña.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblContraseña);
 			lblContraseña.setFont(fuente);
 
 			contraseñaField.setColumns(10);
-			contraseñaField.setEditable(false);
 			panelRegistrarse.add(contraseñaField);
-			contraseñaField.setFont(new Font("Dialog", Font.BOLD, 15));
+			contraseñaField.setFont(fuente1);
+			
+			lblConfirmarContraseña.setHorizontalAlignment(SwingConstants.CENTER);
+			panelRegistrarse.add(lblConfirmarContraseña);
+			lblConfirmarContraseña.setFont(fuente);
+
+			contraseñaConfField.setColumns(10);
+			panelRegistrarse.add(contraseñaConfField);
+			contraseñaConfField.setFont(fuente1);
 
 			lblNombre.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblNombre);
@@ -185,7 +211,7 @@ public class PanelPerfilCliente extends JPanel {
 
 			nombreField.setColumns(10);
 			panelRegistrarse.add(nombreField);
-			nombreField.setFont(fuente);
+			nombreField.setFont(fuente1);
 
 			lblApellido.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblApellido);
@@ -193,7 +219,7 @@ public class PanelPerfilCliente extends JPanel {
 
 			apellidoField.setColumns(10);
 			panelRegistrarse.add(apellidoField);
-			apellidoField.setFont(fuente);
+			apellidoField.setFont(fuente1);
 
 			lblFechaNacimiento.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblFechaNacimiento);
@@ -201,7 +227,7 @@ public class PanelPerfilCliente extends JPanel {
 
 			fechaNacimientoField.setColumns(10);
 			panelRegistrarse.add(fechaNacimientoField);
-			fechaNacimientoField.setFont(fuente);
+			fechaNacimientoField.setFont(fuente1);
 
 			lblDireccionDeCorreo.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblDireccionDeCorreo);
@@ -210,7 +236,7 @@ public class PanelPerfilCliente extends JPanel {
 			direccionCorreoField.setColumns(10);
 			direccionCorreoField.setEditable(false);
 			panelRegistrarse.add(direccionCorreoField);
-			direccionCorreoField.setFont(fuente);
+			direccionCorreoField.setFont(fuente1);
 
 			lblTelefono.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblTelefono);
@@ -218,7 +244,7 @@ public class PanelPerfilCliente extends JPanel {
 
 			telefonoField.setColumns(10);
 			panelRegistrarse.add(telefonoField);
-			telefonoField.setFont(fuente);
+			telefonoField.setFont(fuente1);
 
 			lblTipoDeDocumento.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblTipoDeDocumento);
@@ -226,7 +252,7 @@ public class PanelPerfilCliente extends JPanel {
 
 			tipoDocumentoBox.setModel(new DefaultComboBoxModel(new String[] { "DNI", "CI", "Pasaporte" }));
 			panelRegistrarse.add(tipoDocumentoBox);
-			tipoDocumentoBox.setFont(fuente);
+			tipoDocumentoBox.setFont(fuente1);
 
 			lblDni.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblDni);
@@ -235,7 +261,7 @@ public class PanelPerfilCliente extends JPanel {
 			dniField.setColumns(10);
 			dniField.setEditable(false);
 			panelRegistrarse.add(dniField);
-			dniField.setFont(fuente);
+			dniField.setFont(fuente1);
 
 			lblPais.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblPais);
@@ -244,13 +270,42 @@ public class PanelPerfilCliente extends JPanel {
 			paisBox.setModel(
 					new DefaultComboBoxModel(new String[] { "Seleccione pais", "Argentina", "Paraguay", "Uruguay" }));
 			panelRegistrarse.add(paisBox);
-			paisBox.setFont(fuente);
+			paisBox.setSelectedItem(c.getPais());
+			paisBox.setFont(fuente1);
 
 			lblProvincia.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblProvincia);
 			lblProvincia.setFont(fuente);
-			
 
+			DefaultComboBoxModel provinciasArgentina = new DefaultComboBoxModel(new String[] { "Buenos Aires",
+					"Catamarca", "Chaco", "Chubut", "Cordoba", "Corrientes", "Entre Rios", "Formosa", "Jujuy",
+					"La Pampa", "La Rioja", "Mendoza", "Misiones", "Neuquen", "Rio Negro", "Salta", "San Juan",
+					"San Luis", "Santa Cruz", "Santa Fe", "Santiago del Estero", "Tierra del Fuego", "Tucuman" });
+
+			DefaultComboBoxModel provinciasUruguay = new DefaultComboBoxModel(
+					new String[] { "Asuncion", "Concepcion", "San Pedro", "Cordillera", "Guaira", "Caaguazu", "Caazapa",
+							"Itapua", "Misiones", "Paraguari", "Alto Parana", "Central", "Ñeembucu", "Amambay",
+							"Canindeyu", "Presidente Hayes", "Boqueron", "Alto Paraguay" });
+
+			DefaultComboBoxModel provinciasParaguay = new DefaultComboBoxModel(
+					new String[] { "Artigas", "Canelones", "Cerro Largo", "Colonia", "Durazno", "Flores", "Florida",
+							"Lavalleja", "Maldonado", "Montevideo", "Paysandu", "Rio Negro", "Rivera", "Rocha", "Salto",
+							"San Jose", "Soriano", "Tacuarembo", "Treinta y Tres" });
+
+			switch (c.getPais()) {
+			case "Argentina":
+				provinciaBox.setModel(provinciasArgentina);
+				break;
+			case "Uruguay":
+				provinciaBox.setModel(provinciasUruguay);
+				break;
+			case "Paraguay":
+				provinciaBox.setModel(provinciasParaguay);
+				break;
+			}
+
+			provinciaBox.setSelectedItem(c.getProvincia());
+			
 			paisBox.addItemListener(new ItemListener() {
 
 				@Override
@@ -258,31 +313,22 @@ public class PanelPerfilCliente extends JPanel {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 						switch (e.getItem().toString()) {
 						case "Argentina":
-							provinciaBox.setModel(new DefaultComboBoxModel(new String[] { "Buenos Aires", "Catamarca",
-									"Chaco", "Chubut", "Córdoba", "Corrientes", "Entre Ríos", "Formosa", "Jujuy",
-									"La Pampa", "La Rioja", "Mendoza", "Misiones", "Neuquén", "Río Negro", "Salta",
-									"San Juan", "San Luis", "Santa Cruz", "Santa Fe", "Santiago del Estero",
-									"Tierra del Fuego", "Tucumán" }));
+							provinciaBox.setModel(provinciasArgentina);
 							break;
 						case "Paraguay":
-							provinciaBox.setModel(new DefaultComboBoxModel(new String[] { "Asunción", "Concepcion",
-									"San Pedro", "Cordillera", "Guairá", "Caaguazú", "Caazapá", "Itapúa", "Misiones",
-									"Paraguarí", "Alto Paraná", "Central", "Ñeembucú", "Amambay", "Canindeyú",
-									"Presidente Hayes", "Boquerón", "Alto Paraguay" }));
+							provinciaBox.setModel(provinciasUruguay);
 							break;
 						case "Uruguay":
-							provinciaBox.setModel(new DefaultComboBoxModel(new String[] { "Artigas", "Canelones",
-									"Cerro Largo", "Colonia", "Durazno", "Flores", "Florida", "Lavalleja", "Maldonado",
-									"Montevideo", "Paysandú", "Rio Negro", "Rivera", "Rocha", "Salto", "San Jose",
-									"Soriano", "Tacuarembó", "Treinta y Tres" }));
+							provinciaBox.setModel(provinciasParaguay);
 							break;
 						}
 					}
 				}
 			});
-
+			
 			panelRegistrarse.add(provinciaBox);
-			provinciaBox.setFont(fuente);
+			provinciaBox.setFont(fuente1);
+			provinciaBox.setSelectedItem(c.getProvincia());
 
 			lblLocalidad.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblLocalidad);
@@ -290,7 +336,7 @@ public class PanelPerfilCliente extends JPanel {
 
 			localidadField.setColumns(10);
 			panelRegistrarse.add(localidadField);
-			localidadField.setFont(fuente);
+			localidadField.setFont(fuente1);
 
 			lblDireccion.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblDireccion);
@@ -298,7 +344,7 @@ public class PanelPerfilCliente extends JPanel {
 
 			direccionField.setColumns(10);
 			panelRegistrarse.add(direccionField);
-			direccionField.setFont(fuente);
+			direccionField.setFont(fuente1);
 
 			lblCodigoPostal.setHorizontalAlignment(SwingConstants.CENTER);
 			panelRegistrarse.add(lblCodigoPostal);
@@ -306,14 +352,14 @@ public class PanelPerfilCliente extends JPanel {
 
 			codigoPostalField.setColumns(10);
 			panelRegistrarse.add(codigoPostalField);
-			codigoPostalField.setFont(fuente);
+			codigoPostalField.setFont(fuente1);
 
 		}
 
 		private class PanelInferior extends JPanel {
 			JButton btnModificarDatos = new JButton("Modificar datos");
 			JButton btnEliminarCuenta = new JButton("Eliminar cuenta");
-			
+
 			public PanelInferior() {
 				inicializarBotones();
 			}
@@ -325,22 +371,80 @@ public class PanelPerfilCliente extends JPanel {
 				btnModificarDatos.setBackground(new Color(0, 102, 204));
 				add(btnModificarDatos);
 
+				btnModificarDatos.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						try {
+							if (controlador.modificarUsuario(tipoUsuario.getSelectedItem().toString(),
+									usuarioField.getText(), contraseñaField.getText(), contraseñaConfField.getText(),
+									nombreField.getText(), apellidoField.getText(), fechaNacimientoField.getText(),
+									direccionCorreoField.getText(), telefonoField.getText(), dniField.getText(),
+									paisBox.getSelectedItem().toString(), provinciaBox.getSelectedItem().toString(),
+									localidadField.getText(), direccionField.getText(), codigoPostalField.getText())) {
+								JOptionPane.showMessageDialog(null, "Su perfil ha sido modificado.");
+								VistaTicketNow.changePanel("cliente", PanelPerfilCliente.this, controlador,
+										cliente);
+							}
+						} catch (ContraseñaIncorrectaException m) {
+							JOptionPane.showMessageDialog(null, m.getMessage(), "Ocurrio algo inesperado",
+									JOptionPane.ERROR_MESSAGE);
+
+						} catch (ContraseñaInvalidaException m1) {
+							JOptionPane.showMessageDialog(null, m1.getMessage(), "Ocurrio algo inesperado",
+									JOptionPane.ERROR_MESSAGE);
+
+						} catch (NombreInvalidoException m3) {
+							JOptionPane.showMessageDialog(null, m3.getMessage(), "Ocurrio algo inesperado",
+									JOptionPane.ERROR_MESSAGE);
+
+						} catch (ApellidoInvalidoException m4) {
+							JOptionPane.showMessageDialog(null, m4.getMessage(), "Ocurrio algo inesperado",
+									JOptionPane.ERROR_MESSAGE);
+
+						} catch (FechaNacInvalidaException m5) {
+							JOptionPane.showMessageDialog(null, m5.getMessage(), "Ocurrio algo inesperado",
+									JOptionPane.ERROR_MESSAGE);
+
+						} catch (TelefonoInvalidoException m7) {
+							JOptionPane.showMessageDialog(null, m7.getMessage(), "Ocurrio algo inesperado",
+									JOptionPane.ERROR_MESSAGE);
+
+						} catch (UsuarioExistenteException m9) {
+							JOptionPane.showMessageDialog(null, m9.getMessage(), "Ocurrio algo inesperado",
+									JOptionPane.ERROR_MESSAGE);
+
+						} catch (LocalidadInvalidaException m10) {
+							JOptionPane.showMessageDialog(null, m10.getMessage(), "Ocurrio algo inesperado",
+									JOptionPane.ERROR_MESSAGE);
+
+						} catch (DireccionInvalidaException m11) {
+							JOptionPane.showMessageDialog(null, m11.getMessage(), "Ocurrio algo inesperado",
+									JOptionPane.ERROR_MESSAGE);
+
+						} catch (CodigoPostalInvalidoException m12) {
+							JOptionPane.showMessageDialog(null, m12.getMessage(), "Ocurrio algo inesperado",
+									JOptionPane.ERROR_MESSAGE);
+
+						}
+					}
+				});
+				
 				btnEliminarCuenta.setFont(new Font("Dialog", Font.BOLD, 15));
 				btnEliminarCuenta.setVerticalAlignment(SwingConstants.TOP);
 				btnEliminarCuenta.setForeground(new Color(255, 255, 255));
 				btnEliminarCuenta.setBackground(Color.RED);
 				add(btnEliminarCuenta);	
-				
+
 				btnEliminarCuenta.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						VistaTicketNow.changePanel("bajaCliente", PanelPerfilCliente.this, controlador, cliente);
 					}
 				});
-						
+
+				
+
+			}
 
 		}
-
-	}
 
 	}
 }
